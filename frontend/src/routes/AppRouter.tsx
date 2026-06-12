@@ -1,0 +1,83 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import HomePage from "../pages/Home/HomePage";
+import ProductsPage from "../pages/Products/ProductsPage";
+import ProductDetailsPage from "../pages/ProductDetails/ProductDetailsPage";
+import CartPage from "../pages/Cart/CartPage";
+import LoginPage from "../pages/Auth/LoginPage";
+import RegisterPage from "../pages/Auth/RegisterPage";
+import AdminDashboardPage from "../pages/Admin/AdminDashboardPage";
+import AdminProductsPage from "../pages/Admin/AdminProductsPage";
+import AdminOrdersPage from "../pages/Admin/AdminOrdersPage";
+import AdminCategoriesPage from "../pages/Admin/AdminCategoriesPage";
+import AdminOrderDetailsPage from "../pages/Admin/AdminOrderDetailsPage";
+import ProtectedAdminRoute from "./ProtectedAdminRoute";
+import AdminUsersPage from "../pages/Admin/AdminUsersPage";
+export default function AppRouter() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/products/:id" element={<ProductDetailsPage />} />
+        <Route path="/cart" element={<CartPage />} />
+
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
+        <Route
+          path="/admin"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardPage />
+            </ProtectedAdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/products"
+          element={
+            <ProtectedAdminRoute>
+              <AdminProductsPage />
+            </ProtectedAdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/categories"
+          element={
+            <ProtectedAdminRoute>
+              <AdminCategoriesPage />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedAdminRoute>
+              <AdminOrdersPage />
+            </ProtectedAdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedAdminRoute>
+              <AdminUsersPage />
+            </ProtectedAdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/orders/:id"
+          element={
+            <ProtectedAdminRoute>
+              <AdminOrderDetailsPage />
+            </ProtectedAdminRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
