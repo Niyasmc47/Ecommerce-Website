@@ -85,7 +85,6 @@ backend/
 
 ## Screenshots
 
-Add screenshots here after deployment.
 
 ### Home Page
 
@@ -231,25 +230,6 @@ After successful login:
 * Advanced filtering and sorting
 
 ---
-
-## Deployment
-
-### Frontend
-
-* Vercel
-* Netlify
-
-### Backend
-
-* Railway
-* Render
-* Azure App Service
-
-### Database
-
-* PostgreSQL
-* Neon
-* Supabase
 
 ---
 
