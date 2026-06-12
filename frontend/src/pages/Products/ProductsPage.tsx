@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import MainLayout from "../../components/layouts/MainLayout";
 import Container from "../../components/common/Container";
@@ -9,33 +10,49 @@ import { getProducts } from "../../services/productService";
 import type { Product } from "../../types/product";
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [searchParams] =
+    useSearchParams();
 
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] =
+    useState<Product[]>([]);
 
-  const [search, setSearch] = useState("");
+  const [loading, setLoading] =
+    useState(true);
 
-  const [minPrice, setMinPrice] = useState("");
+  const [search, setSearch] =
+    useState(
+      () =>
+        searchParams.get("search") || ""
+    );
 
-  const [maxPrice, setMaxPrice] = useState("");
+  const [minPrice, setMinPrice] =
+    useState("");
 
-  const [page, setPage] = useState(1);
+  const [maxPrice, setMaxPrice] =
+    useState("");
+
+  const [page, setPage] =
+    useState(1);
 
   useEffect(() => {
     async function loadProducts() {
       try {
         setLoading(true);
 
-        const data = await getProducts({
-          search,
-
-          minPrice: minPrice !== "" ? Number(minPrice) : undefined,
-
-          maxPrice: maxPrice !== "" ? Number(maxPrice) : undefined,
-
-          page,
-          pageSize: 12,
-        });
+        const data =
+          await getProducts({
+            search,
+            minPrice:
+              minPrice !== ""
+                ? Number(minPrice)
+                : undefined,
+            maxPrice:
+              maxPrice !== ""
+                ? Number(maxPrice)
+                : undefined,
+            page,
+            pageSize: 12,
+          });
 
         setProducts(data);
       } finally {
@@ -44,7 +61,12 @@ export default function ProductsPage() {
     }
 
     loadProducts();
-  }, [search, minPrice, maxPrice, page]);
+  }, [
+    search,
+    minPrice,
+    maxPrice,
+    page,
+  ]);
 
   return (
     <MainLayout>

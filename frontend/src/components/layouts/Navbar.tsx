@@ -14,7 +14,7 @@ export default function Navbar() {
   const name = localStorage.getItem("name");
 
   const role = localStorage.getItem("role");
-
+  const [search, setSearch] = useState("");
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark",
   );
@@ -40,6 +40,12 @@ export default function Navbar() {
 
     loadCart();
   }, []);
+
+  function handleSearch(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      navigate(`/products?search=${encodeURIComponent(search)}`);
+    }
+  }
 
   useEffect(() => {
     if (darkMode) {
@@ -171,19 +177,22 @@ export default function Navbar() {
             <input
               type="text"
               placeholder="Search products..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={handleSearch}
               className="
-                w-full
-                rounded-xl
-                border
-                border-slate-200
-                bg-slate-50
-                px-4
-                py-2.5
+    w-full
+    rounded-xl
+    border
+    border-slate-200
+    bg-slate-50
+    px-4
+    py-2.5
 
-                dark:border-slate-700
-                dark:bg-slate-900
-                dark:text-white
-              "
+    dark:border-slate-700
+    dark:bg-slate-900
+    dark:text-white
+  "
             />
           </div>
 
