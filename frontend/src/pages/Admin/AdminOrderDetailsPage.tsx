@@ -68,6 +68,7 @@ export default function AdminOrderDetailsPage() {
           mb-8
           text-4xl
           font-bold
+          dark:text-white
         "
       >
         Order #{order.id}
@@ -78,14 +79,17 @@ export default function AdminOrderDetailsPage() {
           mb-8
           rounded-2xl
           border
+          border-slate-200
           p-6
+          dark:border-slate-700
+          dark:bg-slate-900
         "
       >
-        <p>
+        <p className="dark:text-slate-300">
           <strong>Customer:</strong> {order.customerName}
         </p>
 
-        <p>
+        <p className="dark:text-slate-300">
           <strong>Email:</strong> {order.customerEmail}
         </p>
 
@@ -99,8 +103,12 @@ export default function AdminOrderDetailsPage() {
               className="
         rounded-lg
         border
+        border-slate-200
         px-3
         py-2
+        dark:border-slate-700
+        dark:bg-slate-950
+        dark:text-white
       "
             >
               <option>Pending</option>
@@ -129,7 +137,7 @@ export default function AdminOrderDetailsPage() {
           </div>
         </div>
 
-        <p>
+        <p className="dark:text-slate-300">
           <strong>Total:</strong> ₹{order.totalAmount}
         </p>
       </div>
@@ -138,7 +146,10 @@ export default function AdminOrderDetailsPage() {
         className="
           rounded-2xl
           border
+          border-slate-200
           p-6
+          dark:border-slate-700
+          dark:bg-slate-900
         "
       >
         <h2
@@ -146,6 +157,7 @@ export default function AdminOrderDetailsPage() {
             mb-4
             text-2xl
             font-bold
+            dark:text-white
           "
         >
           Order Items
@@ -158,22 +170,22 @@ export default function AdminOrderDetailsPage() {
         >
           <thead>
             <tr>
-              <th className="text-left">Product</th>
+              <th className="text-left dark:text-slate-300">Product</th>
 
-              <th className="text-left">Quantity</th>
+              <th className="text-left dark:text-slate-300">Quantity</th>
 
-              <th className="text-left">Price</th>
+              <th className="text-left dark:text-slate-300">Price</th>
             </tr>
           </thead>
 
           <tbody>
             {order.items.map((item, index) => (
               <tr key={index}>
-                <td>{item.productName}</td>
+                <td className="dark:text-slate-300">{item.productName}</td>
 
-                <td>{item.quantity}</td>
+                <td className="dark:text-slate-300">{item.quantity}</td>
 
-                <td>₹{item.price}</td>
+                <td className="dark:text-slate-300">₹{item.price}</td>
               </tr>
             ))}
           </tbody>

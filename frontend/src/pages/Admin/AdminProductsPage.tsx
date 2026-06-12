@@ -158,7 +158,10 @@ export default function AdminProductsPage() {
                 mb-8
                 rounded-2xl
                 border
+                border-slate-200
                 p-6
+                dark:border-slate-700
+                dark:bg-slate-900
               "
           >
             <h2
@@ -181,7 +184,10 @@ export default function AdminProductsPage() {
       mb-8
       rounded-2xl
       border
+      border-slate-200
       p-6
+      dark:border-slate-700
+      dark:bg-slate-900
     "
           >
             <div
@@ -200,15 +206,18 @@ export default function AdminProductsPage() {
               >
                 Edit Product
               </h2>
-              ```
               <button
                 onClick={() => setEditingProduct(null)}
                 className="
       rounded-lg
       border
+      border-slate-200
       px-4
       py-2
       hover:bg-slate-100
+
+      dark:border-slate-700
+      dark:hover:bg-slate-800
     "
               >
                 Cancel
@@ -226,7 +235,6 @@ export default function AdminProductsPage() {
               submitText="Update Product"
               onSubmit={handleUpdate}
             />
-            ```
           </div>
         )}
 
@@ -235,7 +243,7 @@ export default function AdminProductsPage() {
           placeholder="Search products..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="mb-6 w-full rounded-xl sborderp-4"
+          className="mb-6 w-full rounded-xl border border-slate-200 p-4 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
         />
 
         {loading ? (
@@ -252,7 +260,7 @@ export default function AdminProductsPage() {
           >
             <table className="w-full">
               <thead>
-                <tr className="border-b bg-slate-50">
+                <tr className="border-b bg-slate-50 dark:bg-slate-950">
                   <th className="p-4 text-left">ID</th>
                   <th className="p-4 text-left">Image</th>
 

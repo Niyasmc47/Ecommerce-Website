@@ -187,10 +187,11 @@ export default function AdminCategoriesPage() {
 
         <h1
           className="
-            mb-8
-            text-4xl
-            font-bold
-          "
+              mb-8
+              text-4xl
+              font-bold
+              dark:text-white
+            "
         >
           Category Management
         </h1>
@@ -200,7 +201,10 @@ export default function AdminCategoriesPage() {
             mb-8
             rounded-2xl
             border
+            border-slate-200
             p-6
+            dark:border-slate-700
+            dark:bg-slate-900
           "
         >
 
@@ -209,6 +213,7 @@ export default function AdminCategoriesPage() {
               mb-4
               text-2xl
               font-bold
+              dark:text-white
             "
           >
             {
@@ -232,7 +237,11 @@ export default function AdminCategoriesPage() {
                 w-full
                 rounded-xl
                 border
+                border-slate-200
                 p-4
+                dark:border-slate-700
+                dark:bg-slate-950
+                dark:text-white
               "
             />
 
@@ -248,7 +257,11 @@ export default function AdminCategoriesPage() {
                 w-full
                 rounded-xl
                 border
+                border-slate-200
                 p-4
+                dark:border-slate-700
+                dark:bg-slate-950
+                dark:text-white
               "
             />
 
@@ -291,13 +304,17 @@ export default function AdminCategoriesPage() {
             w-full
             rounded-xl
             border
+            border-slate-200
             p-4
+            dark:border-slate-700
+            dark:bg-slate-950
+            dark:text-white
           "
         />
 
         {loading ? (
 
-          <p>
+            <p className="dark:text-slate-300">
             Loading...
           </p>
 
@@ -308,6 +325,8 @@ export default function AdminCategoriesPage() {
               overflow-x-auto
               rounded-2xl
               border
+              border-slate-200
+              dark:border-slate-700
             "
           >
 
@@ -315,7 +334,7 @@ export default function AdminCategoriesPage() {
 
               <thead>
 
-                <tr className="border-b">
+                <tr className="border-b dark:border-slate-700">
 
                   <th className="p-4 text-left">
                     ID
@@ -341,10 +360,7 @@ export default function AdminCategoriesPage() {
 
                 {filteredCategories.map(category => (
 
-                  <tr
-                    key={category.id}
-                    className="border-b"
-                  >
+                  <tr key={category.id} className="border-b dark:border-slate-700">
 
                     <td className="p-4">
                       {category.id}

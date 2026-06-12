@@ -65,7 +65,8 @@ public class AuthService : IAuthService
         {
             Token = token,
             Email = user.Email,
-            Role = user.Role
+            Role = user.Role,
+            Name = user.Name
         };
     }
 
@@ -102,7 +103,8 @@ public class AuthService : IAuthService
         {
             Token = token,
             Email = user.Email,
-            Role = user.Role
+            Role = user.Role,
+            Name = user.Name
         };
     }
 }

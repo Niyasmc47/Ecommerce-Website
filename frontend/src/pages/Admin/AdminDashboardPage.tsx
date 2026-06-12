@@ -64,6 +64,7 @@ export default function AdminDashboardPage() {
           className="
               text-5xl
               font-bold
+              dark:text-white
             "
         >
           Admin Dashboard
@@ -80,34 +81,34 @@ export default function AdminDashboardPage() {
               lg:grid-cols-4
             "
         >
-          <div className="rounded-2xl border p-6">
+          <div className="rounded-2xl border border-slate-200 p-6 dark:border-slate-700 dark:bg-slate-900">
             <FaUsers className="mb-4 text-3xl" />
 
-            <p className="text-slate-500">Users</p>
+            <p className="text-slate-500 dark:text-slate-400">Users</p>
 
             <h2 className="mt-2 text-4xl font-bold">{stats?.totalUsers}</h2>
           </div>
 
-          <div className="rounded-2xl border p-6">
+          <div className="rounded-2xl border border-slate-200 p-6 dark:border-slate-700 dark:bg-slate-900">
             <FaBox className="mb-4 text-3xl" />
 
-            <p className="text-slate-500">Products</p>
+            <p className="text-slate-500 dark:text-slate-400">Products</p>
 
             <h2 className="mt-2 text-4xl font-bold">{stats?.totalProducts}</h2>
           </div>
 
-          <div className="rounded-2xl border p-6">
+          <div className="rounded-2xl border border-slate-200 p-6 dark:border-slate-700 dark:bg-slate-900">
             <FaShoppingCart className="mb-4 text-3xl" />
 
-            <p className="text-slate-500">Orders</p>
+            <p className="text-slate-500 dark:text-slate-400">Orders</p>
 
             <h2 className="mt-2 text-4xl font-bold">{stats?.totalOrders}</h2>
           </div>
 
-          <div className="rounded-2xl border p-6">
+          <div className="rounded-2xl border border-slate-200 p-6 dark:border-slate-700 dark:bg-slate-900">
             <FaIndianRupeeSign className="mb-4 text-3xl" />
 
-            <p className="text-slate-500">Revenue</p>
+            <p className="text-slate-500 dark:text-slate-400">Revenue</p>
 
             <h2 className="mt-2 text-3xl font-bold">₹{stats?.totalRevenue}</h2>
           </div>

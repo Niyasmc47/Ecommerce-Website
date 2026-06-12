@@ -34,6 +34,8 @@ export default function LoginPage() {
 
       localStorage.setItem("email", response.data.email);
 
+      localStorage.setItem("name", response.data.name);
+
       toast.success("Login successful");
 
       navigate("/");
@@ -74,7 +76,12 @@ export default function LoginPage() {
                 w-full
                 rounded-xl
                 border
+                border-slate-200
                 p-4
+
+                dark:border-slate-700
+                dark:bg-slate-950
+                dark:text-white
               "
               required
             />
@@ -88,7 +95,12 @@ export default function LoginPage() {
                 w-full
                 rounded-xl
                 border
+                border-slate-200
                 p-4
+
+                dark:border-slate-700
+                dark:bg-slate-950
+                dark:text-white
               "
               required
             />
@@ -99,10 +111,10 @@ export default function LoginPage() {
               className="
                 w-full
                 rounded-xl
-                bg-blue-600
+                bg-emerald-600
                 py-4
                 text-white
-                hover:bg-blue-700
+                hover:bg-emerald-700
               "
             >
               {loading ? "Logging in..." : "Login"}

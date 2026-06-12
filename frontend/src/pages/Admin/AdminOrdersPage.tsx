@@ -38,17 +38,16 @@ export default function AdminOrdersPage() {
       mb-8
       text-4xl
       font-bold
+      dark:text-white
     "
       >
         Orders
       </h1>
 
-      <div
-        className="overflow-x-auto rounded-2xl border"
-      >
+      <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700">
         <table className="w-full">
           <thead>
-            <tr className="border-b">
+            <tr className="border-b dark:border-slate-700">
               <th className="p-4 text-left">ID</th>
 
               <th className="p-4 text-left">Amount</th>
@@ -63,7 +62,7 @@ export default function AdminOrdersPage() {
 
           <tbody>
             {orders.map((order) => (
-              <tr key={order.id} className="border-b">
+              <tr key={order.id} className="border-b dark:border-slate-700">
                 <td className="p-4">{order.id}</td>
 
                 <td className="p-4">₹{order.totalAmount}</td>

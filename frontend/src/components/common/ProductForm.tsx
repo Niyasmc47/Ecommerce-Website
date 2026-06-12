@@ -82,14 +82,14 @@ export default function ProductForm({
       }}
     >
       <input
-        className="w-full rounded-xl border p-4"
+        className="w-full rounded-xl border border-slate-200 p-4 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
         placeholder="Product Name"
         value={form.name}
         onChange={(e) => updateField("name", e.target.value)}
       />
 
       <textarea
-        className="w-full rounded-xl border p-4"
+        className="w-full rounded-xl border border-slate-200 p-4 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
         placeholder="Description"
         value={form.description}
         onChange={(e) => updateField("description", e.target.value)}
@@ -97,7 +97,7 @@ export default function ProductForm({
 
       <input
         type="number"
-        className="w-full rounded-xl border p-4"
+        className="w-full rounded-xl border border-slate-200 p-4 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
         placeholder="Price"
         value={form.price}
         onChange={(e) => updateField("price", Number(e.target.value))}
@@ -105,7 +105,7 @@ export default function ProductForm({
 
       <input
         type="number"
-        className="w-full rounded-xl border p-4"
+        className="w-full rounded-xl border border-slate-200 p-4 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
         placeholder="Stock"
         value={form.stock}
         onChange={(e) => updateField("stock", Number(e.target.value))}
@@ -118,7 +118,12 @@ export default function ProductForm({
     w-full
     rounded-xl
     border
+    border-slate-200
     p-4
+
+    dark:border-slate-700
+    dark:bg-slate-950
+    dark:text-white
   "
         onChange={(e) => {
           const file = e.target.files?.[0];
@@ -140,12 +145,15 @@ export default function ProductForm({
       rounded-xl
       border
       object-cover
+
+      border-slate-200
+      dark:border-slate-700
     "
         />
       )}
 
       <select
-        className="w-full rounded-xl border p-4"
+        className="w-full rounded-xl border border-slate-200 p-4 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
         value={form.categoryId}
         onChange={(e) => updateField("categoryId", Number(e.target.value))}
       >

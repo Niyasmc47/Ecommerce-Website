@@ -10,6 +10,7 @@ import AdminDashboardPage from "../pages/Admin/AdminDashboardPage";
 import AdminProductsPage from "../pages/Admin/AdminProductsPage";
 import AdminOrdersPage from "../pages/Admin/AdminOrdersPage";
 import AdminCategoriesPage from "../pages/Admin/AdminCategoriesPage";
+import OrdersPage from "../pages/Orders/OrdersPage";
 import AdminOrderDetailsPage from "../pages/Admin/AdminOrderDetailsPage";
 import ProtectedAdminRoute from "./ProtectedAdminRoute";
 import AdminUsersPage from "../pages/Admin/AdminUsersPage";
@@ -21,6 +22,7 @@ export default function AppRouter() {
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/products/:id" element={<ProductDetailsPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/orders" element={<OrdersPage />} />
 
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -77,6 +79,8 @@ export default function AppRouter() {
             </ProtectedAdminRoute>
           }
         />
+
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </BrowserRouter>
   );

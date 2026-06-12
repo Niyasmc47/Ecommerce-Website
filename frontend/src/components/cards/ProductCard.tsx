@@ -1,38 +1,82 @@
 import type { Product } from "../../types/product";
+
 import { Link } from "react-router-dom";
+
 interface Props {
   product: Product;
 }
 
-export default function ProductCard({ product }: Props) {
+export default function ProductCard({
+  product,
+}: Props) {
   return (
     <div
       className="
-      overflow-hidden
-      rounded-2xl
-      border
-      border-slate-200
-      bg-white
-      transition
-      hover:-translate-y-1
-      hover:shadow-lg
+        group
+        overflow-hidden
+        rounded-3xl
+        bg-white
+        shadow-sm
+        ring-1
+        ring-slate-200
+
+        dark:bg-slate-900
+        dark:ring-slate-700
+        transition-all
+        duration-300
+        hover:-translate-y-2
+        hover:shadow-xl
       "
     >
-      <img
-        src={product.imageUrl}
-        alt={product.name}
+      <div
         className="
-        h-64
-        w-full
-        object-cover
+          overflow-hidden
+          bg-slate-50
+
+          dark:bg-slate-950
         "
-      />
+      >
+        <img
+          src={product.imageUrl}
+          alt={product.name}
+          className="
+            h-72
+            w-full
+            object-cover
+            transition-transform
+            duration-500
+            group-hover:scale-105
+          "
+        />
+      </div>
 
       <div className="p-5">
+        <div
+          className="
+            mb-3
+            inline-flex
+            rounded-full
+            bg-emerald-100
+            px-3
+            py-1
+            text-xs
+            font-medium
+            text-emerald-700
+            dark:bg-emerald-950
+            dark:text-emerald-300
+          "
+        >
+          In Stock
+        </div>
+
         <h3
           className="
-          text-lg
-          font-semibold
+            text-xl
+            font-semibold
+            tracking-tight
+            text-slate-900
+
+            dark:text-white
           "
         >
           {product.name}
@@ -40,10 +84,12 @@ export default function ProductCard({ product }: Props) {
 
         <p
           className="
-          mt-2
-          line-clamp-2
-          text-sm
-          text-slate-500
+            mt-2
+            line-clamp-2
+            text-sm
+            text-slate-500
+
+            dark:text-slate-400
           "
         >
           {product.description}
@@ -51,16 +97,19 @@ export default function ProductCard({ product }: Props) {
 
         <div
           className="
-          mt-4
-          flex
-          items-center
-          justify-between
+            mt-6
+            flex
+            items-center
+            justify-between
           "
         >
           <span
             className="
-            text-xl
-            font-bold
+              text-2xl
+              font-bold
+              text-slate-900
+
+              dark:text-white
             "
           >
             ₹{product.price}
@@ -68,12 +117,16 @@ export default function ProductCard({ product }: Props) {
 
           <Link
             to={`/products/${product.id}`}
-            className="rounded-xl
-  bg-blue-600
-  px-4
-  py-2
-  text-white
-  "
+            className="
+              rounded-xl
+              bg-emerald-600
+              px-5
+              py-2.5
+              font-medium
+              text-white
+              transition
+              hover:bg-emerald-700
+            "
           >
             View
           </Link>

@@ -74,6 +74,7 @@ export default function AdminUsersPage() {
           mb-8
           text-4xl
           font-bold
+          dark:text-white
         "
       >
         Users
@@ -93,7 +94,11 @@ export default function AdminUsersPage() {
           w-full
           rounded-xl
           border
+          border-slate-200
           p-4
+          dark:border-slate-700
+          dark:bg-slate-950
+          dark:text-white
         "
       />
 
@@ -102,6 +107,8 @@ export default function AdminUsersPage() {
           overflow-x-auto
           rounded-2xl
           border
+          border-slate-200
+          dark:border-slate-700
         "
       >
 

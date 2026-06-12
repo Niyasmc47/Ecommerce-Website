@@ -45,112 +45,227 @@ export default function CartPage() {
   return (
     <MainLayout>
       <Container>
-        <div className="py-16">
-          <h1
+        <div className="py-20">
+          <div
             className="
-              text-5xl
-              font-bold
-            "
+          mb-12
+          text-center
+        "
           >
-            Shopping Cart
-          </h1>
+            <span
+              className="
+            rounded-full
+            bg-emerald-100
+            px-4
+            py-2
+            text-sm
+            font-medium
+            text-emerald-700
+          "
+            >
+              Your Cart
+            </span>
+
+            <h1
+              className="
+            mt-6
+            text-5xl
+            font-bold
+            tracking-tight
+          "
+            >
+              Shopping Cart
+            </h1>
+
+            <p
+              className="
+            mt-4
+            text-lg
+            text-slate-500
+            dark:text-slate-400
+          "
+            >
+              Review your items before checkout.
+            </p>
+          </div>
 
           {loading ? (
-            <p className="mt-8">Loading...</p>
+            <p
+              className="
+            text-center
+            text-slate-500
+            dark:text-slate-400
+          "
+            >
+              Loading...
+            </p>
           ) : items.length === 0 ? (
-            <p className="mt-8">Your cart is empty.</p>
+            <div
+              className="
+            rounded-3xl
+            bg-white
+            dark:bg-slate-900
+            p-12
+            text-center
+            shadow-sm
+            ring-1
+            ring-slate-200
+            dark:ring-slate-700
+          "
+            >
+              <h2
+                className="
+              text-2xl
+              font-semibold
+            "
+              >
+                Your cart is empty
+              </h2>
+
+              <p
+                className="
+              mt-3
+              text-slate-500
+              dark:text-slate-400
+            "
+              >
+                Add products to start shopping.
+              </p>
+            </div>
           ) : (
-            <>
-              <div className="mt-10 space-y-4">
+            <div
+              className="
+            grid
+            gap-8
+            lg:grid-cols-3
+          "
+            >
+              <div
+                className="
+              space-y-4
+              lg:col-span-2
+            "
+              >
                 {items.map((item) => (
                   <div
                     key={item.id}
                     className="
+                    rounded-3xl
+                    bg-white
+                    dark:bg-slate-900
+                    p-6
+                    shadow-sm
+                    ring-1
+                    ring-slate-200
+                    dark:ring-slate-700
+                  "
+                  >
+                    <div
+                      className="
                       flex
                       items-center
                       justify-between
-                      rounded-xl
-                      border
-                      p-6
                     "
-                  >
-                    <div>
-                      <h3
-                        className="
+                    >
+                      <div>
+                        <h3
+                          className="
                           text-xl
                           font-semibold
                         "
-                      >
-                        {item.productName}
-                      </h3>
+                        >
+                          {item.productName}
+                        </h3>
 
-                      <p>Qty: {item.quantity}</p>
-                    </div>
+                        <p
+                          className="
+                          mt-2
+                          text-slate-500
+                          dark:text-slate-400
+                        "
+                        >
+                          Quantity: {item.quantity}
+                        </p>
+                      </div>
 
-                    <div
-                      className="
-                        text-xl
+                      <div
+                        className="
+                        text-2xl
                         font-bold
+                        dark:text-white
                       "
-                    >
-                      ₹{item.totalPrice}
+                      >
+                        ₹{item.totalPrice}
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div
-                className="
-                  mt-10
-                  rounded-xl
-                  border
-                  p-6
-                "
-              >
-                <h2
-                  className="
-                    text-2xl
-                    font-bold
-                  "
-                >
-                  Order Summary
-                </h2>
-
+              <div>
                 <div
                   className="
-                    mt-4
-                    flex
-                    justify-between
-                  "
+                sticky
+                top-28
+                rounded-3xl
+                bg-white
+                dark:bg-slate-900
+                p-8
+                shadow-sm
+                ring-1
+                ring-slate-200
+                dark:ring-slate-700
+              "
                 >
-                  <span>Total</span>
-
-                  <span
+                  <h2
                     className="
-                      font-bold
-                    "
+                  text-2xl
+                  font-bold
+                  dark:text-white
+                "
                   >
-                    ₹{total}
-                  </span>
-                </div>
+                    Order Summary
+                  </h2>
 
-                <button
-                  onClick={handleCheckout}
-                  className="
-                    mt-6
-                    w-full
-                    rounded-xl
-                    bg-blue-600
-                    py-4
-                    text-white
-                    transition
-                    hover:bg-blue-700
+                  <div
+                    className="
+                  mt-6
+                  flex
+                  justify-between
+                "
+                  >
+                    <span>Total</span>
+
+                    <span
+                      className="
+                    text-2xl
+                    font-bold
+                    dark:text-white
                   "
-                >
-                  Checkout
-                </button>
+                    >
+                      ₹{total}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={handleCheckout}
+                    className="
+                  mt-8
+                  w-full
+                  rounded-xl
+                  bg-emerald-600
+                  py-4
+                  font-medium
+                  text-white
+                  transition
+                  hover:bg-emerald-700
+                "
+                  >
+                    Checkout
+                  </button>
+                </div>
               </div>
-            </>
+            </div>
           )}
         </div>
       </Container>
