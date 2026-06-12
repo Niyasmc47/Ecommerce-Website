@@ -1,0 +1,68 @@
+using System.Security.Claims;
+using ECommerce.API.Common;
+using ECommerce.API.DTOs.Responses;
+using ECommerce.API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ECommerce.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+[Authorize]
+public class OrdersController : ControllerBase
+{
+    private readonly IOrderService _orderService;
+
+    public OrdersController(
+        IOrderService orderService)
+    {
+        _orderService = orderService;
+    }
+
+    private int GetUserId()
+    {
+        return int.Parse(
+            User.FindFirstValue(
+                ClaimTypes.NameIdentifier)!);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetOrders()
+    {
+        return Ok(
+            await _orderService.GetOrdersAsync(
+                GetUserId()));
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetOrder(
+        int id)
+    {
+        var order =
+            await _orderService.GetOrderByIdAsync(
+                GetUserId(),
+                id);
+
+        if (order is null)
+            return NotFound();
+
+        return Ok(order);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateOrder()
+    {
+        var result =
+            await _orderService.CreateOrderAsync(
+                GetUserId());
+
+        return Ok(
+            new ApiResponse<OrderResponse>
+            {
+                Success = true,
+                Message = "Order created successfully.",
+                Data = result
+            });
+    }
+}

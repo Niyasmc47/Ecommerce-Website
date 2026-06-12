@@ -1,0 +1,18 @@
+# Node
+node_modules/
+dist/
+
+# .NET / C#
+[Bb]in/
+[Oo]bj/
+appsettings.Development.json
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Secrets
+.env
+.env.*
