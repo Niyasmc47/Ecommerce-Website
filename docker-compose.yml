@@ -1,0 +1,19 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: ecommerce-sql
+
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Ecommerce@123"
+
+    ports:
+      - "1434:1433"
+
+    volumes:
+      - ecommerce_sql_data:/var/opt/mssql
+
+    restart: unless-stopped
+
+volumes:
+  ecommerce_sql_data:
