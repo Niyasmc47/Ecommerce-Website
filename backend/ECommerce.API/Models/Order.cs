@@ -12,7 +12,28 @@ public class Order
 
     public string Status { get; set; } = "Pending";
 
+    public string PaymentStatus { get; set; } = "Pending";
+
+    public string PaymentMethod { get; set; } = string.Empty;
+
+    public string FullName { get; set; } = string.Empty;
+
+    public string PhoneNumber { get; set; } = string.Empty;
+
+    public string AddressLine1 { get; set; } = string.Empty;
+
+    public string AddressLine2 { get; set; } = string.Empty;
+
+    public string City { get; set; } = string.Empty;
+
+    public string State { get; set; } = string.Empty;
+
+    public string Country { get; set; } = string.Empty;
+
+    public string PostalCode { get; set; } = string.Empty;
+
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
-    public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    public ICollection<OrderItem> OrderItems { get; set; }
+        = new List<OrderItem>();
 }

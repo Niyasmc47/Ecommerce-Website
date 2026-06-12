@@ -9,7 +9,30 @@ function getAuthHeaders() {
   };
 }
 
-export async function addToCart(productId: number, quantity: number) {
+export interface CheckoutRequest {
+  fullName: string;
+
+  phoneNumber: string;
+
+  addressLine1: string;
+
+  addressLine2: string;
+
+  city: string;
+
+  state: string;
+
+  country: string;
+
+  postalCode: string;
+
+  paymentMethod: string;
+}
+
+export async function addToCart(
+  productId: number,
+  quantity: number
+) {
   return api.post(
     "/cart",
     {
@@ -23,19 +46,27 @@ export async function addToCart(productId: number, quantity: number) {
 }
 
 export async function getCart() {
-  const response = await api.get<CartItem[]>("/cart", {
-    headers: getAuthHeaders(),
-  });
+  const response =
+    await api.get<CartItem[]>(
+      "/cart",
+      {
+        headers:
+          getAuthHeaders(),
+      }
+    );
 
   return response.data;
 }
 
-export async function createOrder() {
+export async function createOrder(
+  data: CheckoutRequest
+) {
   return api.post(
     "/orders",
-    {},
+    data,
     {
-      headers: getAuthHeaders(),
+      headers:
+        getAuthHeaders(),
     },
   );
 }

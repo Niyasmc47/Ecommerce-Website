@@ -1,5 +1,5 @@
 using ECommerce.API.DTOs.Responses;
-
+using ECommerce.API.DTOs.Requests;
 namespace ECommerce.API.Services.Interfaces;
 
 public interface IOrderService
@@ -11,6 +11,9 @@ public interface IOrderService
         int userId,
         int orderId);
 
+
+
     Task<OrderResponse> CreateOrderAsync(
-        int userId);
+        int userId,
+        CheckoutRequest request);
 }

@@ -3,7 +3,7 @@ using ECommerce.API.DTOs.Responses;
 using ECommerce.API.Models;
 using ECommerce.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-
+using ECommerce.API.DTOs.Requests;
 namespace ECommerce.API.Services.Implementations;
 
 public class OrderService : IOrderService
@@ -52,7 +52,8 @@ public class OrderService : IOrderService
     }
 
     public async Task<OrderResponse> CreateOrderAsync(
-        int userId)
+    int userId,
+    CheckoutRequest request)
     {
         var cartItems = await _context.CartItems
             .Where(x => x.UserId == userId)
@@ -66,7 +67,28 @@ public class OrderService : IOrderService
         var order = new Order
         {
             UserId = userId,
-            Status = "Pending"
+
+            Status = "Pending",
+
+            PaymentStatus = "Pending",
+
+            PaymentMethod = request.PaymentMethod,
+
+            FullName = request.FullName,
+
+            PhoneNumber = request.PhoneNumber,
+
+            AddressLine1 = request.AddressLine1,
+
+            AddressLine2 = request.AddressLine2,
+
+            City = request.City,
+
+            State = request.State,
+
+            Country = request.Country,
+
+            PostalCode = request.PostalCode
         };
 
         _context.Orders.Add(order);

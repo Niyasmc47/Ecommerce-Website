@@ -4,7 +4,7 @@ using ECommerce.API.DTOs.Responses;
 using ECommerce.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using ECommerce.API.DTOs.Requests;
 namespace ECommerce.API.Controllers;
 
 [ApiController]
@@ -51,11 +51,13 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateOrder()
+    public async Task<IActionResult> CreateOrder(
+    CheckoutRequest request)
     {
         var result =
             await _orderService.CreateOrderAsync(
-                GetUserId());
+                GetUserId(),
+                request);
 
         return Ok(
             new ApiResponse<OrderResponse>

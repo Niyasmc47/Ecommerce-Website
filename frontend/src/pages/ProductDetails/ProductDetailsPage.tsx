@@ -5,15 +5,14 @@ import toast from "react-hot-toast";
 
 import MainLayout from "../../components/layouts/MainLayout";
 import Container from "../../components/common/Container";
-
+import { useNavigate } from "react-router-dom";
 import { getProductById } from "../../services/productService";
-import { addToCart, createOrder } from "../../services/cartService";
-
+import { addToCart } from "../../services/cartService";
 import type { Product } from "../../types/product";
 
 export default function ProductDetailsPage() {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const [product, setProduct] =
     useState<Product | null>(null);
 
@@ -59,27 +58,21 @@ export default function ProductDetailsPage() {
   }
 
   async function handleBuyNow() {
-    if (!product) return;
+  if (!product) return;
 
-    try {
-      await addToCart(
-        product.id,
-        1
-      );
+  try {
+    await addToCart(
+      product.id,
+      1
+    );
 
-      await createOrder();
-
-      toast.success(
-        "Order placed successfully"
-      );
-
-      window.location.reload();
-    } catch {
-      toast.error(
-        "Unable to place order"
-      );
-    }
+    navigate("/checkout");
+  } catch {
+    toast.error(
+      "Please login first"
+    );
   }
+}
 
   if (loading) {
     return (

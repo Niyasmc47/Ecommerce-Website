@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import MainLayout from "../../components/layouts/MainLayout";
 import Container from "../../components/common/Container";
 
-import toast from "react-hot-toast";
-
-import { getCart, createOrder } from "../../services/cartService";
+import { getCart } from "../../services/cartService";
 
 import type { CartItem } from "../../types/cartItem";
 
 export default function CartPage() {
+  const navigate = useNavigate();
   const [items, setItems] = useState<CartItem[]>([]);
 
   const [loading, setLoading] = useState(true);
@@ -28,17 +27,9 @@ export default function CartPage() {
     loadCart();
   }, []);
 
-  async function handleCheckout() {
-    try {
-      await createOrder();
-
-      toast.success("Order created successfully");
-
-      window.location.reload();
-    } catch {
-      toast.error("Checkout failed");
-    }
-  }
+  function handleCheckout() {
+  navigate("/checkout");
+}
 
   const total = items.reduce((sum, item) => sum + item.totalPrice, 0);
 
