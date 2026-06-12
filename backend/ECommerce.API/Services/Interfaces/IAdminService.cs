@@ -13,5 +13,10 @@ public interface IAdminService
         int id
     );
 
+    Task<bool> UpdateOrderStatusAsync(
+    int orderId,
+    string status
+);
+
     Task<DashboardResponse> GetDashboardAsync();
 }

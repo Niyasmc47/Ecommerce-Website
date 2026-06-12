@@ -64,52 +64,79 @@ public class AdminService : IAdminService
     GetOrderByIdAsync(
         int id
     )
-{
-    return await _context.Orders
+    {
+        return await _context.Orders
 
-        .Include(x => x.User)
+            .Include(x => x.User)
 
-        .Include(x => x.OrderItems)
-        .ThenInclude(x => x.Product)
+            .Include(x => x.OrderItems)
+            .ThenInclude(x => x.Product)
 
-        .Where(x => x.Id == id)
+            .Where(x => x.Id == id)
 
-        .Select(x =>
-            new AdminOrderDetailsResponse
-            {
-                Id = x.Id,
+            .Select(x =>
+                new AdminOrderDetailsResponse
+                {
+                    Id = x.Id,
 
-                CustomerName =
-                    x.User!.Name,
+                    CustomerName =
+                        x.User!.Name,
 
-                CustomerEmail =
-                    x.User.Email,
+                    CustomerEmail =
+                        x.User.Email,
 
-                TotalAmount =
-                    x.TotalAmount,
+                    TotalAmount =
+                        x.TotalAmount,
 
-                Status =
-                    x.Status,
+                    Status =
+                        x.Status,
 
-                CreatedDate =
-                    x.CreatedDate,
+                    CreatedDate =
+                        x.CreatedDate,
 
-                Items =
-                    x.OrderItems
-                        .Select(i =>
-                            new AdminOrderItemResponse
-                            {
-                                ProductName =
-                                    i.Product!.Name,
+                    Items =
+                        x.OrderItems
+                            .Select(i =>
+                                new AdminOrderItemResponse
+                                {
+                                    ProductName =
+                                        i.Product!.Name,
 
-                                Quantity =
-                                    i.Quantity,
+                                    Quantity =
+                                        i.Quantity,
 
-                                Price =
-                                    i.Price
-                            })
-                        .ToList()
-            })
-        .FirstOrDefaultAsync();
-}
+                                    Price =
+                                        i.Price
+                                })
+                            .ToList()
+                })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<bool>
+        UpdateOrderStatusAsync(
+            int orderId,
+            string status
+        )
+    {
+        var order =
+            await _context.Orders
+                .FirstOrDefaultAsync(
+                    x => x.Id == orderId
+                );
+
+        if (order is null)
+        {
+            return false;
+        }
+
+        order.Status = status;
+
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+
+
 }

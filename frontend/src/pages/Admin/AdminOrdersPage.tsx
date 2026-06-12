@@ -44,11 +44,7 @@ export default function AdminOrdersPage() {
       </h1>
 
       <div
-        className="
-      overflow-x-auto
-      rounded-2xl
-      border
-    "
+        className="overflow-x-auto rounded-2xl border"
       >
         <table className="w-full">
           <thead>

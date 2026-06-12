@@ -1,7 +1,7 @@
 using ECommerce.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using ECommerce.API.DTOs.Requests;
 namespace ECommerce.API.Controllers;
 
 [ApiController]
@@ -32,24 +32,24 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet("orders/{id}")]
-public async Task<IActionResult>
+    public async Task<IActionResult>
     GetOrderById(
         int id
     )
-{
-    var order =
-        await _adminService
-            .GetOrderByIdAsync(
-                id
-            );
-
-    if (order is null)
     {
-        return NotFound();
-    }
+        var order =
+            await _adminService
+                .GetOrderByIdAsync(
+                    id
+                );
 
-    return Ok(order);
-}
+        if (order is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(order);
+    }
 
     [HttpGet("dashboard")]
     public async Task<IActionResult> GetDashboard()
@@ -58,5 +58,27 @@ public async Task<IActionResult>
             await _adminService.GetDashboardAsync());
     }
 
-    
+    [HttpPut("orders/{id}/status")]
+    public async Task<IActionResult>
+        UpdateOrderStatus(
+            int id,
+            UpdateOrderStatusRequest request
+        )
+    {
+        var success =
+            await _adminService
+                .UpdateOrderStatusAsync(
+                    id,
+                    request.Status
+                );
+
+        if (!success)
+        {
+            return NotFound();
+        }
+
+        return Ok();
+    }
+
+
 }
