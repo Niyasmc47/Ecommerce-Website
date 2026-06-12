@@ -63,6 +63,55 @@ public class CartService : ICartService
         if (product is null)
             throw new Exception("Product not found.");
 
+        if (product.Stock <= 0)
+            throw new Exception("Product is out of stock.");
+
+        if (request.Quantity <= 0)
+            throw new Exception(
+                "Quantity must be greater than zero.");
+
+        if (request.Quantity > product.Stock)
+        {
+            throw new Exception(
+                $"Only {product.Stock} units of {product.Name} are available.");
+        }
+
+        var existingItem =
+            (await _cartRepository.GetAllAsync())
+            .FirstOrDefault(x =>
+                x.UserId == userId &&
+                x.ProductId == request.ProductId);
+
+        if (existingItem is not null)
+        {
+            if (
+                existingItem.Quantity +
+                request.Quantity >
+                product.Stock)
+            {
+                throw new Exception(
+                    $"Only {product.Stock} units of {product.Name} are available.");
+            }
+
+            existingItem.Quantity +=
+                request.Quantity;
+
+            await _cartRepository.UpdateAsync(
+                existingItem);
+
+            return new CartItemResponse
+            {
+                Id = existingItem.Id,
+                ProductId = product.Id,
+                ProductName = product.Name,
+                Price = product.Price,
+                Quantity = existingItem.Quantity,
+                TotalPrice =
+                    product.Price *
+                    existingItem.Quantity
+            };
+        }
+
         var cartItem = new CartItem
         {
             UserId = userId,
@@ -79,7 +128,9 @@ public class CartService : ICartService
             ProductName = product.Name,
             Price = product.Price,
             Quantity = cartItem.Quantity,
-            TotalPrice = product.Price * cartItem.Quantity
+            TotalPrice =
+                product.Price *
+                cartItem.Quantity
         };
     }
 
@@ -88,14 +139,11 @@ public class CartService : ICartService
         UpdateCartItemRequest request)
     {
         var cartItem =
-            await _cartRepository.GetByIdAsync(cartItemId);
+            await _cartRepository.GetByIdAsync(
+                cartItemId);
 
         if (cartItem is null)
             return null;
-
-        cartItem.Quantity = request.Quantity;
-
-        await _cartRepository.UpdateAsync(cartItem);
 
         var product =
             await _productRepository.GetByIdAsync(
@@ -104,6 +152,24 @@ public class CartService : ICartService
         if (product is null)
             return null;
 
+        if (request.Quantity <= 0)
+        {
+            throw new Exception(
+                "Quantity must be greater than zero.");
+        }
+
+        if (request.Quantity > product.Stock)
+        {
+            throw new Exception(
+                $"Only {product.Stock} units of {product.Name} are available.");
+        }
+
+        cartItem.Quantity =
+            request.Quantity;
+
+        await _cartRepository.UpdateAsync(
+            cartItem);
+
         return new CartItemResponse
         {
             Id = cartItem.Id,
@@ -111,7 +177,9 @@ public class CartService : ICartService
             ProductName = product.Name,
             Price = product.Price,
             Quantity = cartItem.Quantity,
-            TotalPrice = product.Price * cartItem.Quantity
+            TotalPrice =
+                product.Price *
+                cartItem.Quantity
         };
     }
 
@@ -119,12 +187,14 @@ public class CartService : ICartService
         int cartItemId)
     {
         var cartItem =
-            await _cartRepository.GetByIdAsync(cartItemId);
+            await _cartRepository.GetByIdAsync(
+                cartItemId);
 
         if (cartItem is null)
             return false;
 
-        await _cartRepository.DeleteAsync(cartItem);
+        await _cartRepository.DeleteAsync(
+            cartItem);
 
         return true;
     }

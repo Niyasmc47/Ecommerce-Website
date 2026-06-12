@@ -1,11 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-import {
-  BsCart3,
-  BsMoonStars,
-  BsSun,
-} from "react-icons/bs";
+import logo from "../../assets/logo.png";
+import { BsCart3, BsMoonStars, BsSun } from "react-icons/bs";
 
 import Container from "../common/Container";
 import { getCart } from "../../services/cartService";
@@ -13,41 +9,28 @@ import { getCart } from "../../services/cartService";
 export default function Navbar() {
   const navigate = useNavigate();
 
-  const token =
-    localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-  const name =
-    localStorage.getItem("name");
+  const name = localStorage.getItem("name");
 
-  const role =
-    localStorage.getItem("role");
+  const role = localStorage.getItem("role");
 
-  const [darkMode, setDarkMode] =
-    useState(
-      localStorage.getItem("theme") ===
-        "dark"
-    );
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
 
-  const [cartCount, setCartCount] =
-    useState(0);
+  const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
     async function loadCart() {
-      const token =
-        localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
       if (!token) return;
 
       try {
-        const items =
-          await getCart();
+        const items = await getCart();
 
-        const count =
-          items.reduce(
-            (sum, item) =>
-              sum + item.quantity,
-            0
-          );
+        const count = items.reduce((sum, item) => sum + item.quantity, 0);
 
         setCartCount(count);
       } catch {
@@ -60,42 +43,24 @@ export default function Navbar() {
 
   useEffect(() => {
     if (darkMode) {
-      document.documentElement.classList.add(
-        "dark"
-      );
+      document.documentElement.classList.add("dark");
 
-      localStorage.setItem(
-        "theme",
-        "dark"
-      );
+      localStorage.setItem("theme", "dark");
     } else {
-      document.documentElement.classList.remove(
-        "dark"
-      );
+      document.documentElement.classList.remove("dark");
 
-      localStorage.setItem(
-        "theme",
-        "light"
-      );
+      localStorage.setItem("theme", "light");
     }
   }, [darkMode]);
 
   function handleLogout() {
-    localStorage.removeItem(
-      "token"
-    );
+    localStorage.removeItem("token");
 
-    localStorage.removeItem(
-      "role"
-    );
+    localStorage.removeItem("role");
 
-    localStorage.removeItem(
-      "email"
-    );
+    localStorage.removeItem("email");
 
-    localStorage.removeItem(
-      "name"
-    );
+    localStorage.removeItem("name");
 
     navigate("/login");
 
@@ -130,12 +95,30 @@ export default function Navbar() {
           <Link
             to="/"
             className="
-              text-2xl
-              font-bold
-              text-emerald-600
-            "
+    flex
+    items-center
+    gap-3
+  "
           >
-            Velocity.Shop
+            <img
+              src={logo}
+              alt="Velocity.Shop"
+              className="
+      h-15
+      w-15
+      object-contain
+    "
+            />
+
+            <span
+              className="
+      text-2xl
+      font-bold
+    "
+            >
+              Velocity
+              <span className="text-emerald-600">.Shop</span>
+            </span>
           </Link>
 
           <nav
@@ -212,11 +195,7 @@ export default function Navbar() {
             "
           >
             <button
-              onClick={() =>
-                setDarkMode(
-                  !darkMode
-                )
-              }
+              onClick={() => setDarkMode(!darkMode)}
               className="
                 flex
                 h-11
@@ -234,11 +213,7 @@ export default function Navbar() {
                 dark:hover:bg-slate-800
               "
             >
-              {darkMode ? (
-                <BsSun />
-              ) : (
-                <BsMoonStars />
-              )}
+              {darkMode ? <BsSun /> : <BsMoonStars />}
             </button>
 
             <Link
@@ -292,7 +267,7 @@ export default function Navbar() {
               )}
             </Link>
 
-                        {token ? (
+            {token ? (
               <div className="relative group">
                 <button
                   className="

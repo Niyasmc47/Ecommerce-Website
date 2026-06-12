@@ -6,9 +6,7 @@ interface Props {
   product: Product;
 }
 
-export default function ProductCard({
-  product,
-}: Props) {
+export default function ProductCard({ product }: Props) {
   return (
     <div
       className="
@@ -22,6 +20,7 @@ export default function ProductCard({
 
         dark:bg-slate-900
         dark:ring-slate-700
+
         transition-all
         duration-300
         hover:-translate-y-2
@@ -51,22 +50,45 @@ export default function ProductCard({
       </div>
 
       <div className="p-5">
-        <div
-          className="
-            mb-3
-            inline-flex
-            rounded-full
-            bg-emerald-100
-            px-3
-            py-1
-            text-xs
-            font-medium
-            text-emerald-700
-            dark:bg-emerald-950
-            dark:text-emerald-300
-          "
-        >
-          In Stock
+        {/* Stock Badge */}
+        <div className="mb-3">
+          {product.stock > 0 ? (
+            <span
+              className="
+                inline-flex
+                rounded-full
+                bg-emerald-100
+                px-3
+                py-1
+                text-xs
+                font-medium
+                text-emerald-700
+
+                dark:bg-emerald-950
+                dark:text-emerald-300
+              "
+            >
+              In Stock ({product.stock})
+            </span>
+          ) : (
+            <span
+              className="
+                inline-flex
+                rounded-full
+                bg-red-100
+                px-3
+                py-1
+                text-xs
+                font-medium
+                text-red-700
+
+                dark:bg-red-950
+                dark:text-red-300
+              "
+            >
+              Out of Stock
+            </span>
+          )}
         </div>
 
         <h3
@@ -84,7 +106,7 @@ export default function ProductCard({
 
         <p
           className="
-            mt-2
+            mt-3
             line-clamp-2
             text-sm
             text-slate-500
@@ -120,11 +142,11 @@ export default function ProductCard({
             className="
               rounded-xl
               bg-emerald-600
-              px-5
-              py-2.5
-              font-medium
+              px-4
+              py-2
               text-white
               transition
+
               hover:bg-emerald-700
             "
           >

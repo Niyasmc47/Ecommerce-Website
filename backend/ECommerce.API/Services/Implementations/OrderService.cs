@@ -82,6 +82,13 @@ public class OrderService : IOrderService
             if (product is null)
                 continue;
 
+            if (product.Stock < cartItem.Quantity)
+            {
+                throw new Exception(
+                    $"Only {product.Stock} units of {product.Name} are available."
+                );
+            }
+
             totalAmount +=
                 product.Price * cartItem.Quantity;
 
@@ -93,6 +100,8 @@ public class OrderService : IOrderService
                     Quantity = cartItem.Quantity,
                     Price = product.Price
                 });
+
+            product.Stock -= cartItem.Quantity;
         }
 
         order.TotalAmount = totalAmount;
