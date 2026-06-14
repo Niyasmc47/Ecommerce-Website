@@ -140,4 +140,113 @@ public class OrderService : IOrderService
             CreatedDate = order.CreatedDate
         };
     }
+
+    public async Task<OrderResponse>
+    CreateOrderFromPendingOrderAsync(
+        PendingOrder pendingOrder)
+{
+    decimal totalAmount = 0;
+
+    var order = new Order
+    {
+        UserId = pendingOrder.UserId,
+
+        Status = "Pending",
+
+        PaymentStatus = "Paid",
+
+        PaymentMethod =
+            pendingOrder.PaymentMethod,
+
+        FullName =
+            pendingOrder.FullName,
+
+        PhoneNumber =
+            pendingOrder.PhoneNumber,
+
+        AddressLine1 =
+            pendingOrder.AddressLine1,
+
+        AddressLine2 =
+            pendingOrder.AddressLine2,
+
+        City =
+            pendingOrder.City,
+
+        State =
+            pendingOrder.State,
+
+        Country =
+            pendingOrder.Country,
+
+        PostalCode =
+            pendingOrder.PostalCode
+    };
+
+    _context.Orders.Add(order);
+
+    await _context.SaveChangesAsync();
+
+    foreach (var pendingItem in
+        pendingOrder.PendingOrderItems)
+    {
+        var product =
+            await _context.Products
+                .FirstOrDefaultAsync(
+                    x => x.Id ==
+                    pendingItem.ProductId);
+
+        if (product is null)
+            continue;
+
+        if (product.Stock <
+            pendingItem.Quantity)
+        {
+            throw new Exception(
+                $"Only {product.Stock} units of {product.Name} are available."
+            );
+        }
+
+        totalAmount +=
+            pendingItem.Price *
+            pendingItem.Quantity;
+
+        _context.OrderItems.Add(
+            new OrderItem
+            {
+                OrderId = order.Id,
+
+                ProductId =
+                    pendingItem.ProductId,
+
+                Quantity =
+                    pendingItem.Quantity,
+
+                Price =
+                    pendingItem.Price
+            });
+
+        product.Stock -=
+            pendingItem.Quantity;
+    }
+
+    order.TotalAmount =
+        totalAmount;
+
+    await _context.SaveChangesAsync();
+
+    return new OrderResponse
+    {
+        Id = order.Id,
+
+        TotalAmount =
+            order.TotalAmount,
+
+        Status =
+            order.Status,
+
+        CreatedDate =
+            order.CreatedDate
+    };
+}
 }

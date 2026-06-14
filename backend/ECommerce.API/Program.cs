@@ -1,38 +1,40 @@
-    using ECommerce.API.Data;
-    using Microsoft.EntityFrameworkCore;
-    using ECommerce.API.Authentication;
-    using ECommerce.API.Services.Implementations;
-    using ECommerce.API.Services.Interfaces;
-    using ECommerce.API.Extensions;
-    using FluentValidation;
-    using ECommerce.API.Cloudinary;
-    using FluentValidation.AspNetCore;
-    using ECommerce.API.Validators;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.IdentityModel.Tokens;
-    // using Microsoft.OpenApi.Models;
-    using System.Text;
-    using ECommerce.API.Mappings;
-    using ECommerce.API.Repositories.Interfaces;
-    using ECommerce.API.Repositories.Implementations;
-    using ECommerce.API.DTOs.Requests;
-    using DotNetEnv;
+using ECommerce.API.Data;
+using Microsoft.EntityFrameworkCore;
+using ECommerce.API.Authentication;
+using ECommerce.API.Services.Implementations;
+using ECommerce.API.Services.Interfaces;
+using ECommerce.API.Extensions;
+using FluentValidation;
+using ECommerce.API.Cloudinary;
+using FluentValidation.AspNetCore;
+using ECommerce.API.Validators;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+// using Microsoft.OpenApi.Models;
+using System.Text;
 
-    Env.Load(); // Load environment variables from .env file
+using ECommerce.API.Mappings;
+using ECommerce.API.Repositories.Interfaces;
+using ECommerce.API.Repositories.Implementations;
+using ECommerce.API.DTOs.Requests;
+using DotNetEnv;
+using ECommerce.API.Stripe;
 
-    var builder = WebApplication.CreateBuilder(args);
+Env.Load(); // Load environment variables from .env file
 
-    builder.Services.AddEndpointsApiExplorer();
+var builder = WebApplication.CreateBuilder(args);
 
-    builder.Services.AddSwaggerGen(options =>
-    {
-        options.SwaggerDoc("v1",
-            new Microsoft.OpenApi.OpenApiInfo
-            {
-                Title = "ECommerce API",
-                Version = "v1"
-            });
-    });
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1",
+        new Microsoft.OpenApi.OpenApiInfo
+        {
+            Title = "ECommerce API",
+            Version = "v1"
+        });
+});
 
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings"));
@@ -48,6 +50,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(
     typeof(MappingProfile));
+
+builder.Services.Configure<StripeSettings>(
+    builder.Configuration.GetSection("Stripe"));
 
 var jwtSettings = builder.Configuration
     .GetSection("JwtSettings")
@@ -98,6 +103,8 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddScoped<IOrderService, OrderService>();
+
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.Configure<CloudinarySettings>(
     builder.Configuration.GetSection("CloudinarySettings"));

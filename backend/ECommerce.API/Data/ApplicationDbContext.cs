@@ -23,10 +23,24 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 
+    public DbSet<PendingOrder> PendingOrders
+    => Set<PendingOrder>();
+
+    public DbSet<PendingOrderItem> PendingOrderItems
+        => Set<PendingOrderItem>();
+
     protected override void OnModelCreating(
         ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<PendingOrder>()
+    .Property(p => p.TotalAmount)
+    .HasPrecision(18, 2);
+
+        modelBuilder.Entity<PendingOrderItem>()
+            .Property(p => p.Price)
+            .HasPrecision(18, 2);
 
         modelBuilder.Entity<Product>()
             .Property(p => p.Price)

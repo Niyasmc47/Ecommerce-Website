@@ -8,60 +8,57 @@ import Container from "../../components/common/Container";
 
 import {
   createOrder,
+  createCheckoutSession,
   type CheckoutRequest,
 } from "../../services/cartService";
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
 
-  const [form, setForm] =
-    useState<CheckoutRequest>({
-      fullName: "",
-      phoneNumber: "",
-      addressLine1: "",
-      addressLine2: "",
-      city: "",
-      state: "",
-      country: "",
-      postalCode: "",
-      paymentMethod: "COD",
-    });
+  const [form, setForm] = useState<CheckoutRequest>({
+    fullName: "",
+    phoneNumber: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    state: "",
+    country: "",
+    postalCode: "",
+    paymentMethod: "COD",
+  });
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
   function handleChange(
-    e: React.ChangeEvent<
-      HTMLInputElement |
-      HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) {
     setForm({
       ...form,
-      [e.target.name]:
-        e.target.value,
+      [e.target.name]: e.target.value,
     });
   }
 
-  async function handleSubmit(
-    e: React.FormEvent
-  ) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     try {
       setLoading(true);
 
-      await createOrder(form);
+      if (form.paymentMethod === "COD") {
+        await createOrder(form);
 
-      toast.success(
-        "Order placed successfully"
-      );
+        toast.success("Order placed successfully");
 
-      navigate("/orders");
+        navigate("/orders");
+
+        return;
+      }
+
+      const session = await createCheckoutSession(form);
+
+      window.location.href = session.url;
     } catch {
-      toast.error(
-        "Failed to place order"
-      );
+      toast.error("Failed to place order");
     } finally {
       setLoading(false);
     }
@@ -94,8 +91,7 @@ export default function CheckoutPage() {
               text-slate-500
             "
           >
-            Enter your shipping
-            details.
+            Enter your shipping details.
           </p>
 
           <form
@@ -218,9 +214,7 @@ export default function CheckoutPage() {
 
             <select
               name="paymentMethod"
-              value={
-                form.paymentMethod
-              }
+              value={form.paymentMethod}
               onChange={handleChange}
               className="
                 w-full
@@ -229,9 +223,9 @@ export default function CheckoutPage() {
                 p-4
               "
             >
-              <option value="COD">
-                Cash On Delivery
-              </option>
+              <option value="COD">Cash On Delivery</option>
+
+              <option value="Stripe">Credit / Debit Card</option>
             </select>
 
             <button
@@ -247,9 +241,7 @@ export default function CheckoutPage() {
                 hover:bg-emerald-700
               "
             >
-              {loading
-                ? "Placing Order..."
-                : "Place Order"}
+              {loading ? "Placing Order..." : "Place Order"}
             </button>
           </form>
         </div>

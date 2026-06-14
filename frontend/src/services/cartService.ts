@@ -29,6 +29,11 @@ export interface CheckoutRequest {
   paymentMethod: string;
 }
 
+export interface CheckoutSessionResponse {
+  sessionId: string;
+  url: string;
+}
+
 export async function addToCart(
   productId: number,
   quantity: number
@@ -69,4 +74,20 @@ export async function createOrder(
         getAuthHeaders(),
     },
   );
+}
+
+export async function createCheckoutSession(
+  data: CheckoutRequest
+) {
+  const response =
+    await api.post<CheckoutSessionResponse>(
+      "/payments/create-session",
+      data,
+      {
+        headers:
+          getAuthHeaders(),
+      }
+    );
+
+  return response.data;
 }
