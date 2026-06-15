@@ -34,6 +34,21 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<Order>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.Orders)
+            .HasForeignKey(x => x.UserId);
+
+        modelBuilder.Entity<Order>()
+            .HasMany(x => x.OrderItems)
+            .WithOne(x => x.Order)
+            .HasForeignKey(x => x.OrderId);
+
+        modelBuilder.Entity<OrderItem>()
+            .HasOne(x => x.Product)
+            .WithMany()
+            .HasForeignKey(x => x.ProductId);
+
         modelBuilder.Entity<PendingOrder>()
     .Property(p => p.TotalAmount)
     .HasPrecision(18, 2);

@@ -8,9 +8,9 @@ public interface IOrderService
     Task<IEnumerable<OrderResponse>> GetOrdersAsync(
         int userId);
 
-    Task<OrderResponse?> GetOrderByIdAsync(
-        int userId,
-        int orderId);
+    Task<OrderDetailsResponse?> GetOrderByIdAsync(
+    int userId,
+    int orderId);
 
 
 

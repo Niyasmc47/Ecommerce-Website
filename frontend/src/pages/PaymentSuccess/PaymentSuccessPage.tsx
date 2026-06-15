@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import toast from "react-hot-toast";
@@ -14,7 +14,15 @@ export default function PaymentSuccessPage() {
   const [searchParams] =
     useSearchParams();
 
+  const hasRun = useRef(false);
+
   useEffect(() => {
+    if (hasRun.current) {
+      return;
+    }
+
+    hasRun.current = true;
+
     async function confirmPayment() {
       const sessionId =
         searchParams.get(

@@ -1,11 +1,11 @@
 using ECommerce.API.Data;
+using ECommerce.API.DTOs.Requests;
 using ECommerce.API.DTOs.Responses;
 using ECommerce.API.Models;
 using ECommerce.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using ECommerce.API.DTOs.Requests;
-namespace ECommerce.API.Services.Implementations;
 
+namespace ECommerce.API.Services.Implementations;
 public class OrderService : IOrderService
 {
     private readonly ApplicationDbContext _context;
@@ -30,11 +30,13 @@ public class OrderService : IOrderService
             .ToListAsync();
     }
 
-    public async Task<OrderResponse?> GetOrderByIdAsync(
-        int userId,
-        int orderId)
+    public async Task<OrderDetailsResponse?> GetOrderByIdAsync(
+    int userId,
+    int orderId)
     {
         var order = await _context.Orders
+            .Include(x => x.OrderItems)
+            .ThenInclude(x => x.Product)
             .FirstOrDefaultAsync(x =>
                 x.Id == orderId &&
                 x.UserId == userId);
@@ -42,12 +44,48 @@ public class OrderService : IOrderService
         if (order is null)
             return null;
 
-        return new OrderResponse
+        return new OrderDetailsResponse
         {
             Id = order.Id,
+
             TotalAmount = order.TotalAmount,
+
             Status = order.Status,
-            CreatedDate = order.CreatedDate
+
+            PaymentStatus = order.PaymentStatus,
+
+            PaymentMethod = order.PaymentMethod,
+
+            FullName = order.FullName,
+
+            PhoneNumber = order.PhoneNumber,
+
+            AddressLine1 = order.AddressLine1,
+
+            AddressLine2 = order.AddressLine2,
+
+            City = order.City,
+
+            State = order.State,
+
+            Country = order.Country,
+
+            PostalCode = order.PostalCode,
+
+            CreatedDate = order.CreatedDate,
+
+            Items = order.OrderItems
+                .Select(item => new OrderItemResponse
+                {
+                    ProductId = item.ProductId,
+
+                    ProductName = item.Product?.Name ?? "Unknown Product",
+
+                    Price = item.Price,
+
+                    Quantity = item.Quantity
+                })
+                .ToList()
         };
     }
 
@@ -144,109 +182,109 @@ public class OrderService : IOrderService
     public async Task<OrderResponse>
     CreateOrderFromPendingOrderAsync(
         PendingOrder pendingOrder)
-{
-    decimal totalAmount = 0;
-
-    var order = new Order
     {
-        UserId = pendingOrder.UserId,
+        decimal totalAmount = 0;
 
-        Status = "Pending",
-
-        PaymentStatus = "Paid",
-
-        PaymentMethod =
-            pendingOrder.PaymentMethod,
-
-        FullName =
-            pendingOrder.FullName,
-
-        PhoneNumber =
-            pendingOrder.PhoneNumber,
-
-        AddressLine1 =
-            pendingOrder.AddressLine1,
-
-        AddressLine2 =
-            pendingOrder.AddressLine2,
-
-        City =
-            pendingOrder.City,
-
-        State =
-            pendingOrder.State,
-
-        Country =
-            pendingOrder.Country,
-
-        PostalCode =
-            pendingOrder.PostalCode
-    };
-
-    _context.Orders.Add(order);
-
-    await _context.SaveChangesAsync();
-
-    foreach (var pendingItem in
-        pendingOrder.PendingOrderItems)
-    {
-        var product =
-            await _context.Products
-                .FirstOrDefaultAsync(
-                    x => x.Id ==
-                    pendingItem.ProductId);
-
-        if (product is null)
-            continue;
-
-        if (product.Stock <
-            pendingItem.Quantity)
+        var order = new Order
         {
-            throw new Exception(
-                $"Only {product.Stock} units of {product.Name} are available."
-            );
+            UserId = pendingOrder.UserId,
+
+            Status = "Pending",
+
+            PaymentStatus = "Paid",
+
+            PaymentMethod =
+                pendingOrder.PaymentMethod,
+
+            FullName =
+                pendingOrder.FullName,
+
+            PhoneNumber =
+                pendingOrder.PhoneNumber,
+
+            AddressLine1 =
+                pendingOrder.AddressLine1,
+
+            AddressLine2 =
+                pendingOrder.AddressLine2,
+
+            City =
+                pendingOrder.City,
+
+            State =
+                pendingOrder.State,
+
+            Country =
+                pendingOrder.Country,
+
+            PostalCode =
+                pendingOrder.PostalCode
+        };
+
+        _context.Orders.Add(order);
+
+        await _context.SaveChangesAsync();
+
+        foreach (var pendingItem in
+            pendingOrder.PendingOrderItems)
+        {
+            var product =
+                await _context.Products
+                    .FirstOrDefaultAsync(
+                        x => x.Id ==
+                        pendingItem.ProductId);
+
+            if (product is null)
+                continue;
+
+            if (product.Stock <
+                pendingItem.Quantity)
+            {
+                throw new Exception(
+                    $"Only {product.Stock} units of {product.Name} are available."
+                );
+            }
+
+            totalAmount +=
+                pendingItem.Price *
+                pendingItem.Quantity;
+
+            _context.OrderItems.Add(
+                new OrderItem
+                {
+                    OrderId = order.Id,
+
+                    ProductId =
+                        pendingItem.ProductId,
+
+                    Quantity =
+                        pendingItem.Quantity,
+
+                    Price =
+                        pendingItem.Price
+                });
+
+            product.Stock -=
+                pendingItem.Quantity;
         }
 
-        totalAmount +=
-            pendingItem.Price *
-            pendingItem.Quantity;
+        order.TotalAmount =
+            totalAmount;
 
-        _context.OrderItems.Add(
-            new OrderItem
-            {
-                OrderId = order.Id,
+        await _context.SaveChangesAsync();
 
-                ProductId =
-                    pendingItem.ProductId,
+        return new OrderResponse
+        {
+            Id = order.Id,
 
-                Quantity =
-                    pendingItem.Quantity,
+            TotalAmount =
+                order.TotalAmount,
 
-                Price =
-                    pendingItem.Price
-            });
+            Status =
+                order.Status,
 
-        product.Stock -=
-            pendingItem.Quantity;
+            CreatedDate =
+                order.CreatedDate
+        };
     }
-
-    order.TotalAmount =
-        totalAmount;
-
-    await _context.SaveChangesAsync();
-
-    return new OrderResponse
-    {
-        Id = order.Id,
-
-        TotalAmount =
-            order.TotalAmount,
-
-        Status =
-            order.Status,
-
-        CreatedDate =
-            order.CreatedDate
-    };
-}
 }
