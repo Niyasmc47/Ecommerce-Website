@@ -143,7 +143,7 @@ export default function AdminProductsPage() {
              </div>
              <div className="bg-surface border border-border rounded-xl p-6 shadow-sm relative overflow-hidden">
                 <p className="text-xs font-mono font-bold uppercase tracking-widest text-foreground/50 mb-2">Revenue Forecast</p>
-                <h2 className="text-4xl font-bold">${revenueForecast.toLocaleString(undefined, {minimumFractionDigits: 2})}</h2>
+                <h2 className="text-4xl font-bold">₹{revenueForecast.toLocaleString(undefined, {minimumFractionDigits: 2})}</h2>
                 {/* Decorative Chart Bars */}
                 <div className="absolute right-6 bottom-6 flex items-end gap-1 opacity-20">
                    <div className="w-2 bg-foreground h-4 rounded-t-sm"></div>
@@ -207,7 +207,7 @@ export default function AdminProductsPage() {
                           </span>
                         </td>
                         <td className="px-6 py-4 font-mono">
-                          ${product.price.toLocaleString(undefined, {minimumFractionDigits: 2})}
+                          ₹{product.price.toLocaleString(undefined, {minimumFractionDigits: 2})}
                         </td>
                         <td className="px-6 py-4">
                            <div className="flex items-center gap-2">
