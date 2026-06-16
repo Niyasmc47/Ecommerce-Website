@@ -7,6 +7,7 @@ using ECommerce.API.Stripe;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Stripe.Checkout;
+using ECommerce.API.Email;
 
 namespace ECommerce.API.Services.Implementations;
 
@@ -14,15 +15,18 @@ public class PaymentService : IPaymentService
 {
     private readonly ApplicationDbContext _context;
     private readonly IOrderService _orderService;
+    private readonly IEmailService _emailService;
     private readonly StripeSettings _stripeSettings;
 
     public PaymentService(
         ApplicationDbContext context,
         IOrderService orderService,
+        IEmailService emailService,
         IOptions<StripeSettings> stripeOptions)
     {
         _context = context;
         _orderService = orderService;
+        _emailService = emailService;
         _stripeSettings = stripeOptions.Value;
 
         global::Stripe.StripeConfiguration.ApiKey =
@@ -72,7 +76,7 @@ public class PaymentService : IPaymentService
                     PriceData =
                         new SessionLineItemPriceDataOptions
                         {
-                            Currency = "usd",
+                            Currency = "inr",
 
                             UnitAmount =
                                 (long)(product.Price * 100),
@@ -224,9 +228,53 @@ public class PaymentService : IPaymentService
             return false;
         }
 
-        await _orderService
-    .CreateOrderFromPendingOrderAsync(
-        pendingOrder);
+        var order =
+    await _orderService
+        .CreateOrderFromPendingOrderAsync(
+            pendingOrder);
+
+        var user =
+            await _context.Users
+                .FirstOrDefaultAsync(
+                    x => x.Id ==
+                    pendingOrder.UserId);
+
+        if (user is not null)
+        {
+            var body = $@"
+        <h2>Payment Successful 🎉</h2>
+
+        <p>Hello {user.Name},</p>
+
+        <p>Your payment has been received successfully.</p>
+
+        <hr/>
+
+        <p><strong>Order ID:</strong> {order.Id}</p>
+
+        <p><strong>Total Amount:</strong> ₹{order.TotalAmount}</p>
+
+        <p><strong>Payment Method:</strong> Stripe</p>
+
+        <p><strong>Status:</strong> {order.Status}</p>
+
+        <hr/>
+
+        <p>Thank you for shopping with Velocity Shop.</p>
+    ";
+
+            try
+            {
+                await _emailService.SendEmailAsync(
+                    user.Email,
+                    $"Order #{order.Id} Confirmation",
+                    body);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[WARNING] Failed to send order confirmation email to {user.Email}: {ex.Message}");
+            }
+        }
 
         var cartItems =
             await _context.CartItems

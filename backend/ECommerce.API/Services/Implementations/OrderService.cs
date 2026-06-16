@@ -6,6 +6,7 @@ using ECommerce.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.API.Services.Implementations;
+
 public class OrderService : IOrderService
 {
     private readonly ApplicationDbContext _context;
@@ -16,16 +17,45 @@ public class OrderService : IOrderService
     }
 
     public async Task<IEnumerable<OrderResponse>> GetOrdersAsync(
-        int userId)
+    int userId)
     {
         return await _context.Orders
+            .Include(x => x.OrderItems)
+                .ThenInclude(x => x.Product)
             .Where(x => x.UserId == userId)
             .Select(x => new OrderResponse
             {
                 Id = x.Id,
-                TotalAmount = x.TotalAmount,
-                Status = x.Status,
-                CreatedDate = x.CreatedDate
+
+                TotalAmount =
+                    x.TotalAmount,
+
+                Status =
+                    x.Status,
+
+                CreatedDate =
+                    x.CreatedDate,
+
+                ProductName =
+                    x.OrderItems
+                        .Select(i =>
+                            i.Product != null
+                                ? i.Product.Name
+                                : "Unknown Product")
+                        .FirstOrDefault()
+                        ?? "Unknown Product",
+
+                ProductImage =
+                    x.OrderItems
+                        .Select(i =>
+                            i.Product != null
+                                ? i.Product.ImageUrl
+                                : "")
+                        .FirstOrDefault()
+                        ?? "",
+
+                ItemCount =
+                    x.OrderItems.Count
             })
             .ToListAsync();
     }
@@ -286,5 +316,32 @@ public class OrderService : IOrderService
             CreatedDate =
                 order.CreatedDate
         };
+    }
+
+
+    public async Task<bool> DeleteOrderAsync(
+    int userId,
+    int orderId)
+    {
+        var order = await _context.Orders
+            .FirstOrDefaultAsync(x =>
+                x.Id == orderId &&
+                x.UserId == userId &&
+                x.Status == "Delivered");
+
+        if (order == null)
+            return false;
+
+        var orderItems = await _context.OrderItems
+            .Where(x => x.OrderId == orderId)
+            .ToListAsync();
+
+        _context.OrderItems.RemoveRange(orderItems);
+
+        _context.Orders.Remove(order);
+
+        await _context.SaveChangesAsync();
+
+        return true;
     }
 }

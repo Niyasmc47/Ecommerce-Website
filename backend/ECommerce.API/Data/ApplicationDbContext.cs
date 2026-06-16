@@ -12,6 +12,8 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<User> Users => Set<User>();
+    
+    public DbSet<UserAddress> UserAddresses => Set<UserAddress>();
 
     public DbSet<Category> Categories => Set<Category>();
 
@@ -22,6 +24,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Order> Orders => Set<Order>();
 
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+
+    public DbSet<Review> Reviews { get; set; }
 
     public DbSet<PendingOrder> PendingOrders
     => Set<PendingOrder>();
@@ -37,6 +41,11 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Order>()
             .HasOne(x => x.User)
             .WithMany(x => x.Orders)
+            .HasForeignKey(x => x.UserId);
+
+        modelBuilder.Entity<UserAddress>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.Addresses)
             .HasForeignKey(x => x.UserId);
 
         modelBuilder.Entity<Order>()

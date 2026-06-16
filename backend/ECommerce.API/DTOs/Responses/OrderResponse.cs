@@ -9,4 +9,12 @@ public class OrderResponse
     public string Status { get; set; } = string.Empty;
 
     public DateTime CreatedDate { get; set; }
+
+    public string ProductName { get; set; }
+        = string.Empty;
+
+    public string ProductImage { get; set; }
+        = string.Empty;
+
+    public int ItemCount { get; set; }
 }

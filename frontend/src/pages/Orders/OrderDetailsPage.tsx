@@ -1,25 +1,22 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { deleteOrder } from "../../services/orderService";
 import MainLayout from "../../components/layouts/MainLayout";
 import Container from "../../components/common/Container";
 
 import { getOrderById } from "../../services/orderService";
 
-import type {
-  OrderDetails,
-  OrderItem,
-} from "../../types/orderDetails";
+import type { OrderDetails, OrderItem } from "../../types/orderDetails";
 
 export default function OrderDetailsPage() {
   const { id } = useParams();
-  const [order, setOrder] =
-    useState<OrderDetails | null>(
-      null
-    );
+  const [order, setOrder] = useState<OrderDetails | null>(null);
 
-  const [loading, setLoading] =
-    useState(true);
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadOrder() {
@@ -38,8 +35,7 @@ export default function OrderDetailsPage() {
       }
 
       try {
-        const data =
-          await getOrderById(orderId);
+        const data = await getOrderById(orderId);
 
         setOrder(data);
       } finally {
@@ -50,13 +46,29 @@ export default function OrderDetailsPage() {
     loadOrder();
   }, [id]);
 
+  async function handleDelete() {
+    if (!order) return;
+
+    if (!window.confirm("Delete this delivered order?")) {
+      return;
+    }
+
+    try {
+      await deleteOrder(order.id);
+
+      toast.success("Order deleted");
+
+      navigate("/orders");
+    } catch {
+      toast.error("Failed to delete order");
+    }
+  }
+
   if (loading) {
     return (
       <MainLayout>
         <Container>
-          <div className="py-20">
-            Loading...
-          </div>
+          <div className="py-20">Loading...</div>
         </Container>
       </MainLayout>
     );
@@ -66,9 +78,7 @@ export default function OrderDetailsPage() {
     return (
       <MainLayout>
         <Container>
-          <div className="py-20">
-            Order not found.
-          </div>
+          <div className="py-20">Order not found.</div>
         </Container>
       </MainLayout>
     );
@@ -124,30 +134,24 @@ export default function OrderDetailsPage() {
             </h2>
 
             <p>
-              <strong>Status:</strong>{" "}
-              {order.status}
+              <strong>Status:</strong> {order.status}
             </p>
 
             <p>
-              <strong>Payment Status:</strong>{" "}
-              {order.paymentStatus}
+              <strong>Payment Status:</strong> {order.paymentStatus}
             </p>
 
             <p>
-              <strong>Payment Method:</strong>{" "}
-              {order.paymentMethod}
+              <strong>Payment Method:</strong> {order.paymentMethod}
             </p>
 
             <p>
-              <strong>Total:</strong>{" "}
-              ₹{order.totalAmount}
+              <strong>Total:</strong> ₹{order.totalAmount}
             </p>
 
             <p>
               <strong>Date:</strong>{" "}
-              {new Date(
-                order.createdDate
-              ).toLocaleString()}
+              {new Date(order.createdDate).toLocaleString()}
             </p>
           </div>
 
@@ -175,24 +179,15 @@ export default function OrderDetailsPage() {
 
             <p>{order.addressLine1}</p>
 
-            {order.addressLine2 && (
-              <p>
-                {order.addressLine2}
-              </p>
-            )}
+            {order.addressLine2 && <p>{order.addressLine2}</p>}
 
             <p>
-              {order.city},{" "}
-              {order.state}
+              {order.city}, {order.state}
             </p>
 
-            <p>
-              {order.country}
-            </p>
+            <p>{order.country}</p>
 
-            <p>
-              {order.postalCode}
-            </p>
+            <p>{order.postalCode}</p>
           </div>
 
           <div
@@ -212,52 +207,65 @@ export default function OrderDetailsPage() {
               Products
             </h2>
 
-            {order.items.map(
-              (
-                item: OrderItem
-              ) => (
-                <div
-                  key={`${item.productId}-${item.quantity}`}
-                  className="
+            {order.items.map((item: OrderItem) => (
+              <div
+                key={`${item.productId}-${item.quantity}`}
+                className="
                     flex
                     justify-between
                     items-center
                     border-b
                     py-4
                   "
-                >
-                  <div>
-                    <div
-                      className="
+              >
+                <div>
+                  <div
+                    className="
                         font-medium
                       "
-                    >
-                      {item.productName}
-                    </div>
-
-                    <div
-                      className="
-                        text-sm
-                        text-slate-500
-                      "
-                    >
-                      Quantity:
-                      {" "}
-                      {item.quantity}
-                    </div>
+                  >
+                    {item.productName}
                   </div>
 
                   <div
                     className="
-                      font-semibold
-                    "
+                        text-sm
+                        text-slate-500
+                      "
                   >
-                    ₹{item.price}
+                    Quantity: {item.quantity}
                   </div>
                 </div>
-              )
-            )}
+
+                <div
+                  className="
+                      font-semibold
+                    "
+                >
+                  ₹{item.price}
+                </div>
+              </div>
+            ))}
           </div>
+
+          {order.status === "Delivered" && (
+            <div className="mt-6">
+              <button
+                onClick={handleDelete}
+                className="
+        rounded-xl
+        bg-red-600
+        px-5
+        py-3
+        font-medium
+        text-white
+        hover:bg-red-700
+      "
+              >
+                Delete Order
+              </button>
+            </div>
+          )}
         </div>
       </Container>
     </MainLayout>

@@ -20,4 +20,9 @@ public interface IOrderService
 
     Task<OrderResponse> CreateOrderFromPendingOrderAsync(
     PendingOrder pendingOrder);
+
+
+    Task<bool> DeleteOrderAsync(
+    int userId,
+    int orderId);
 }

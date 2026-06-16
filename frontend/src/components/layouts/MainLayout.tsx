@@ -8,11 +8,9 @@ interface Props {
 
 export default function MainLayout({ children }: Props) {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-primary/30">
       <Navbar />
-
-      <main>{children}</main>
-
+      <main className="flex-1 flex flex-col">{children}</main>
       <Footer />
     </div>
   );

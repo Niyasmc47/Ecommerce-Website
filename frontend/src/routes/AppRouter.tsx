@@ -16,6 +16,7 @@ import AdminOrderDetailsPage from "../pages/Admin/AdminOrderDetailsPage";
 import ProtectedAdminRoute from "./ProtectedAdminRoute";
 import AdminUsersPage from "../pages/Admin/AdminUsersPage";
 import CheckoutPage from "../pages/Checkout/CheckoutPage";
+import ProfilePage from "../pages/Profile/ProfilePage";
 import PaymentSuccessPage from "../pages/PaymentSuccess/PaymentSuccessPage";
 import PaymentCancelPage from "../pages/PaymentCancel/PaymentCancelPage";
 export default function AppRouter() {
@@ -36,6 +37,7 @@ export default function AppRouter() {
         <Route path="/orders/:id" element={<OrderDetailsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
 
         <Route
           path="/admin"

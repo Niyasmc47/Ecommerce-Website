@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 // using Microsoft.OpenApi.Models;
 using System.Text;
+using ECommerce.API.Email;
 
 using ECommerce.API.Mappings;
 using ECommerce.API.Repositories.Interfaces;
@@ -53,6 +54,21 @@ builder.Services.AddAutoMapper(
 
 builder.Services.Configure<StripeSettings>(
     builder.Configuration.GetSection("Stripe"));
+
+var sp = builder.Services.BuildServiceProvider();
+var stripeSettings = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<ECommerce.API.Stripe.StripeSettings>>().Value;
+Console.WriteLine("\n=== STRIPE CONFIG ===");
+Console.WriteLine($"SecretKey: {stripeSettings.SecretKey}");
+Console.WriteLine($"SuccessUrl: {stripeSettings.SuccessUrl}");
+Console.WriteLine($"CancelUrl: {stripeSettings.CancelUrl}");
+Console.WriteLine("=====================\n");
+
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection(
+        "EmailSettings"));
+
+builder.Services.AddScoped<IEmailService,
+    EmailService>();
 
 var jwtSettings = builder.Configuration
     .GetSection("JwtSettings")
@@ -103,6 +119,10 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddScoped<IOrderService, OrderService>();
+
+builder.Services.AddScoped<
+    IReviewService,
+    ReviewService>();
 
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 

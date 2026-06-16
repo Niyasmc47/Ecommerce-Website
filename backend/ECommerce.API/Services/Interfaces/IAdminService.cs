@@ -16,7 +16,17 @@ public interface IAdminService
     Task<bool> UpdateOrderStatusAsync(
     int orderId,
     string status
+
+
+
+
 );
+
+
+    Task<bool> UpdateUserRoleAsync(
+        int userId,
+        string role
+    );
 
     Task<DashboardResponse> GetDashboardAsync();
 }

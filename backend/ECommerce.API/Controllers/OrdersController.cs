@@ -67,4 +67,20 @@ public class OrdersController : ControllerBase
                 Data = result
             });
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteOrder(
+    int id)
+    {
+        var deleted =
+            await _orderService.DeleteOrderAsync(
+                GetUserId(),
+                id);
+
+        if (!deleted)
+            return BadRequest(
+                "Only delivered orders can be deleted.");
+
+        return Ok();
+    }
 }

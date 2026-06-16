@@ -11,36 +11,45 @@ const categories = [
 
 export default function CategoriesSection() {
   return (
-    <section className="bg-white py-24 dark:bg-slate-950">
-      <Container>
-        <div className="mb-14">
-          <h2 className="text-5xl font-bold tracking-tight text-slate-900 dark:text-white">
+    <section className="bg-surface py-24 relative overflow-hidden border-b border-border">
+      <Container className="relative z-10">
+        <div className="mb-16 flex flex-col items-center text-center">
+          <span className="font-mono text-xs font-bold uppercase tracking-widest text-primary mb-4">Categories</span>
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground mb-4">
             Shop by Category
           </h2>
-
-          <p className="mt-4 text-lg text-slate-500 dark:text-slate-400">
-            Explore our most popular product categories.
+          <p className="max-w-2xl text-lg text-foreground/60">
+            Explore our curated selection of high-performance product categories, engineered for excellence.
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {categories.map((category) => (
             <div
               key={category.title}
-              className="group rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-200 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl dark:bg-slate-900 dark:ring-slate-700"
+              className="group relative overflow-hidden rounded-2xl bg-card-bg p-8 border border-card-border shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-primary/30 premium-card"
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-100 dark:bg-emerald-950">
-                <category.icon className="text-3xl text-emerald-600 dark:text-emerald-400" />
+              {/* Subtle gradient background on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+              
+              <div className="relative z-10 flex flex-col h-full">
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                  <category.icon className="text-2xl text-primary" />
+                </div>
+
+                <h3 className="text-xl font-bold tracking-tight text-foreground mb-2">
+                  {category.title}
+                </h3>
+
+                <p className="text-sm text-foreground/60 mb-6 flex-1">
+                  Browse our latest {category.title.toLowerCase()} collection.
+                </p>
+                
+                <div className="flex items-center gap-2 text-sm font-bold text-primary opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                  <span>Explore</span>
+                  <span className="text-lg leading-none">&rarr;</span>
+                </div>
               </div>
-
-              <h3 className="mt-6 text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
-                {category.title}
-              </h3>
-
-              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                Browse our latest {` ${category.title.toLowerCase()}`}
-                collection.
-              </p>
             </div>
           ))}
         </div>

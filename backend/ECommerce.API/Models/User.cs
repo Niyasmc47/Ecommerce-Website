@@ -17,4 +17,14 @@ public class User
     public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
     public ICollection<Order> Orders { get; set; } = new List<Order>();
+
+    public ICollection<Review> Reviews
+    {
+        get;
+        set;
+    } = new List<Review>();
+
+    public string PhoneNumber { get; set; } = string.Empty;
+
+    public ICollection<UserAddress> Addresses { get; set; } = new List<UserAddress>();
 }

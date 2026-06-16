@@ -22,6 +22,7 @@ public class ExceptionMiddleware
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = 500;
+            Console.WriteLine("\n[ERROR] " + ex.ToString() + "\n");
 
             var response = new ApiResponse<object>
             {

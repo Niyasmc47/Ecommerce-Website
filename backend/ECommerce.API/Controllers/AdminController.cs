@@ -81,4 +81,27 @@ public class AdminController : ControllerBase
     }
 
 
+    [HttpPut("users/{id}/role")]
+    public async Task<IActionResult>
+UpdateUserRole(
+    int id,
+    UpdateUserRoleRequest request
+)
+    {
+        var success =
+            await _adminService
+                .UpdateUserRoleAsync(
+                    id,
+                    request.Role
+                );
+
+        if (!success)
+        {
+            return NotFound();
+        }
+
+        return Ok();
+    }
+
+
 }

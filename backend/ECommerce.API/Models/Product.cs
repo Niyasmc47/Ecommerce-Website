@@ -18,5 +18,25 @@ public class Product
 
     public Category? Category { get; set; }
 
+    // --- New Advanced Fields ---
+    public decimal? CompareAtPrice { get; set; }
+    public string? InstallmentPlan { get; set; }
+    public List<string> Images { get; set; } = new List<string>();
+    public string? Brand { get; set; }
+    public bool IsActive { get; set; } = true;
+    public string? SKU { get; set; }
+    public bool TrackQuantity { get; set; } = true;
+    public bool ContinueSellingWhenOutOfStock { get; set; } = false;
+    public string? UrlHandle { get; set; }
+    public string? MetaDescription { get; set; }
+    public string? ProductType { get; set; }
+    public string? Vendor { get; set; }
+    public List<string> Tags { get; set; } = new List<string>();
+    public string? Variants { get; set; } // JSON string representation
+    public string? Specifications { get; set; } // JSON string representation
+    public List<string> Features { get; set; } = new List<string>();
+
+    public ICollection<Review> Reviews { get; set; } = new List<Review>();
+
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 }

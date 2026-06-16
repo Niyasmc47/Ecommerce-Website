@@ -49,3 +49,15 @@ export async function getOrders() {
 
   return response.data;
 }
+
+export async function updateUserRole(userId: number, role: string) {
+  await api.put(
+    `/admin/users/${userId}/role`,
+    {
+      role,
+    },
+    {
+      headers: getAuthHeaders(),
+    },
+  );
+}

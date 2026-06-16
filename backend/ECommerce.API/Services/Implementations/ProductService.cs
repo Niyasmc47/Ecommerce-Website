@@ -98,7 +98,23 @@ public class ProductService : IProductService
             Price = request.Price,
             Stock = request.Stock,
             ImageUrl = request.ImageUrl,
-            CategoryId = request.CategoryId
+            CategoryId = request.CategoryId,
+            CompareAtPrice = request.CompareAtPrice,
+            InstallmentPlan = request.InstallmentPlan,
+            Images = request.Images,
+            Brand = request.Brand,
+            IsActive = request.IsActive,
+            SKU = request.SKU,
+            TrackQuantity = request.TrackQuantity,
+            ContinueSellingWhenOutOfStock = request.ContinueSellingWhenOutOfStock,
+            UrlHandle = request.UrlHandle,
+            MetaDescription = request.MetaDescription,
+            ProductType = request.ProductType,
+            Vendor = request.Vendor,
+            Tags = request.Tags,
+            Variants = request.Variants,
+            Specifications = request.Specifications,
+            Features = request.Features
         };
 
         await _productRepository.AddAsync(product);
@@ -121,6 +137,22 @@ public class ProductService : IProductService
         product.Stock = request.Stock;
         product.ImageUrl = request.ImageUrl;
         product.CategoryId = request.CategoryId;
+        product.CompareAtPrice = request.CompareAtPrice;
+        product.InstallmentPlan = request.InstallmentPlan;
+        product.Images = request.Images;
+        product.Brand = request.Brand;
+        product.IsActive = request.IsActive;
+        product.SKU = request.SKU;
+        product.TrackQuantity = request.TrackQuantity;
+        product.ContinueSellingWhenOutOfStock = request.ContinueSellingWhenOutOfStock;
+        product.UrlHandle = request.UrlHandle;
+        product.MetaDescription = request.MetaDescription;
+        product.ProductType = request.ProductType;
+        product.Vendor = request.Vendor;
+        product.Tags = request.Tags;
+        product.Variants = request.Variants;
+        product.Specifications = request.Specifications;
+        product.Features = request.Features;
 
         await _productRepository.UpdateAsync(product);
 

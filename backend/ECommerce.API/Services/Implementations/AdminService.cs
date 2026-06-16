@@ -60,7 +60,7 @@ public class AdminService : IAdminService
         };
     }
 
-    
+
 
     public async Task<AdminOrderDetailsResponse?>
     GetOrderByIdAsync(
@@ -133,6 +133,40 @@ public class AdminService : IAdminService
         }
 
         order.Status = status;
+
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+
+
+    public async Task<bool>
+UpdateUserRoleAsync(
+    int userId,
+    string role
+)
+    {
+        var user =
+            await _context.Users
+                .FirstOrDefaultAsync(
+                    x => x.Id == userId
+                );
+
+        if (user is null)
+        {
+            return false;
+        }
+
+        if (
+            role != "Admin" &&
+            role != "User"
+        )
+        {
+            return false;
+        }
+
+        user.Role = role;
 
         await _context.SaveChangesAsync();
 

@@ -26,3 +26,9 @@ export async function getOrderById(id: number): Promise<OrderDetails> {
 
   return response.data;
 }
+
+export async function deleteOrder(id: number) {
+  return api.delete(`/orders/${id}`, {
+    headers: getAuthHeaders(),
+  });
+}
