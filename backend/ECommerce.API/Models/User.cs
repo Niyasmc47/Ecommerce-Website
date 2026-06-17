@@ -12,6 +12,10 @@ public class User
 
     public string Role { get; set; } = "User";
 
+    public string? GoogleId { get; set; }
+
+    public string? ProfilePictureUrl { get; set; }
+
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
     public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();

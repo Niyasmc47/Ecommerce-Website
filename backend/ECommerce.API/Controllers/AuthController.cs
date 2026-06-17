@@ -89,4 +89,22 @@ public class AuthController : ControllerBase
             Message = "Password reset successful."
         });
     }
+
+    [HttpPost("google")]
+    public async Task<ActionResult<ApiResponse<AuthResponse>>>
+    GoogleLogin(
+        GoogleLoginRequest request)
+    {
+        var result =
+            await _authService.GoogleLoginAsync(
+                request.IdToken);
+
+        return Ok(
+            new ApiResponse<AuthResponse>
+            {
+                Success = true,
+                Message = "Google login successful.",
+                Data = result
+            });
+    }
 }

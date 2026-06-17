@@ -3,16 +3,18 @@ using ECommerce.API.Data;
 using ECommerce.API.DTOs.Requests;
 using ECommerce.API.DTOs.Responses;
 using ECommerce.API.Models;
+using Google.Apis.Auth;
 using ECommerce.API.Services.Interfaces;
 using ECommerce.API.Email;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-
 namespace ECommerce.API.Services.Implementations;
 
 public class AuthService : IAuthService
 {
     private readonly ApplicationDbContext _context;
+    private readonly ITurnstileService _turnstileService;
+
     private readonly IEmailService _emailService;
     private readonly JwtTokenGenerator _tokenGenerator;
     private readonly IValidator<RegisterRequest> _registerValidator;
@@ -23,13 +25,16 @@ public class AuthService : IAuthService
         JwtTokenGenerator tokenGenerator,
         IValidator<RegisterRequest> registerValidator,
         IValidator<LoginRequest> loginValidator,
+        ITurnstileService turnstileService,
         IEmailService emailService)
     {
         _context = context;
         _tokenGenerator = tokenGenerator;
         _registerValidator = registerValidator;
         _loginValidator = loginValidator;
+        _turnstileService = turnstileService;
         _emailService = emailService;
+
     }
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
@@ -85,6 +90,18 @@ public class AuthService : IAuthService
                 string.Join(", ",
                     validationResult.Errors
                         .Select(x => x.ErrorMessage)));
+        }
+        if (!string.IsNullOrWhiteSpace(request.CaptchaToken))
+        {
+            var captchaValid =
+                await _turnstileService
+                    .VerifyAsync(request.CaptchaToken);
+
+            if (!captchaValid)
+            {
+                throw new Exception(
+                    "Captcha verification failed.");
+            }
         }
 
         var user = await _context.Users
@@ -149,9 +166,9 @@ public class AuthService : IAuthService
             "Velocity.Shop Password Reset",
             body);
     }
-        public async Task VerifyOtpAsync(
-        string email,
-        string otp)
+    public async Task VerifyOtpAsync(
+    string email,
+    string otp)
     {
         var record =
             await _context.PasswordResetOtps
@@ -215,5 +232,59 @@ public class AuthService : IAuthService
         record.IsUsed = true;
 
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<AuthResponse> GoogleLoginAsync(
+    string idToken)
+    {
+        var payload =
+            await GoogleJsonWebSignature
+                .ValidateAsync(idToken);
+
+        var user =
+            await _context.Users
+                .FirstOrDefaultAsync(
+                    x => x.Email == payload.Email);
+
+        if (user == null)
+        {
+            user = new User
+            {
+                Name = payload.Name,
+                Email = payload.Email,
+                Role = "User",
+                PasswordHash = string.Empty,
+                GoogleId = payload.Subject,
+                ProfilePictureUrl = payload.Picture
+            };
+
+            _context.Users.Add(user);
+
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(user.GoogleId))
+            {
+                user.GoogleId =
+                    payload.Subject;
+
+                user.ProfilePictureUrl =
+                    payload.Picture;
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        var token =
+            _tokenGenerator.GenerateToken(user);
+
+        return new AuthResponse
+        {
+            Token = token,
+            Email = user.Email,
+            Role = user.Role,
+            Name = user.Name
+        };
     }
 }

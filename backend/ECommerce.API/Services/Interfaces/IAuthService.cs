@@ -1,6 +1,6 @@
 using ECommerce.API.DTOs.Requests;
 using ECommerce.API.DTOs.Responses;
-
+using Google.Apis.Auth;
 namespace ECommerce.API.Services.Interfaces;
 
 public interface IAuthService
@@ -10,6 +10,9 @@ public interface IAuthService
     Task<AuthResponse> LoginAsync(LoginRequest request);
 
     Task ForgotPasswordAsync(string email);
+
+    Task<AuthResponse> GoogleLoginAsync(
+    string idToken);
 
     Task VerifyOtpAsync(
         string email,

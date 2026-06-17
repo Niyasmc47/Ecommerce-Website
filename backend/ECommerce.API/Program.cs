@@ -26,6 +26,7 @@ Env.Load(); // Load environment variables from .env file
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpClient();
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -39,6 +40,9 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings"));
+builder.Services.AddScoped<
+    ITurnstileService,
+    TurnstileService>();
 
 builder.Services.AddScoped<JwtTokenGenerator>();
 

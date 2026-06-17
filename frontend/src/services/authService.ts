@@ -3,6 +3,7 @@ import { api } from "../api/axios";
 export interface LoginRequest {
   email: string;
   password: string;
+  captchaToken: string;
 }
 
 export async function login(data: LoginRequest) {
@@ -44,4 +45,12 @@ export async function resetPassword(
     otp,
     newPassword,
   });
+}
+
+export async function googleLogin(idToken: string) {
+  const response = await api.post("/auth/google", {
+    idToken,
+  });
+
+  return response.data;
 }
