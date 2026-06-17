@@ -4,6 +4,7 @@ using ECommerce.API.DTOs.Requests;
 using ECommerce.API.DTOs.Responses;
 using ECommerce.API.Models;
 using ECommerce.API.Services.Interfaces;
+using ECommerce.API.Email;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,7 @@ namespace ECommerce.API.Services.Implementations;
 public class AuthService : IAuthService
 {
     private readonly ApplicationDbContext _context;
+    private readonly IEmailService _emailService;
     private readonly JwtTokenGenerator _tokenGenerator;
     private readonly IValidator<RegisterRequest> _registerValidator;
     private readonly IValidator<LoginRequest> _loginValidator;
@@ -20,12 +22,14 @@ public class AuthService : IAuthService
         ApplicationDbContext context,
         JwtTokenGenerator tokenGenerator,
         IValidator<RegisterRequest> registerValidator,
-        IValidator<LoginRequest> loginValidator)
+        IValidator<LoginRequest> loginValidator,
+        IEmailService emailService)
     {
         _context = context;
         _tokenGenerator = tokenGenerator;
         _registerValidator = registerValidator;
         _loginValidator = loginValidator;
+        _emailService = emailService;
     }
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
@@ -106,5 +110,110 @@ public class AuthService : IAuthService
             Role = user.Role,
             Name = user.Name
         };
+    }
+
+    public async Task ForgotPasswordAsync(string email)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(x => x.Email == email);
+
+        if (user == null)
+            throw new Exception("User not found.");
+
+        var otp =
+            Random.Shared.Next(100000, 999999)
+                .ToString();
+
+        var otpHash =
+            BCrypt.Net.BCrypt.HashPassword(otp);
+
+        _context.PasswordResetOtps.Add(
+            new PasswordResetOtp
+            {
+                Email = email,
+                Otp = otpHash,
+                ExpiresAt = DateTime.UtcNow.AddMinutes(5),
+                IsUsed = false
+            });
+
+        await _context.SaveChangesAsync();
+
+        var body = $@"
+            <h2>Password Reset OTP</h2>
+            <p>Your OTP is:</p>
+            <h1>{otp}</h1>
+            <p>This OTP expires in 5 minutes.</p>";
+
+        await _emailService.SendEmailAsync(
+            email,
+            "Velocity.Shop Password Reset",
+            body);
+    }
+        public async Task VerifyOtpAsync(
+        string email,
+        string otp)
+    {
+        var record =
+            await _context.PasswordResetOtps
+                .OrderByDescending(x => x.Id)
+                .FirstOrDefaultAsync(x =>
+                    x.Email == email &&
+                    !x.IsUsed);
+
+        if (record == null)
+            throw new Exception("Invalid OTP.");
+
+        if (record.ExpiresAt < DateTime.UtcNow)
+            throw new Exception("OTP expired.");
+
+        var isValidOtp =
+            BCrypt.Net.BCrypt.Verify(
+                otp,
+                record.Otp);
+
+        if (!isValidOtp)
+            throw new Exception("Invalid OTP.");
+    }
+
+    public async Task ResetPasswordAsync(
+        string email,
+        string otp,
+        string newPassword)
+    {
+        var record =
+            await _context.PasswordResetOtps
+                .OrderByDescending(x => x.Id)
+                .FirstOrDefaultAsync(x =>
+                    x.Email == email &&
+                    !x.IsUsed);
+
+        if (record == null)
+            throw new Exception("Invalid OTP.");
+
+        if (record.ExpiresAt < DateTime.UtcNow)
+            throw new Exception("OTP expired.");
+
+        var isValidOtp =
+            BCrypt.Net.BCrypt.Verify(
+                otp,
+                record.Otp);
+
+        if (!isValidOtp)
+            throw new Exception("Invalid OTP.");
+
+        var user =
+            await _context.Users
+                .FirstOrDefaultAsync(x => x.Email == email);
+
+        if (user == null)
+            throw new Exception("User not found.");
+
+        user.PasswordHash =
+            BCrypt.Net.BCrypt.HashPassword(
+                newPassword);
+
+        record.IsUsed = true;
+
+        await _context.SaveChangesAsync();
     }
 }

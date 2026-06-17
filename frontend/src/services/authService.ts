@@ -17,14 +17,31 @@ export interface RegisterRequest {
   password: string;
 }
 
-export async function register(
-  data: RegisterRequest
-) {
-  const response =
-    await api.post(
-      "/auth/register",
-      data
-    );
+export async function register(data: RegisterRequest) {
+  const response = await api.post("/auth/register", data);
 
   return response.data;
+}
+
+export async function forgotPassword(email: string) {
+  return api.post("/auth/forgot-password", { email });
+}
+
+export async function verifyOtp(email: string, otp: string) {
+  return api.post("/auth/verify-otp", {
+    email,
+    otp,
+  });
+}
+
+export async function resetPassword(
+  email: string,
+  otp: string,
+  newPassword: string,
+) {
+  return api.post("/auth/reset-password", {
+    email,
+    otp,
+    newPassword,
+  });
 }

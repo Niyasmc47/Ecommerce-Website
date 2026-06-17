@@ -33,6 +33,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<PendingOrderItem> PendingOrderItems
         => Set<PendingOrderItem>();
 
+    public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
+
     protected override void OnModelCreating(
         ModelBuilder modelBuilder)
     {

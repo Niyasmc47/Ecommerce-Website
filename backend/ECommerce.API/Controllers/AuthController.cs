@@ -44,4 +44,49 @@ public class AuthController : ControllerBase
             Data = result
         });
     }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(
+    ForgotPasswordRequest request)
+    {
+        await _authService.ForgotPasswordAsync(
+            request.Email);
+
+        return Ok(new ApiResponse<object>
+        {
+            Success = true,
+            Message = "OTP sent successfully."
+        });
+    }
+
+    [HttpPost("verify-otp")]
+    public async Task<IActionResult> VerifyOtp(
+    VerifyOtpRequest request)
+    {
+        await _authService.VerifyOtpAsync(
+            request.Email,
+            request.Otp);
+
+        return Ok(new ApiResponse<object>
+        {
+            Success = true,
+            Message = "OTP verified."
+        });
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(
+    ResetPasswordRequest request)
+    {
+        await _authService.ResetPasswordAsync(
+            request.Email,
+            request.Otp,
+            request.NewPassword);
+
+        return Ok(new ApiResponse<object>
+        {
+            Success = true,
+            Message = "Password reset successful."
+        });
+    }
 }

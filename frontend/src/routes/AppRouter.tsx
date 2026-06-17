@@ -18,6 +18,7 @@ import AdminUsersPage from "../pages/Admin/AdminUsersPage";
 import CheckoutPage from "../pages/Checkout/CheckoutPage";
 import ProfilePage from "../pages/Profile/ProfilePage";
 import PaymentSuccessPage from "../pages/PaymentSuccess/PaymentSuccessPage";
+import ForgotPasswordPage from "../pages/Auth/ForgotPasswordPage";
 import PaymentCancelPage from "../pages/PaymentCancel/PaymentCancelPage";
 export default function AppRouter() {
   return (
@@ -37,6 +38,7 @@ export default function AppRouter() {
         <Route path="/orders/:id" element={<OrderDetailsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/profile" element={<ProfilePage />} />
 
         <Route
