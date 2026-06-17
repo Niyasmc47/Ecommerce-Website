@@ -12,11 +12,15 @@ import type { Product } from "../../types/product";
 import { BsSearch, BsFilterRight } from "react-icons/bs";
 
 export default function ProductsPage() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoriesFromUrl = searchParams.getAll("category");
+
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
 
-  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>(
+    categoriesFromUrl.length > 0 ? categoriesFromUrl.map(Number) : [],
+  );
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState(() => searchParams.get("search") || "");
@@ -30,6 +34,8 @@ export default function ProductsPage() {
         setLoading(true);
         const data = await getProducts({
           search,
+          categoryIds:
+            selectedCategories.length > 0 ? selectedCategories : undefined,
           minPrice: minPrice !== "" ? Number(minPrice) : undefined,
           maxPrice: maxPrice !== "" ? Number(maxPrice) : undefined,
           page,
@@ -41,7 +47,7 @@ export default function ProductsPage() {
       }
     }
     loadProducts();
-  }, [search, minPrice, maxPrice, page]);
+  }, [search, minPrice, maxPrice, page, selectedCategories]);
 
   useEffect(() => {
     async function loadCategories() {
@@ -53,19 +59,25 @@ export default function ProductsPage() {
     loadCategories();
   }, []);
 
-  const filteredProducts =
-    selectedCategories.length === 0
-      ? products
-      : products.filter((product) =>
-          selectedCategories.includes(product.categoryId),
-        );
+  const filteredProducts = products;
 
   function toggleCategory(categoryId: number) {
-    setSelectedCategories((prev) =>
-      prev.includes(categoryId)
+    setSelectedCategories((prev) => {
+      const isSelected = prev.includes(categoryId);
+      const next = isSelected
         ? prev.filter((id) => id !== categoryId)
-        : [...prev, categoryId],
-    );
+        : [...prev, categoryId];
+
+      // Sync URL search params
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete("category");
+      next.forEach((id) => newParams.append("category", id.toString()));
+      setSearchParams(newParams);
+
+      return next;
+    });
+
+    setPage(1);
   }
 
   return (
@@ -134,48 +146,48 @@ export default function ProductsPage() {
             <div className="grid gap-10 lg:grid-cols-[260px_1fr] lg:items-start">
               {/* Sidebar */}
               <div className="hidden lg:block">
-  <div className="sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto rounded-3xl border border-border bg-surface p-6 premium-card">
-                {" "}
-                <div className="mb-6 flex items-center justify-between">
-                  <h3 className="font-bold text-lg text-foreground">
-                    Categories
-                  </h3>
+                <div className="sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto rounded-3xl border border-border bg-surface p-6 premium-card">
+                  {" "}
+                  <div className="mb-6 flex items-center justify-between">
+                    <h3 className="font-bold text-lg text-foreground">
+                      Categories
+                    </h3>
 
-                  <button
-                    onClick={() => setSelectedCategories([])}
-                    className="text-xs text-primary hover:underline"
-                  >
-                    Clear
-                  </button>
-                </div>
-                <div className="space-y-3">
-                  {categories.map((category) => (
-                    <label
-                      key={category.id}
-                      className="flex cursor-pointer items-center justify-between rounded-xl p-2 hover:bg-background"
+                    <button
+                      onClick={() => {
+                        setSelectedCategories([]);
+                        const newParams = new URLSearchParams(searchParams);
+                        newParams.delete("category");
+                        setSearchParams(newParams);
+                      }}
+                      className="text-xs text-primary hover:underline"
                     >
-                      <div className="flex items-center gap-3">
-                        <input
-                          type="checkbox"
-                          checked={selectedCategories.includes(category.id)}
-                          onChange={() => toggleCategory(category.id)}
-                          className="h-4 w-4 accent-primary"
-                        />
+                      Clear
+                    </button>
+                  </div>
+                  <div className="space-y-3">
+                    {categories.map((category) => (
+                      <label
+                        key={category.id}
+                        className="flex cursor-pointer items-center justify-between rounded-xl p-2 hover:bg-background"
+                      >
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="checkbox"
+                            checked={selectedCategories.includes(category.id)}
+                            onChange={() => toggleCategory(category.id)}
+                            className="h-4 w-4 accent-primary"
+                          />
 
-                        <span className="text-sm text-foreground">
-                          {category.name}
-                        </span>
-                      </div>
+                          <span className="text-sm text-foreground">
+                            {category.name}
+                          </span>
+                        </div>
 
-                      <span className="text-xs text-foreground/50">
-                        {
-                          products.filter((p) => p.categoryId === category.id)
-                            .length
-                        }
-                      </span>
-                    </label>
-                  ))}
-                </div>
+                        <span className="text-xs text-foreground/50">→</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
 

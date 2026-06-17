@@ -21,12 +21,12 @@ public class ProductService : IProductService
     IGenericRepository<Category> categoryRepository,
     ApplicationDbContext context,
     IMapper mapper)
-{
-    _productRepository = productRepository;
-    _categoryRepository = categoryRepository;
-    _context = context;
-    _mapper = mapper;
-}
+    {
+        _productRepository = productRepository;
+        _categoryRepository = categoryRepository;
+        _context = context;
+        _mapper = mapper;
+    }
     public async Task<IEnumerable<ProductResponse>> GetAllAsync()
     {
         var products = await _productRepository.GetAllAsync();
@@ -45,10 +45,11 @@ public class ProductService : IProductService
                 x.Name.Contains(request.Search));
         }
 
-        if (request.CategoryId.HasValue)
+        if (request.CategoryIds != null &&
+    request.CategoryIds.Any())
         {
             query = query.Where(x =>
-                x.CategoryId == request.CategoryId.Value);
+                request.CategoryIds.Contains(x.CategoryId));
         }
 
         if (request.MinPrice.HasValue)

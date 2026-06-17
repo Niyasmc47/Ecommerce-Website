@@ -4,7 +4,7 @@ public class ProductQueryRequest
 {
     public string? Search { get; set; }
 
-    public int? CategoryId { get; set; }
+    public List<int>? CategoryIds { get; set; }
 
     public decimal? MinPrice { get; set; }
 

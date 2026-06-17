@@ -7,6 +7,7 @@ public class Category
     public string Name { get; set; } = string.Empty;
 
     public string ImageUrl { get; set; } = string.Empty;
+    public string IconName { get; set; } = "category";
 
     public ICollection<Product> Products { get; set; } = new List<Product>();
 }

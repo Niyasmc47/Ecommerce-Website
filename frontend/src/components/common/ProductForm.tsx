@@ -382,7 +382,7 @@ export default function ProductForm({
             </p>
           </div>
 
-          {/* SEO */}
+          {/* SEO
           <div className="bg-surface border border-border rounded-xl p-6 shadow-sm space-y-4">
             <h3 className="text-md font-bold flex items-center gap-2">
               <span className="material-symbols-outlined text-[18px]">travel_explore</span> Search Engine Optimization
@@ -408,7 +408,7 @@ export default function ProductForm({
                 onChange={(e) => updateField("metaDescription", e.target.value)}
               />
             </div>
-          </div>
+          </div> */}
 
           {/* Pricing */}
           <div className="bg-surface border border-border rounded-xl p-6 shadow-sm space-y-4">
@@ -451,7 +451,7 @@ export default function ProductForm({
             <h3 className="text-md font-bold flex items-center gap-2">
               <span className="material-symbols-outlined text-[18px]">inventory_2</span> Inventory Management
             </h3>
-            <div>
+            {/* <div>
               <label className="block text-xs font-bold mb-1">SKU (Stock Keeping Unit)</label>
               <input
                 className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:ring-1 outline-none font-mono"
@@ -459,7 +459,7 @@ export default function ProductForm({
                 value={form.sku}
                 onChange={(e) => updateField("sku", e.target.value)}
               />
-            </div>
+            </div> */}
             <div>
               <label className="block text-xs font-bold mb-1">Stock Quantity</label>
               <input
@@ -493,7 +493,7 @@ export default function ProductForm({
             </div>
           </div>
 
-          {/* Organization */}
+          {/* Organization
           <div className="bg-surface border border-border rounded-xl p-6 shadow-sm space-y-4">
             <h3 className="text-md font-bold flex items-center gap-2">
               <span className="material-symbols-outlined text-[18px]">folder</span> Organization
@@ -525,7 +525,7 @@ export default function ProductForm({
                 onChange={(e) => updateField("tags", e.target.value.split(",").map(s => s.trim()).filter(Boolean))}
               />
             </div>
-          </div>
+          </div> */}
 
         </div>
       </div>

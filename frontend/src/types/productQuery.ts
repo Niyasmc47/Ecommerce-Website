@@ -1,6 +1,6 @@
 export interface ProductQuery {
   search?: string;
-  categoryId?: number;
+  categoryIds?: number[];
   minPrice?: number;
   maxPrice?: number;
   page?: number;

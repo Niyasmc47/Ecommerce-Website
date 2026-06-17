@@ -3,9 +3,20 @@ import type { Product } from "../types/product";
 import type { ProductQuery } from "../types/productQuery";
 
 export async function getProducts(query?: ProductQuery): Promise<Product[]> {
-  const response = await api.get<Product[]>("/products", {
-    params: query,
-  });
+  const params = new URLSearchParams();
+
+  if (query) {
+    if (query.search) params.append("Search", query.search);
+    if (query.minPrice !== undefined) params.append("MinPrice", query.minPrice.toString());
+    if (query.maxPrice !== undefined) params.append("MaxPrice", query.maxPrice.toString());
+    if (query.page !== undefined) params.append("Page", query.page.toString());
+    if (query.pageSize !== undefined) params.append("PageSize", query.pageSize.toString());
+    if (query.categoryIds) {
+      query.categoryIds.forEach((id) => params.append("CategoryIds", id.toString()));
+    }
+  }
+
+  const response = await api.get<Product[]>(`/products?${params.toString()}`);
 
   return response.data;
 }

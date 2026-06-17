@@ -24,7 +24,8 @@ public class CategoryService : ICategoryService
         {
             Id = c.Id,
             Name = c.Name,
-            ImageUrl = c.ImageUrl
+            ImageUrl = c.ImageUrl,
+            IconName = c.IconName
         });
     }
 
@@ -46,10 +47,12 @@ public class CategoryService : ICategoryService
     public async Task<CategoryResponse> CreateAsync(
         CreateCategoryRequest request)
     {
+
         var category = new Category
         {
             Name = request.Name,
-            ImageUrl = request.ImageUrl
+            ImageUrl = request.ImageUrl,
+            IconName = request.IconName
         };
 
         await _repository.AddAsync(category);
@@ -58,7 +61,8 @@ public class CategoryService : ICategoryService
         {
             Id = category.Id,
             Name = category.Name,
-            ImageUrl = category.ImageUrl
+            ImageUrl = category.ImageUrl,
+            IconName = category.IconName
         };
     }
 
@@ -73,6 +77,7 @@ public class CategoryService : ICategoryService
 
         category.Name = request.Name;
         category.ImageUrl = request.ImageUrl;
+        category.IconName = request.IconName;
 
         await _repository.UpdateAsync(category);
 
@@ -80,7 +85,8 @@ public class CategoryService : ICategoryService
         {
             Id = category.Id,
             Name = category.Name,
-            ImageUrl = category.ImageUrl
+            ImageUrl = category.ImageUrl,
+            IconName = category.IconName
         };
     }
 
