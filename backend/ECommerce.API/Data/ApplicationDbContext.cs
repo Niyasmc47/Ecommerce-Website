@@ -12,7 +12,7 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<User> Users => Set<User>();
-    
+
     public DbSet<UserAddress> UserAddresses => Set<UserAddress>();
 
     public DbSet<Category> Categories => Set<Category>();
@@ -32,6 +32,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<PendingOrderItem> PendingOrderItems
         => Set<PendingOrderItem>();
+    public DbSet<DeliveryOtp> DeliveryOtps
+    => Set<DeliveryOtp>();
 
     public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
 
@@ -54,6 +56,12 @@ public class ApplicationDbContext : DbContext
             .HasMany(x => x.OrderItems)
             .WithOne(x => x.Order)
             .HasForeignKey(x => x.OrderId);
+
+        modelBuilder.Entity<Order>()
+              .HasOne(x => x.DeliveryAgent)
+           .WithMany(x => x.AssignedOrders)
+           .HasForeignKey(x => x.DeliveryAgentId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<OrderItem>()
             .HasOne(x => x.Product)

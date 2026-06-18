@@ -32,6 +32,12 @@ public class Order
 
     public string PostalCode { get; set; } = string.Empty;
 
+    public int? DeliveryAgentId { get; set; }
+
+    public User? DeliveryAgent { get; set; }
+
+    public DateTime? DeliveredAt { get; set; }
+
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
     public ICollection<OrderItem> OrderItems { get; set; }

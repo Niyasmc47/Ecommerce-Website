@@ -17,9 +17,12 @@ import ProtectedAdminRoute from "./ProtectedAdminRoute";
 import AdminUsersPage from "../pages/Admin/AdminUsersPage";
 import CheckoutPage from "../pages/Checkout/CheckoutPage";
 import ProfilePage from "../pages/Profile/ProfilePage";
+import DeliveryPage from "../pages/Delivery/DeliveryPage";
+import DeliveryManagementPage from "../pages/Admin/DeliveryManagementPage";
 import PaymentSuccessPage from "../pages/PaymentSuccess/PaymentSuccessPage";
 import ForgotPasswordPage from "../pages/Auth/ForgotPasswordPage";
 import PaymentCancelPage from "../pages/PaymentCancel/PaymentCancelPage";
+
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -29,6 +32,7 @@ export default function AppRouter() {
         <Route path="/products/:id" element={<ProductDetailsPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/delivery" element={<DeliveryPage />} />
 
         <Route path="/payment/success" element={<PaymentSuccessPage />} />
 
@@ -81,6 +85,15 @@ export default function AppRouter() {
           element={
             <ProtectedAdminRoute>
               <AdminUsersPage />
+            </ProtectedAdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/delivery"
+          element={
+            <ProtectedAdminRoute>
+              <DeliveryManagementPage />
             </ProtectedAdminRoute>
           }
         />

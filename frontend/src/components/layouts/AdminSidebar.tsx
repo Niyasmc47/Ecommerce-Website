@@ -9,6 +9,7 @@ import {
   BsMoonStars,
   BsSun,
   BsShop,
+  BsTruck,
 } from "react-icons/bs";
 import { useEffect, useState } from "react";
 
@@ -35,6 +36,7 @@ export default function AdminSidebar() {
     { path: "/admin/categories", label: "Categories", icon: BsTags },
     { path: "/admin/orders", label: "Orders", icon: BsReceipt },
     { path: "/admin/users", label: "Customers", icon: BsPeople },
+    { path: "/admin/delivery", label: "Deliveries", icon: BsTruck },
   ];
 
   return (

@@ -132,11 +132,19 @@ public class OrderService : IOrderService
 
         decimal totalAmount = 0;
 
+        var deliveryAgent =
+    await _context.Users
+        .Where(x => x.Role == "DeliveryAgent")
+        .FirstOrDefaultAsync();
+
         var order = new Order
         {
+            DeliveryAgentId =
+    deliveryAgent?.Id,
+
             UserId = userId,
 
-            Status = "Pending",
+            Status = "Assigned",
 
             PaymentStatus = "Pending",
 
@@ -215,11 +223,18 @@ public class OrderService : IOrderService
     {
         decimal totalAmount = 0;
 
+        var deliveryAgent =
+    await _context.Users
+        .Where(x => x.Role == "DeliveryAgent")
+        .FirstOrDefaultAsync();
+
         var order = new Order
         {
             UserId = pendingOrder.UserId,
 
-            Status = "Pending",
+            DeliveryAgentId = deliveryAgent?.Id,
+
+            Status = "Assigned",
 
             PaymentStatus = "Paid",
 
