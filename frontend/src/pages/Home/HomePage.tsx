@@ -159,9 +159,13 @@ export default function HomePage() {
     return { ...DUMMY_PRODUCTS[i], isReal: false };
   });
 
-  const heroItem = merged[0];
-  const secondary1 = merged[1];
-  const secondary2 = merged[2];
+  const heroItem = merged.find((x: any) => x.originalId === 2005) ?? merged[0];
+
+  const secondary1 =
+    merged.find((x: any) => x.originalId === 2006) ?? merged[1];
+
+  const secondary2 =
+    merged.find((x: any) => x.originalId === 2007) ?? merged[2];
   const bestSellers = merged.slice(3, 8);
   const cellphones = merged.slice(8, 11);
 
@@ -269,7 +273,7 @@ export default function HomePage() {
                   </p>
                   <Link
                     to={getProductLink(heroItem)}
-                    className="inline-block bg-primary text-on-primary px-8 py-3 rounded-full font-label-md text-label-md hover:shadow-lg active:scale-95 transition-all"
+                    className="inline-block bg-primary text-white px-8 py-3 rounded-full font-bold text-sm no-underline hover:scale-105 hover:shadow-lg transition-all"
                   >
                     Buy Now
                   </Link>
@@ -287,9 +291,10 @@ export default function HomePage() {
             {/* Secondary Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-auto md:h-48">
               {[secondary1, secondary2].map((item, idx) => (
-                <div
+                <Link
                   key={item.id || idx}
-                  className="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant flex items-center gap-4 group cursor-pointer hover:shadow-md transition-shadow"
+                  to={getProductLink(item)}
+                  className="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant flex items-center gap-4 group cursor-pointer hover:shadow-md transition-shadow no-underline"
                 >
                   <div className="flex-1">
                     <span
@@ -300,19 +305,18 @@ export default function HomePage() {
                     <h3 className="font-headline-sm text-headline-sm mt-1">
                       {item.name}
                     </h3>
-                    <Link
-                      to={getProductLink(item)}
+                    <span
                       className="text-primary font-label-md text-label-md hover:underline inline-block mt-2"
                     >
                       Shop Now
-                    </Link>
+                    </span>
                   </div>
                   <img
                     alt={item.name}
                     className="w-24 h-24 object-contain group-hover:scale-110 transition-transform"
                     src={item.imageUrl}
                   />
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -432,9 +436,10 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {bestSellers.map((item) => (
-              <div
+              <Link
                 key={item.id}
-                className="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 group hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col h-full relative"
+                to={getProductLink(item)}
+                className="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 group hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col h-full relative no-underline text-inherit"
               >
                 <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
                   {item.badges?.map((badge: any, i: number) => (
@@ -446,7 +451,10 @@ export default function HomePage() {
                     </span>
                   ))}
                 </div>
-                <button className="absolute top-3 right-3 text-on-surface-variant hover:text-error transition-colors z-10">
+                <button
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                  className="absolute top-3 right-3 text-on-surface-variant hover:text-error transition-colors z-10"
+                >
                   <span className="material-symbols-outlined">favorite</span>
                 </button>
                 <div className="bg-surface-container-low rounded-lg overflow-hidden mb-4 h-48 flex items-center justify-center p-4">
@@ -460,12 +468,11 @@ export default function HomePage() {
                   <span className="text-primary font-micro-tag text-micro-tag uppercase">
                     {item.tag}
                   </span>
-                  <Link
-                    to={getProductLink(item)}
+                  <span
                     className="block font-label-md text-label-md font-bold text-on-surface line-clamp-2 hover:text-primary transition-colors"
                   >
                     {item.name}
-                  </Link>
+                  </span>
                   <div className="flex items-center gap-1 text-tertiary-fixed-dim">
                     {renderStars(item.rating ?? 0)}
                   </div>
@@ -479,7 +486,7 @@ export default function HomePage() {
                 >
                   Quick Add
                 </button>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
@@ -500,7 +507,7 @@ export default function HomePage() {
               </p>
               <Link
                 to="/products"
-                className="inline-block bg-surface-container-lowest text-on-surface px-8 py-3 rounded-full font-label-md text-label-md hover:scale-105 active:scale-95 transition-all"
+                className="inline-block bg-on-background text-on-surface px-8 py-3 rounded-full font-label-md text-label-md hover:scale-105 active:scale-95 transition-all"
               >
                 Discover Now
               </Link>
@@ -533,7 +540,7 @@ export default function HomePage() {
                 </p>
                 <Link
                   to="/products"
-                  className="inline-block bg-black text-white px-6 py-2 rounded-lg font-label-md"
+                  className="inline-block bg-primary text-white px-6 py-2 rounded-lg font-bold text-sm no-underline hover:scale-105 transition-transform"
                 >
                   Shop Now
                 </Link>
@@ -548,84 +555,48 @@ export default function HomePage() {
             {/* Brand Grid & Product Cards */}
             <div className="lg:col-span-8 flex flex-col gap-8">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant flex items-center gap-3 cursor-pointer hover:border-primary transition-all group">
-                  <span className="material-symbols-outlined text-[24px] text-primary group-hover:scale-110 transition-transform">
-                    smartphone
-                  </span>
-                  <div>
-                    <div className="font-label-md text-label-md font-bold">
-                      iPhone (iOS)
+                {categories.slice(0, 4).map((cat) => (
+                  <Link
+                    key={cat.id}
+                    to={`/products?category=${cat.id}`}
+                    className="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant flex items-center gap-3 cursor-pointer hover:border-primary transition-all group no-underline text-inherit"
+                  >
+                    <span className="material-symbols-outlined text-[24px] text-primary group-hover:scale-110 transition-transform">
+                      {cat.iconName || "category"}
+                    </span>
+                    <div>
+                      <div className="font-label-md text-label-md font-bold">
+                        {cat.name}
+                      </div>
                     </div>
-                    <div className="text-[12px] text-on-surface-variant">
-                      14 Items
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant flex items-center gap-3 cursor-pointer hover:border-primary transition-all group">
-                  <span className="material-symbols-outlined text-[24px] text-primary group-hover:scale-110 transition-transform">
-                    android
-                  </span>
-                  <div>
-                    <div className="font-label-md text-label-md font-bold">
-                      Android
-                    </div>
-                    <div className="text-[12px] text-on-surface-variant">
-                      33 Items
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant flex items-center gap-3 cursor-pointer hover:border-primary transition-all group">
-                  <span className="material-symbols-outlined text-[24px] text-primary group-hover:scale-110 transition-transform">
-                    5g
-                  </span>
-                  <div>
-                    <div className="font-label-md text-label-md font-bold">
-                      5G Support
-                    </div>
-                    <div className="text-[12px] text-on-surface-variant">
-                      12 Items
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant flex items-center gap-3 cursor-pointer hover:border-primary transition-all group">
-                  <span className="material-symbols-outlined text-[24px] text-primary group-hover:scale-110 transition-transform">
-                    bolt
-                  </span>
-                  <div>
-                    <div className="font-label-md text-label-md font-bold">
-                      Accessories
-                    </div>
-                    <div className="text-[12px] text-on-surface-variant">
-                      88 Items
-                    </div>
-                  </div>
-                </div>
+                  </Link>
+                ))}
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {cellphones.map((item) => (
-                  <div
+                  <Link
                     key={item.id}
-                    className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant group hover:shadow-lg transition-all text-center flex flex-col h-full"
+                    to={getProductLink(item)}
+                    className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant group hover:shadow-lg transition-all text-center flex flex-col h-full no-underline text-inherit"
                   >
                     <img
                       alt={item.name}
                       className="w-24 h-32 object-contain mx-auto mb-4 group-hover:scale-110 transition-transform"
                       src={item.imageUrl}
                     />
-                    <Link
-                      to={getProductLink(item)}
+                    <span
                       className="font-label-md text-label-md font-bold hover:text-primary transition-colors flex-1"
                     >
                       {item.name}
-                    </Link>
+                    </span>
                     <div className="flex items-center justify-center gap-1 text-tertiary-fixed-dim my-1">
                       {renderStars(item.rating ?? 0)}
                     </div>
                     <div className="font-price-lg text-price-lg text-primary">
                       ₹{item.price.toLocaleString()}
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
