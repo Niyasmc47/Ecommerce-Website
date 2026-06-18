@@ -3,7 +3,7 @@
 A modern full-stack eCommerce platform built with React, TypeScript, ASP.NET Core, Entity Framework Core, and PostgreSQL.
 
 Velocity.Shop provides a complete online shopping experience with product browsing, cart management, order processing, user authentication, and an administrative dashboard for managing products, categories, users, and orders.
-
+edited readme
 ---
 
 ## Features
