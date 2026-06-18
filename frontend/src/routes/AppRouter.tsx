@@ -10,10 +10,12 @@ import AdminDashboardPage from "../pages/Admin/AdminDashboardPage";
 import AdminProductsPage from "../pages/Admin/AdminProductsPage";
 import AdminOrdersPage from "../pages/Admin/AdminOrdersPage";
 import AdminCategoriesPage from "../pages/Admin/AdminCategoriesPage";
+import AdminSellersPage from "../pages/Admin/AdminSellersPage";
 import OrdersPage from "../pages/Orders/OrdersPage";
 import OrderDetailsPage from "../pages/Orders/OrderDetailsPage";
 import AdminOrderDetailsPage from "../pages/Admin/AdminOrderDetailsPage";
 import ProtectedAdminRoute from "./ProtectedAdminRoute";
+import ProtectedSellerRoute from "./ProtectedSellerRoute";
 import AdminUsersPage from "../pages/Admin/AdminUsersPage";
 import CheckoutPage from "../pages/Checkout/CheckoutPage";
 import ProfilePage from "../pages/Profile/ProfilePage";
@@ -22,6 +24,10 @@ import DeliveryManagementPage from "../pages/Admin/DeliveryManagementPage";
 import PaymentSuccessPage from "../pages/PaymentSuccess/PaymentSuccessPage";
 import ForgotPasswordPage from "../pages/Auth/ForgotPasswordPage";
 import PaymentCancelPage from "../pages/PaymentCancel/PaymentCancelPage";
+
+import SellerDashboardPage from "../pages/Seller/SellerDashboardPage";
+import SellerProductsPage from "../pages/Seller/SellerProductsPage";
+import SellerOrdersPage from "../pages/Seller/SellerOrdersPage";
 
 export default function AppRouter() {
   return (
@@ -45,6 +51,7 @@ export default function AppRouter() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/profile" element={<ProfilePage />} />
 
+        {/* Admin Routes */}
         <Route
           path="/admin"
           element={
@@ -53,7 +60,6 @@ export default function AppRouter() {
             </ProtectedAdminRoute>
           }
         />
-
         <Route
           path="/admin/products"
           element={
@@ -62,7 +68,6 @@ export default function AppRouter() {
             </ProtectedAdminRoute>
           }
         />
-
         <Route
           path="/admin/categories"
           element={
@@ -79,7 +84,6 @@ export default function AppRouter() {
             </ProtectedAdminRoute>
           }
         />
-
         <Route
           path="/admin/users"
           element={
@@ -88,7 +92,6 @@ export default function AppRouter() {
             </ProtectedAdminRoute>
           }
         />
-
         <Route
           path="/admin/delivery"
           element={
@@ -97,7 +100,14 @@ export default function AppRouter() {
             </ProtectedAdminRoute>
           }
         />
-
+        <Route
+          path="/admin/sellers"
+          element={
+            <ProtectedAdminRoute>
+              <AdminSellersPage />
+            </ProtectedAdminRoute>
+          }
+        />
         <Route
           path="/admin/orders/:id"
           element={
@@ -107,7 +117,31 @@ export default function AppRouter() {
           }
         />
 
-        <Route path="/register" element={<RegisterPage />} />
+        {/* Seller Routes */}
+        <Route
+          path="/seller"
+          element={
+            <ProtectedSellerRoute>
+              <SellerDashboardPage />
+            </ProtectedSellerRoute>
+          }
+        />
+        <Route
+          path="/seller/products"
+          element={
+            <ProtectedSellerRoute>
+              <SellerProductsPage />
+            </ProtectedSellerRoute>
+          }
+        />
+        <Route
+          path="/seller/orders"
+          element={
+            <ProtectedSellerRoute>
+              <SellerOrdersPage />
+            </ProtectedSellerRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

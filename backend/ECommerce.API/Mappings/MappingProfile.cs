@@ -8,7 +8,10 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Product, ProductResponse>();
+        CreateMap<Product, ProductResponse>()
+            .ForMember(dest => dest.SellerName,
+                opt => opt.MapFrom(src =>
+                    src.Seller != null ? src.Seller.CompanyName : null));
 
         CreateMap<Category, CategoryResponse>();
 

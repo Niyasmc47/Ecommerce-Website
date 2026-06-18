@@ -36,6 +36,7 @@ export default function AdminSidebar() {
     { path: "/admin/categories", label: "Categories", icon: BsTags },
     { path: "/admin/orders", label: "Orders", icon: BsReceipt },
     { path: "/admin/users", label: "Customers", icon: BsPeople },
+    { path: "/admin/sellers", label: "Sellers", icon: BsShop },
     { path: "/admin/delivery", label: "Deliveries", icon: BsTruck },
   ];
 

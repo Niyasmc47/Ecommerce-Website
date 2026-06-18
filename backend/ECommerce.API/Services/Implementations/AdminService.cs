@@ -143,10 +143,18 @@ public class AdminService : IAdminService
 
     public async Task<bool>
 UpdateUserRoleAsync(
+    int currentUserId,
     int userId,
     string role
 )
     {
+        var validRoles = new[] { "Admin", "User", "DeliveryAgent", "Seller" };
+
+        if (!validRoles.Contains(role))
+        {
+            return false;
+        }
+
         var user =
             await _context.Users
                 .FirstOrDefaultAsync(
@@ -158,12 +166,11 @@ UpdateUserRoleAsync(
             return false;
         }
 
-        if (
-            role != "Admin" &&
-            role != "User"
-        )
+        // Prevent admin from removing their own admin access
+        if (currentUserId == userId && user.Role == "Admin" && role != "Admin")
         {
-            return false;
+            throw new Exception(
+                "You cannot remove your own Admin role.");
         }
 
         user.Role = role;

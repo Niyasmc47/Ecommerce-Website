@@ -202,6 +202,16 @@ export default function ProductDetailsPage() {
               ))}
               <h1 className="text-display-sm font-headline-lg font-bold text-on-surface mb-4 leading-tight">{product.name}</h1>
               
+              {product.sellerName && (
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-sm text-on-surface-variant">Sold by</span>
+                  <span className="inline-flex items-center gap-1.5 bg-tertiary-container/30 text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold">
+                    <span className="material-symbols-outlined text-[14px]">storefront</span>
+                    {product.sellerName}
+                  </span>
+                </div>
+              )}
+              
               <div className="flex items-center gap-4 text-sm">
                 <div className="flex items-center text-tertiary-fixed-dim">
                   <span className="material-symbols-outlined text-[16px]">star</span>

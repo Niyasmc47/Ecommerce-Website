@@ -151,6 +151,10 @@ builder.Services.AddScoped<
     IAdminService,
     AdminService>();
 
+builder.Services.AddScoped<
+    ISellerService,
+    SellerService>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend",

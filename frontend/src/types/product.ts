@@ -23,4 +23,6 @@ export interface Product {
   variants?: string;
   specifications?: string;
   features?: string[];
+  sellerId?: number;
+  sellerName?: string;
 }

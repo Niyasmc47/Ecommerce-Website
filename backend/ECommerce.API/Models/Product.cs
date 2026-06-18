@@ -36,6 +36,10 @@ public class Product
     public string? Specifications { get; set; } // JSON string representation
     public List<string> Features { get; set; } = new List<string>();
 
+    public int? SellerId { get; set; }
+
+    public Seller? Seller { get; set; }
+
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
 
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;

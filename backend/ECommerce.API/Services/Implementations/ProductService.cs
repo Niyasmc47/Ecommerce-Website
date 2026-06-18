@@ -37,7 +37,9 @@ public class ProductService : IProductService
     public async Task<IEnumerable<ProductResponse>>
         GetFilteredAsync(ProductQueryRequest request)
     {
-        var query = _context.Products.AsQueryable();
+        var query = _context.Products
+            .Include(p => p.Seller)
+            .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
@@ -75,7 +77,9 @@ public class ProductService : IProductService
 
     public async Task<ProductResponse?> GetByIdAsync(int id)
     {
-        var product = await _productRepository.GetByIdAsync(id);
+        var product = await _context.Products
+            .Include(p => p.Seller)
+            .FirstOrDefaultAsync(p => p.Id == id);
 
         if (product is null)
             return null;

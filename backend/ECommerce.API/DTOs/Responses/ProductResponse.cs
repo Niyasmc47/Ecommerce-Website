@@ -26,4 +26,7 @@ public class ProductResponse
     public string? Variants { get; set; }
     public string? Specifications { get; set; }
     public List<string> Features { get; set; } = new List<string>();
+
+    public int? SellerId { get; set; }
+    public string? SellerName { get; set; }
 }

@@ -24,6 +24,7 @@ public interface IAdminService
 
 
     Task<bool> UpdateUserRoleAsync(
+        int currentUserId,
         int userId,
         string role
     );

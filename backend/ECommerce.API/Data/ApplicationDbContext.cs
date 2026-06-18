@@ -35,6 +35,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<DeliveryOtp> DeliveryOtps
     => Set<DeliveryOtp>();
 
+    public DbSet<Seller> Sellers => Set<Seller>();
+
     public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
 
     protected override void OnModelCreating(
@@ -86,6 +88,22 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Order>()
             .Property(o => o.TotalAmount)
+            .HasPrecision(18, 2);
+
+        modelBuilder.Entity<Seller>()
+            .HasOne(s => s.User)
+            .WithOne()
+            .HasForeignKey<Seller>(s => s.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Product>()
+            .HasOne(p => p.Seller)
+            .WithMany(s => s.Products)
+            .HasForeignKey(p => p.SellerId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<Product>()
+            .Property(p => p.CompareAtPrice)
             .HasPrecision(18, 2);
     }
 }

@@ -78,6 +78,9 @@ export default function Navbar() {
             {role === "Admin" && (
               <Link to="/admin" className="text-on-surface-variant hover:text-primary transition-colors">Admin Dashboard</Link>
             )}
+            {role === "Seller" && (
+              <Link to="/seller" className="text-on-surface-variant hover:text-primary transition-colors">Seller Dashboard</Link>
+            )}
             {(role === "Admin" || role === "DeliveryAgent") && (
               <Link to="/delivery" className="text-on-surface-variant hover:text-primary transition-colors">Deliveries</Link>
             )}
