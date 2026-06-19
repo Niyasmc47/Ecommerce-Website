@@ -18,4 +18,9 @@ public class ReturnRequestResponse
         = string.Empty;
 
     public DateTime RequestedAt { get; set; }
+
+    public DateTime? ProcessedAt { get; set; }
+
+    public string CustomerName { get; set; }
+        = string.Empty;
 }

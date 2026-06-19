@@ -17,4 +17,7 @@ public class OrderResponse
         = string.Empty;
 
     public int ItemCount { get; set; }
+
+    public string CustomerName { get; set; }
+        = string.Empty;
 }

@@ -32,3 +32,9 @@ export async function deleteOrder(id: number) {
     headers: getAuthHeaders(),
   });
 }
+
+export async function cancelOrder(id: number) {
+  return api.post(`/orders/${id}/cancel`, {}, {
+    headers: getAuthHeaders(),
+  });
+}

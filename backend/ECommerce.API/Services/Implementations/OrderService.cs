@@ -340,9 +340,14 @@ public class OrderService : IOrderService
     {
         var order = await _context.Orders
             .FirstOrDefaultAsync(x =>
-                x.Id == orderId &&
-                x.UserId == userId &&
-                x.Status == "Delivered");
+    x.Id == orderId &&
+    x.UserId == userId &&
+    new[]
+    {
+        "Delivered",
+        "Returned",
+        "Cancelled"
+    }.Contains(x.Status));
 
         if (order == null)
             return false;
@@ -354,6 +359,46 @@ public class OrderService : IOrderService
         _context.OrderItems.RemoveRange(orderItems);
 
         _context.Orders.Remove(order);
+
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> CancelOrderAsync(
+    int userId,
+    int orderId)
+    {
+        var order = await _context.Orders
+            .Include(x => x.OrderItems)
+            .FirstOrDefaultAsync(x =>
+                x.Id == orderId &&
+                x.UserId == userId);
+
+        if (order == null)
+            return false;
+
+        // Only allow cancellation before delivery starts
+        if (order.Status != "Pending" &&
+            order.Status != "Assigned")
+        {
+            return false;
+        }
+
+        // Restore stock for all items
+        foreach (var item in order.OrderItems)
+        {
+            var product = await _context.Products
+                .FirstOrDefaultAsync(
+                    x => x.Id == item.ProductId);
+
+            if (product != null)
+            {
+                product.Stock += item.Quantity;
+            }
+        }
+
+        order.Status = "Cancelled";
 
         await _context.SaveChangesAsync();
 

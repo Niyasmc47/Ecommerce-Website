@@ -24,7 +24,7 @@ import DeliveryManagementPage from "../pages/Admin/DeliveryManagementPage";
 import PaymentSuccessPage from "../pages/PaymentSuccess/PaymentSuccessPage";
 import ForgotPasswordPage from "../pages/Auth/ForgotPasswordPage";
 import PaymentCancelPage from "../pages/PaymentCancel/PaymentCancelPage";
-
+import AdminReturnsPage from "../pages/AdminReturns/AdminReturnsPage";
 import SellerDashboardPage from "../pages/Seller/SellerDashboardPage";
 import SellerProductsPage from "../pages/Seller/SellerProductsPage";
 import SellerOrdersPage from "../pages/Seller/SellerOrdersPage";
@@ -97,6 +97,15 @@ export default function AppRouter() {
           element={
             <ProtectedAdminRoute>
               <DeliveryManagementPage />
+            </ProtectedAdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/returns"
+          element={
+            <ProtectedAdminRoute>
+              <AdminReturnsPage />
             </ProtectedAdminRoute>
           }
         />

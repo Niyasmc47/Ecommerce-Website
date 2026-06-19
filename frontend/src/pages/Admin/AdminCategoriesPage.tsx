@@ -45,9 +45,9 @@ export default function AdminCategoriesPage() {
       setName("");
       setImageUrl("");
       await loadCategories();
-      toast.success("Classification established");
+      toast.success("Category created");
     } catch {
-      toast.error("Operation failed");
+      toast.error("Failed to create category");
     }
   }
 
@@ -64,20 +64,20 @@ export default function AdminCategoriesPage() {
       setImageUrl("");
       setIconName("category");
       await loadCategories();
-      toast.success("Classification updated");
+      toast.success("Category updated");
     } catch {
-      toast.error("Operation failed");
+      toast.error("Failed to update category");
     }
   }
 
   async function handleDelete(id: number) {
-    if (!window.confirm("Confirm termination of this classification?")) return;
+    if (!window.confirm("Are you sure you want to delete this category?")) return;
     try {
       await deleteCategory(id);
       await loadCategories();
-      toast.success("Classification terminated");
+      toast.success("Category deleted");
     } catch {
-      toast.error("Termination failed");
+      toast.error("Failed to delete category");
     }
   }
 

@@ -60,7 +60,7 @@ export default function AdminProductsPage() {
       setShowCreateForm(false);
       toast.success("Product created");
     } catch {
-      toast.error("Registration failed");
+      toast.error("Failed to create product");
     }
   }
 
@@ -73,7 +73,7 @@ export default function AdminProductsPage() {
       setEditingProduct(null);
       toast.success("Product updated");
     } catch {
-      toast.error("Modification failed");
+      toast.error("Failed to update product");
     }
   }
 
@@ -194,7 +194,7 @@ export default function AdminProductsPage() {
               <div className="flex flex-col items-center gap-4">
                 <div className="h-8 w-8 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
                 <span className="font-mono text-xs uppercase tracking-widest text-primary animate-pulse">
-                  Scanning Inventory...
+                  Loading Products...
                 </span>
               </div>
             </div>

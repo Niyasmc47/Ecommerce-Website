@@ -79,8 +79,24 @@ public class OrdersController : ControllerBase
 
         if (!deleted)
             return BadRequest(
-                "Only delivered orders can be deleted.");
+                "Only delivered, returned or cancelled orders can be deleted.");
 
         return Ok();
+    }
+
+    [HttpPost("{id}/cancel")]
+    public async Task<IActionResult> CancelOrder(int id)
+    {
+        var cancelled = await _orderService.CancelOrderAsync(GetUserId(), id);
+
+        if (!cancelled)
+            return BadRequest("Order cannot be cancelled. It may have already been dispatched or does not exist.");
+
+        return Ok(new ApiResponse<bool>
+        {
+            Success = true,
+            Message = "Order cancelled successfully.",
+            Data = true
+        });
     }
 }

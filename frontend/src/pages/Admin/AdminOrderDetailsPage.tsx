@@ -6,6 +6,16 @@ import type { AdminOrderDetails } from "../../types/admin";
 import toast from "react-hot-toast";
 import { BsArrowLeft, BsPerson, BsEnvelope, BsBox, BsReceipt } from "react-icons/bs";
 
+const ORDER_STATUSES = [
+  { value: "Pending",          label: "Pending" },
+  { value: "Assigned",         label: "Assigned" },
+  { value: "OutForDelivery",   label: "Out for Delivery" },
+  { value: "Delivered",        label: "Delivered" },
+  { value: "ReturnRequested",  label: "Return Requested" },
+  { value: "Returned",         label: "Returned" },
+  { value: "Cancelled",        label: "Cancelled" },
+];
+
 export default function AdminOrderDetailsPage() {
   const { id } = useParams();
   const [order, setOrder] = useState<AdminOrderDetails | null>(null);
@@ -35,7 +45,7 @@ export default function AdminOrderDetailsPage() {
       setOrder({ ...order, status });
       toast.success("Order status updated");
     } catch {
-      toast.error("Status modification failed");
+      toast.error("Failed to update status");
     }
   }
 
@@ -80,7 +90,7 @@ export default function AdminOrderDetailsPage() {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-           {/* Shipping Status Panel */}
+           {/* Status Panel */}
            <div className="lg:col-span-1 space-y-8">
               <div className="rounded-3xl border border-border bg-surface p-6 premium-card shadow-sm">
                  <h2 className="text-sm font-mono font-bold uppercase tracking-widest border-b border-border/50 pb-4 mb-6 flex items-center gap-2 text-foreground/70">
@@ -93,11 +103,9 @@ export default function AdminOrderDetailsPage() {
                          onChange={(e) => setStatus(e.target.value)}
                          className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-bold tracking-wider outline-none transition-all cursor-pointer hover:border-primary"
                        >
-                         <option value="Pending">Pending Validation</option>
-                         <option value="Processing">Processing</option>
-                         <option value="Shipped">In Transit</option>
-                         <option value="Delivered">Delivered</option>
-                         <option value="Cancelled">Mission Aborted</option>
+                         {ORDER_STATUSES.map((s) => (
+                           <option key={s.value} value={s.value}>{s.label}</option>
+                         ))}
                        </select>
                     </div>
                     <button
@@ -107,7 +115,7 @@ export default function AdminOrderDetailsPage() {
                          status !== order.status ? 'bg-primary text-white shadow-lg shadow-primary/20 hover:shadow-primary/40 cyber-glow-hover' : 'bg-surface border border-border text-foreground/40 cursor-not-allowed'
                       }`}
                     >
-                      Commit Status
+                      Update Status
                     </button>
                  </div>
               </div>
@@ -127,7 +135,7 @@ export default function AdminOrderDetailsPage() {
                     <div className="flex items-center gap-3">
                        <div className="p-2 bg-background rounded-lg border border-border text-foreground/50"><BsEnvelope size={14} /></div>
                        <div>
-                          <p className="text-xs text-foreground/40 uppercase tracking-widest">Comm Link</p>
+                          <p className="text-xs text-foreground/40 uppercase tracking-widest">Email</p>
                           <p className="font-bold text-foreground">{order.customerEmail}</p>
                        </div>
                     </div>
@@ -135,7 +143,7 @@ export default function AdminOrderDetailsPage() {
               </div>
            </div>
 
-           {/* Hardware Payload */}
+           {/* Order Items */}
            <div className="lg:col-span-2">
               <div className="rounded-3xl border border-border bg-surface premium-card shadow-sm overflow-hidden h-full flex flex-col">
                  <div className="p-6 border-b border-border/50 flex items-center justify-between">

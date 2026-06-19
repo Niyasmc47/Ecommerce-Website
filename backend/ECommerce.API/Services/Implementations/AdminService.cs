@@ -31,12 +31,14 @@ public class AdminService : IAdminService
     public async Task<IEnumerable<OrderResponse>> GetOrdersAsync()
     {
         return await _context.Orders
+            .Include(x => x.User)
             .Select(x => new OrderResponse
             {
                 Id = x.Id,
                 TotalAmount = x.TotalAmount,
                 Status = x.Status,
-                CreatedDate = x.CreatedDate
+                CreatedDate = x.CreatedDate,
+                CustomerName = x.User != null ? x.User.Name : "Unknown"
             })
             .ToListAsync();
     }

@@ -18,6 +18,7 @@ export interface AdminOrder {
   totalAmount: number;
   status: string;
   createdDate: string;
+  customerName: string;
 }
 
 export interface AdminOrderItem {

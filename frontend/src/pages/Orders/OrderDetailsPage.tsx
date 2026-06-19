@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { deleteOrder } from "../../services/orderService";
 import MainLayout from "../../components/layouts/MainLayout";
 import Container from "../../components/common/Container";
-
-import { getOrderById } from "../../services/orderService";
+import { createReturnRequest } from "../../services/returnService";
+import { getOrderById, cancelOrder } from "../../services/orderService";
 
 import type { OrderDetails, OrderItem } from "../../types/orderDetails";
 
@@ -23,6 +23,15 @@ function getTrackingStep(status: string) {
 
     case "Delivered":
       return 4;
+
+    case "ReturnRequested":
+      return 5;
+
+    case "Returned":
+      return 5;
+
+    case "Cancelled":
+      return 0;
 
     default:
       return 1;
@@ -67,6 +76,22 @@ export default function OrderDetailsPage() {
     loadOrder();
   }, [id]);
 
+  async function handleReturnRequest(productId: number) {
+    if (!order) return;
+
+    const reason = window.prompt("Why are you returning this product?");
+
+    if (!reason) return;
+
+    try {
+      await createReturnRequest(order.id, productId, reason);
+
+      toast.success("Return request submitted for review");
+    } catch {
+      toast.error("Return request already exists");
+    }
+  }
+
   async function handleDelete() {
     if (!order) return;
 
@@ -82,6 +107,22 @@ export default function OrderDetailsPage() {
       navigate("/orders");
     } catch {
       toast.error("Failed to delete order");
+    }
+  }
+
+  async function handleCancel() {
+    if (!order) return;
+
+    if (!window.confirm("Are you sure you want to cancel this order?")) {
+      return;
+    }
+
+    try {
+      await cancelOrder(order.id);
+      toast.success("Order cancelled");
+      setOrder({ ...order, status: "Cancelled" });
+    } catch {
+      toast.error("Failed to cancel order");
     }
   }
 
@@ -154,12 +195,18 @@ export default function OrderDetailsPage() {
               Order Tracking
             </h2>
 
-            <div className="flex items-center justify-between">
+            {order.status === "Cancelled" ? (
+              <div className="flex items-center justify-center p-4 bg-red-50 text-red-600 rounded-2xl border border-red-200">
+                <span className="font-bold">This order has been cancelled.</span>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between">
               {[
                 "Order Placed",
                 "Assigned",
                 "Out For Delivery",
                 "Delivered",
+                ...(order.status === "ReturnRequested" || order.status === "Returned" ? ["Return"] : []),
               ].map((step, index) => {
                 const completed = index + 1 <= currentStep;
 
@@ -205,6 +252,7 @@ export default function OrderDetailsPage() {
                 );
               })}
             </div>
+            )}
           </div>
 
           <div
@@ -226,7 +274,12 @@ export default function OrderDetailsPage() {
             </h2>
 
             <p>
-              <strong>Status:</strong> {order.status}
+              <strong>Status:</strong>{" "}
+              {order.status === "OutForDelivery"
+                ? "Out for Delivery"
+                : order.status === "ReturnRequested"
+                ? "Return Requested"
+                : order.status}
             </p>
 
             <p>
@@ -329,19 +382,35 @@ export default function OrderDetailsPage() {
                   </div>
                 </div>
 
-                <div
-                  className="
-                      font-semibold
-                    "
-                >
-                  ₹{item.price}
+                <div className="text-right">
+                  <div
+                    className="
+      font-semibold
+    "
+                  >
+                    ₹{item.price}
+                  </div>
+
+                  {order.status === "Delivered" && (
+                    <button
+                      onClick={() => handleReturnRequest(item.productId)}
+                      className="
+        mt-2
+        text-sm
+        text-red-600
+        hover:underline
+      "
+                    >
+                      Request Return
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
           </div>
 
           {order.status === "Delivered" && (
-            <div className="mt-6">
+            <div className="mt-6 flex justify-end">
               <button
                 onClick={handleDelete}
                 className="
@@ -355,6 +424,25 @@ export default function OrderDetailsPage() {
       "
               >
                 Delete Order
+              </button>
+            </div>
+          )}
+
+          {(order.status === "Pending" || order.status === "Assigned") && (
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={handleCancel}
+                className="
+        rounded-xl
+        bg-slate-200
+        text-slate-700
+        px-5
+        py-3
+        font-medium
+        hover:bg-slate-300
+      "
+              >
+                Cancel Order
               </button>
             </div>
           )}

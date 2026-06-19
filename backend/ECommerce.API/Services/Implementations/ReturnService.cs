@@ -37,15 +37,32 @@ public class ReturnService : IReturnService
                 "Only delivered orders can be returned.");
 
         var orderItem =
-    await _context.OrderItems
-        .FirstOrDefaultAsync(x =>
-            x.OrderId == request.OrderId &&
-            x.ProductId == request.ProductId);
+            await _context.OrderItems
+                .FirstOrDefaultAsync(x =>
+                    x.OrderId == request.OrderId &&
+                    x.ProductId == request.ProductId);
 
         if (orderItem == null)
         {
             throw new Exception(
                 "Product does not belong to this order.");
+        }
+
+        var existingRequest =
+            await _context.ReturnRequests
+                .AnyAsync(x =>
+                    x.OrderId == request.OrderId &&
+                    x.ProductId == request.ProductId &&
+                    x.UserId == userId &&
+                    (
+                        x.Status == "Pending" ||
+                        x.Status == "Approved"
+                    ));
+
+        if (existingRequest)
+        {
+            throw new Exception(
+                "A return request already exists for this item.");
         }
 
         var returnRequest =
@@ -62,6 +79,7 @@ public class ReturnService : IReturnService
 
         _context.ReturnRequests.Add(
             returnRequest);
+        order.Status = "ReturnRequested";
 
         await _context.SaveChangesAsync();
 
@@ -102,6 +120,8 @@ GetAllReturnRequestsAsync()
     {
         return await _context.ReturnRequests
             .Include(x => x.Product)
+            .Include(x => x.User)
+            .OrderByDescending(x => x.RequestedAt)
             .Select(x =>
                 new ReturnRequestResponse
                 {
@@ -121,7 +141,15 @@ GetAllReturnRequestsAsync()
                     Status = x.Status,
 
                     RequestedAt =
-                        x.RequestedAt
+                        x.RequestedAt,
+
+                    ProcessedAt =
+                        x.ProcessedAt,
+
+                    CustomerName =
+                        x.User != null
+                        ? x.User.Name
+                        : "Unknown"
                 })
             .ToListAsync();
     }
@@ -170,6 +198,18 @@ ApproveReturnAsync(
         product.Stock +=
             orderItem.Quantity;
 
+        var order =
+    await _context.Orders
+        .FirstOrDefaultAsync(
+            x => x.Id ==
+            request.OrderId);
+
+        if (order != null)
+        {
+            order.Status =
+                "Returned";
+        }
+
         request.Status =
             "Approved";
 
@@ -196,6 +236,18 @@ RejectReturnAsync(
         if (request.Status != "Pending")
             throw new Exception(
                 "Request already processed.");
+
+        var order =
+    await _context.Orders
+        .FirstOrDefaultAsync(
+            x => x.Id ==
+            request.OrderId);
+
+        if (order != null)
+        {
+            order.Status =
+                "Delivered";
+        }
 
         request.Status =
             "Rejected";
