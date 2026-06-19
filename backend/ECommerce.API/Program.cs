@@ -149,6 +149,9 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IDeliveryService, DeliveryService>();
+builder.Services.AddScoped<
+    IReturnService,
+    ReturnService>();
 
 builder.Services.AddScoped<
     IReviewService,

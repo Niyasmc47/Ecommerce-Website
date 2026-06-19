@@ -10,6 +10,25 @@ import { getOrderById } from "../../services/orderService";
 
 import type { OrderDetails, OrderItem } from "../../types/orderDetails";
 
+function getTrackingStep(status: string) {
+  switch (status) {
+    case "Pending":
+      return 1;
+
+    case "Assigned":
+      return 2;
+
+    case "OutForDelivery":
+      return 3;
+
+    case "Delivered":
+      return 4;
+
+    default:
+      return 1;
+  }
+}
+
 export default function OrderDetailsPage() {
   const { id } = useParams();
   const [order, setOrder] = useState<OrderDetails | null>(null);
@@ -17,6 +36,8 @@ export default function OrderDetailsPage() {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
+
+  const currentStep = order ? getTrackingStep(order.status) : 1;
 
   useEffect(() => {
     async function loadOrder() {
@@ -114,6 +135,77 @@ export default function OrderDetailsPage() {
           >
             Order #{order.id}
           </h1>
+
+          <div
+            className="
+    rounded-3xl
+    border
+    p-6
+    mb-6
+  "
+          >
+            <h2
+              className="
+      text-2xl
+      font-semibold
+      mb-6
+    "
+            >
+              Order Tracking
+            </h2>
+
+            <div className="flex items-center justify-between">
+              {[
+                "Order Placed",
+                "Assigned",
+                "Out For Delivery",
+                "Delivered",
+              ].map((step, index) => {
+                const completed = index + 1 <= currentStep;
+
+                return (
+                  <div
+                    key={step}
+                    className="
+            flex
+            flex-col
+            items-center
+            flex-1
+          "
+                  >
+                    <div
+                      className={`
+              w-10
+              h-10
+              rounded-full
+              flex
+              items-center
+              justify-center
+              font-bold
+              ${
+                completed
+                  ? "bg-emerald-600 text-white"
+                  : "bg-slate-200 text-slate-500"
+              }
+            `}
+                    >
+                      {index + 1}
+                    </div>
+
+                    <p
+                      className="
+              mt-2
+              text-sm
+              text-center
+            "
+                    >
+                      {step}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
           <div
             className="

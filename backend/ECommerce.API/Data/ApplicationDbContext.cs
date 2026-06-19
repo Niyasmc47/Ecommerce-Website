@@ -27,6 +27,9 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Review> Reviews { get; set; }
 
+    public DbSet<ReturnRequest> ReturnRequests
+    => Set<ReturnRequest>();
+
     public DbSet<PendingOrder> PendingOrders
     => Set<PendingOrder>();
 
@@ -105,5 +108,24 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Product>()
             .Property(p => p.CompareAtPrice)
             .HasPrecision(18, 2);
+
+
+        modelBuilder.Entity<ReturnRequest>()
+    .HasOne(x => x.Order)
+    .WithMany()
+    .HasForeignKey(x => x.OrderId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<ReturnRequest>()
+            .HasOne(x => x.Product)
+            .WithMany()
+            .HasForeignKey(x => x.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<ReturnRequest>()
+            .HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
