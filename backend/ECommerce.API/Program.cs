@@ -10,7 +10,7 @@ using FluentValidation.AspNetCore;
 using ECommerce.API.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-// using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using System.Text;
 using ECommerce.API.Email;
 
@@ -30,11 +30,36 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1",
-        new Microsoft.OpenApi.OpenApiInfo
+    options.SwaggerDoc(
+        "v1",
+        new OpenApiInfo
         {
             Title = "ECommerce API",
             Version = "v1"
+        });
+
+
+    options.AddSecurityDefinition(
+        "Bearer",
+        new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.Http,
+
+            Scheme = "bearer",
+
+            BearerFormat = "JWT",
+
+            Description = "Enter JWT token"
+        });
+
+
+    options.AddSecurityRequirement(document =>
+        new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecuritySchemeReference("Bearer", document),
+                new List<string>()
+            }
         });
 });
 
@@ -61,11 +86,11 @@ builder.Services.Configure<StripeSettings>(
 
 var sp = builder.Services.BuildServiceProvider();
 var stripeSettings = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<ECommerce.API.Stripe.StripeSettings>>().Value;
-Console.WriteLine("\n=== STRIPE CONFIG ===");
-Console.WriteLine($"SecretKey: {stripeSettings.SecretKey}");
-Console.WriteLine($"SuccessUrl: {stripeSettings.SuccessUrl}");
-Console.WriteLine($"CancelUrl: {stripeSettings.CancelUrl}");
-Console.WriteLine("=====================\n");
+// Console.WriteLine("\n=== STRIPE CONFIG ===");
+// Console.WriteLine($"SecretKey: {stripeSettings.SecretKey}");
+// Console.WriteLine($"SuccessUrl: {stripeSettings.SuccessUrl}");
+// Console.WriteLine($"CancelUrl: {stripeSettings.CancelUrl}");
+// Console.WriteLine("=====================\n");
 
 builder.Services.Configure<EmailSettings>(
     builder.Configuration.GetSection(
@@ -123,7 +148,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IDeliveryService,DeliveryService>();
+builder.Services.AddScoped<IDeliveryService, DeliveryService>();
 
 builder.Services.AddScoped<
     IReviewService,

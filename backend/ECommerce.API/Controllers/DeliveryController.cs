@@ -117,4 +117,20 @@ StartDelivery(
                     "Delivery started."
             });
     }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet("orders/all")]
+    public async Task<IActionResult>
+GetAllDeliveries()
+    {
+        var deliveries =
+            await _deliveryService
+                .GetAllDeliveriesAsync();
+
+
+        return Ok(deliveries);
+    }
+
+
 }
+

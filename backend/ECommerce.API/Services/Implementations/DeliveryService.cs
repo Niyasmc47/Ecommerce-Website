@@ -231,4 +231,47 @@ public class DeliveryService : IDeliveryService
 
         await _context.SaveChangesAsync();
     }
+
+    public async Task<
+IEnumerable<AdminDeliveryResponse>>
+GetAllDeliveriesAsync()
+    {
+        return await _context.Orders
+
+            .Include(x =>
+                x.DeliveryAgent)
+
+            .Select(x =>
+                new AdminDeliveryResponse
+                {
+                    OrderId =
+                        x.Id,
+
+
+                    CustomerName =
+                        x.FullName,
+
+
+                    TotalAmount =
+                        x.TotalAmount,
+
+
+                    Status =
+                        x.Status,
+
+
+                    DeliveryAgentId =
+                        x.DeliveryAgentId,
+
+
+                    DeliveryAgentName =
+                        x.DeliveryAgent != null
+                        ?
+                        x.DeliveryAgent.Name
+                        :
+                        "Not Assigned"
+                })
+
+            .ToListAsync();
+    }
 }

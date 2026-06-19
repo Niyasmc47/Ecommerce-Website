@@ -24,4 +24,7 @@ public interface IDeliveryService
 
     Task MarkOutForDeliveryAsync(
     int orderId);
+
+    Task<IEnumerable<AdminDeliveryResponse>>
+    GetAllDeliveriesAsync();
 }
