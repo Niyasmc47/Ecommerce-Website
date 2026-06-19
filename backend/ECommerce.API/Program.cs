@@ -84,6 +84,10 @@ builder.Services.AddAutoMapper(
 builder.Services.Configure<StripeSettings>(
     builder.Configuration.GetSection("Stripe"));
 
+builder.Services.AddScoped<
+    ISupportTicketService,
+    SupportTicketService>();
+
 var sp = builder.Services.BuildServiceProvider();
 var stripeSettings = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<ECommerce.API.Stripe.StripeSettings>>().Value;
 // Console.WriteLine("\n=== STRIPE CONFIG ===");

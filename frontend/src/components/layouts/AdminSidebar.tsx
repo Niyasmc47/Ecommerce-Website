@@ -11,6 +11,7 @@ import {
   BsShop,
   BsTruck,
   BsArrowReturnLeft,
+  BsChatDots,
 } from "react-icons/bs";
 import { useEffect, useState } from "react";
 
@@ -39,6 +40,7 @@ export default function AdminSidebar() {
     { path: "/admin/users", label: "Customers", icon: BsPeople },
     { path: "/admin/sellers", label: "Sellers", icon: BsShop },
     { path: "/admin/delivery", label: "Deliveries", icon: BsTruck },
+    { path: "/admin/support", label: "Support", icon: BsChatDots },
 
     {
       path: "/admin/returns",

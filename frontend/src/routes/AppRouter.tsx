@@ -28,6 +28,10 @@ import AdminReturnsPage from "../pages/AdminReturns/AdminReturnsPage";
 import SellerDashboardPage from "../pages/Seller/SellerDashboardPage";
 import SellerProductsPage from "../pages/Seller/SellerProductsPage";
 import SellerOrdersPage from "../pages/Seller/SellerOrdersPage";
+import AdminSupportPage from "../pages/Admin/AdminSupportPage";
+import SupportPage from "../pages/Support/SupportPage";
+import AdminSupportTicketPage from "../pages/Admin/AdminSupportTicketPage";
+import SupportTicketPage from "../pages/Support/SupportTicketPage";
 
 export default function AppRouter() {
   return (
@@ -50,6 +54,8 @@ export default function AppRouter() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/support" element={<SupportPage />} />
+        <Route path="/support/:id" element={<SupportTicketPage />} />
 
         {/* Admin Routes */}
         <Route
@@ -122,6 +128,24 @@ export default function AppRouter() {
           element={
             <ProtectedAdminRoute>
               <AdminOrderDetailsPage />
+            </ProtectedAdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/support"
+          element={
+            <ProtectedAdminRoute>
+              <AdminSupportPage />
+            </ProtectedAdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/support/:id"
+          element={
+            <ProtectedAdminRoute>
+              <AdminSupportTicketPage />
             </ProtectedAdminRoute>
           }
         />

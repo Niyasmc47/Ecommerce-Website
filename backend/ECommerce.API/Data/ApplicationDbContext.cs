@@ -30,6 +30,12 @@ public class ApplicationDbContext : DbContext
     public DbSet<ReturnRequest> ReturnRequests
     => Set<ReturnRequest>();
 
+    public DbSet<SupportTicket> SupportTickets
+    => Set<SupportTicket>();
+
+    public DbSet<SupportMessage> SupportMessages
+        => Set<SupportMessage>();
+
     public DbSet<PendingOrder> PendingOrders
     => Set<PendingOrder>();
 
@@ -41,6 +47,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Seller> Sellers => Set<Seller>();
 
     public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
+
+
 
     protected override void OnModelCreating(
         ModelBuilder modelBuilder)
@@ -126,6 +134,25 @@ public class ApplicationDbContext : DbContext
             .HasOne(x => x.User)
             .WithMany()
             .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
+        modelBuilder.Entity<SupportTicket>()
+    .HasOne(x => x.User)
+    .WithMany()
+    .HasForeignKey(x => x.UserId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<SupportMessage>()
+            .HasOne(x => x.Ticket)
+            .WithMany(x => x.Messages)
+            .HasForeignKey(x => x.TicketId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<SupportMessage>()
+            .HasOne(x => x.Sender)
+            .WithMany()
+            .HasForeignKey(x => x.SenderId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
