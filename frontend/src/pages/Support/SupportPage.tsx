@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
 import MainLayout from "../../components/layouts/MainLayout";
 
 import { getMyTickets, createTicket } from "../../services/supportService";
@@ -143,42 +142,42 @@ export default function SupportPage() {
                 key={ticket.id}
                 onClick={() => (window.location.href = `/support/${ticket.id}`)}
                 className="
-    border
-    rounded-xl
-    p-5
-    bg-white
-    cursor-pointer
-    hover:border-blue-500
-    transition-all
-  "
+                  border
+                  rounded-xl
+                  p-5
+                  bg-white
+                  cursor-pointer
+                  hover:border-blue-500
+                  transition-all
+                "
               >
                 <div
                   className="
-                      flex
-                      justify-between
-                    "
+                    flex
+                    justify-between
+                  "
                 >
                   <h3
                     className="
-                        font-bold
-                      "
+                      font-bold
+                    "
                   >
                     {ticket.subject}
                   </h3>
 
                   <span
                     className={`
-    px-3
-    py-1
-    rounded-full
-    text-xs
-    font-medium
-    ${
-      ticket.status === "Open"
-        ? "bg-green-100 text-green-700"
-        : "bg-slate-100 text-slate-700"
-    }
-  `}
+                      px-3
+                      py-1
+                      rounded-full
+                      text-xs
+                      font-medium
+                      ${
+                        ticket.status === "Open"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-slate-100 text-slate-700"
+                      }
+                    `}
                   >
                     {ticket.status}
                   </span>
@@ -186,10 +185,10 @@ export default function SupportPage() {
 
                 <p
                   className="
-                      text-sm
-                      text-slate-500
-                      mt-2
-                    "
+                    text-sm
+                    text-slate-500
+                    mt-2
+                  "
                 >
                   Ticket #{ticket.id}
                 </p>

@@ -4,18 +4,23 @@ using ECommerce.API.DTOs.Responses;
 using ECommerce.API.Models;
 using ECommerce.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-
+using ECommerce.API.Hubs;
+using Microsoft.AspNetCore.SignalR;
 namespace ECommerce.API.Services.Implementations;
 
 public class SupportTicketService
     : ISupportTicketService
 {
     private readonly ApplicationDbContext _context;
+    private readonly IHubContext<
+    SupportHub> _hub;
 
     public SupportTicketService(
-        ApplicationDbContext context)
+    ApplicationDbContext context,
+    IHubContext<SupportHub> hub)
     {
         _context = context;
+        _hub = hub;
     }
 
     public async Task<SupportTicketResponse>
@@ -193,6 +198,28 @@ public class SupportTicketService
             message);
 
         await _context.SaveChangesAsync();
+
+        var sender =
+    await _context.Users
+        .FirstOrDefaultAsync(
+            x => x.Id == senderId);
+
+        await _hub.Clients
+            .Group($"ticket-{ticketId}")
+            .SendAsync(
+                "ReceiveMessage",
+                new
+                {
+                    Id = message.Id,
+                    SenderId = message.SenderId,
+                    SenderName =
+                        sender?.Name ??
+                        "Unknown",
+                    Message =
+                        message.Message,
+                    CreatedAt =
+                        message.CreatedAt
+                });
     }
 
     public async Task CloseTicketAsync(

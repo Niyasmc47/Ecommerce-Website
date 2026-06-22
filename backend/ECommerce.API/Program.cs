@@ -13,7 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 using ECommerce.API.Email;
-
+using ECommerce.API.Hubs;
 using ECommerce.API.Mappings;
 using ECommerce.API.Repositories.Interfaces;
 using ECommerce.API.Repositories.Implementations;
@@ -78,6 +78,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 builder.Services.AddAutoMapper(
     typeof(MappingProfile));
 
@@ -193,9 +194,12 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
+                .WithOrigins(
+                    "http://localhost:5173"
+                )
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowAnyOrigin();
+                .AllowCredentials();
         });
 });
 
@@ -215,5 +219,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<SupportHub>(
+    "/supportHub");
 
 app.Run();

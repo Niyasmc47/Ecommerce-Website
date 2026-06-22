@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-
+import * as signalR from "@microsoft/signalr";
+import {
+  connectToTicket,
+  disconnectFromTicket,
+} from "../../services/supportHub";
 import AdminLayout from "../../components/layouts/AdminLayout";
 
 import {
@@ -27,6 +31,51 @@ export default function AdminSupportTicketPage() {
 
   useEffect(() => {
     load();
+
+    if (!id) return;
+
+    let connection: signalR.HubConnection | null = null;
+    let isMounted = true;
+
+    const setupSignalR = async () => {
+      const newConnection = await connectToTicket(
+        Number(id),
+        (newMessage) => {
+          setTicket((prev: any) => {
+            if (!prev) return prev;
+
+            const exists = prev.messages?.some(
+              (m: any) => m.id === newMessage.id
+            );
+
+            if (exists) {
+              return prev;
+            }
+
+            return {
+              ...prev,
+              messages: [...prev.messages, newMessage],
+            };
+          });
+        }
+      );
+
+      if (isMounted) {
+        connection = newConnection;
+      } else {
+        // If the component unmounted while we were connecting, disconnect immediately
+        disconnectFromTicket(newConnection, Number(id));
+      }
+    };
+
+    setupSignalR();
+
+    return () => {
+      isMounted = false;
+      if (connection) {
+        disconnectFromTicket(connection, Number(id));
+      }
+    };
   }, [id]);
 
   async function handleReply() {
@@ -38,8 +87,6 @@ export default function AdminSupportTicketPage() {
       await addReply(Number(id), message);
 
       setMessage("");
-
-      await load();
 
       toast.success("Reply sent");
     } catch {
