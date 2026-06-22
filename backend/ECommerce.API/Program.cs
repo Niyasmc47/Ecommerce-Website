@@ -164,6 +164,10 @@ builder.Services.AddScoped<
 
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 
+builder.Services.AddScoped<IWishlistService, WishlistService>();
+
+builder.Services.AddScoped<IAIShoppingAssistantService, AIShoppingAssistantService>();
+
 builder.Services.Configure<CloudinarySettings>(
     builder.Configuration.GetSection("CloudinarySettings"));
 

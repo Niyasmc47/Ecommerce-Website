@@ -150,57 +150,8 @@ export default function ProfilePage() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-slate-900">
-      {/* Top Navbar Header */}
-      <header className="px-8 py-4 flex items-center justify-between border-b border-slate-200 bg-white sticky top-0 z-50">
-        <Link
-          to="/"
-          className="text-xl font-black text-[#0D47A1] tracking-tight"
-        >
-          Velocity.Shop
-        </Link>
-        <div className="hidden md:flex items-center gap-6 font-medium text-slate-600 text-sm">
-          <Link to="/products" className="hover:text-slate-900">
-            Deals
-          </Link>
-          <Link to="/products" className="hover:text-slate-900">
-            Categories
-          </Link>
-          <a href="#" className="hover:text-slate-900">
-            Orders
-          </a>
-          <a href="#" className="hover:text-slate-900">
-            Wishlist
-          </a>
-        </div>
-        <div className="flex-1 max-w-xl mx-8 hidden lg:block">
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">
-              search
-            </span>
-            <input
-              type="text"
-              placeholder="Search for products, brands and more"
-              className="w-full pl-10 pr-4 py-2 bg-[#F1F5F9] border-none rounded-full text-sm outline-none focus:ring-2 focus:ring-blue-600"
-            />
-          </div>
-        </div>
-        <div className="flex items-center gap-4 text-slate-600">
-          <span className="material-symbols-outlined cursor-pointer hover:text-slate-900">
-            notifications
-          </span>
-          <Link to="/cart">
-            <span className="material-symbols-outlined cursor-pointer hover:text-slate-900">
-              shopping_cart
-            </span>
-          </Link>
-          <div className="w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center font-bold text-sm">
-            {profile.name.charAt(0).toUpperCase()}
-          </div>
-        </div>
-      </header>
-
-      <main className="flex-1 flex flex-col md:flex-row max-w-[1440px] mx-auto w-full">
+    <MainLayout>
+      <div className="flex-1 flex flex-col md:flex-row max-w-[1440px] mx-auto w-full">
         {/* Sidebar */}
         <aside className="w-full md:w-64 bg-[#F8FAFC] border-r border-slate-200 flex flex-col min-h-[calc(100vh-73px)]">
           <div className="p-6">
@@ -715,31 +666,7 @@ export default function ProfilePage() {
             </section>
           </div>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="px-8 py-6 border-t border-slate-200 bg-white flex flex-col md:flex-row items-center justify-between gap-4 mt-auto">
-        <div className="text-sm text-slate-500">
-          <span className="font-bold text-slate-900 mr-2 text-lg">
-            Velocity.Shop
-          </span>
-          © 2024 Velocity Premium Retail. All rights reserved.
-        </div>
-        <div className="flex items-center gap-6 text-sm text-slate-600 font-medium">
-          <a href="#" className="hover:text-slate-900">
-            Privacy Policy
-          </a>
-          <a href="#" className="hover:text-slate-900">
-            Terms of Service
-          </a>
-          <a href="#" className="hover:text-slate-900">
-            Help Center
-          </a>
-          <a href="#" className="hover:text-slate-900">
-            Contact Support
-          </a>
-        </div>
-      </footer>
-    </div>
+      </div>
+    </MainLayout>
   );
 }

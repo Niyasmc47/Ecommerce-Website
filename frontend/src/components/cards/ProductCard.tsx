@@ -2,6 +2,7 @@ import type { Product } from "../../types/product";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { addToCart } from "../../services/cartService";
+import { useWishlist } from "../../contexts/WishlistContext";
 
 interface Props {
   product: Product;
@@ -9,6 +10,20 @@ interface Props {
 
 export default function ProductCard({ product }: Props) {
   const navigate = useNavigate();
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+
+  const isWishlisted = isInWishlist(product.id);
+
+  async function handleToggleWishlist(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (isWishlisted) {
+      await removeFromWishlist(product.id);
+    } else {
+      await addToWishlist(product.id);
+    }
+  }
 
   async function handleAddToCart(
     e: React.MouseEvent
@@ -44,6 +59,15 @@ export default function ProductCard({ product }: Props) {
       {/* Image Container */}
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface p-6 flex items-center justify-center">
         <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+        <button
+          onClick={handleToggleWishlist}
+          className="absolute top-4 right-4 z-10 p-2 rounded-full bg-surface/80 backdrop-blur-sm border border-border shadow-sm hover:scale-110 active:scale-95 transition-all duration-300 group/btn"
+        >
+          <span className={`material-symbols-outlined text-[20px] transition-colors ${isWishlisted ? 'text-red-500 [font-variation-settings:"FILL"1]' : 'text-on-surface-variant group-hover/btn:text-red-500'}`}>
+            favorite
+          </span>
+        </button>
 
         <img
           src={product.imageUrl}

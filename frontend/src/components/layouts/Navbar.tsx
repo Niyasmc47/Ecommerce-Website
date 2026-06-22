@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCart } from "../../services/cartService";
+import { useWishlist } from "../../contexts/WishlistContext";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export default function Navbar() {
   );
 
   const [cartCount, setCartCount] = useState(0);
+  const { wishlistCount } = useWishlist();
 
   useEffect(() => {
     async function loadCart() {
@@ -136,6 +138,15 @@ export default function Navbar() {
                 </button>
               </Link>
             )}
+
+            <Link to="/wishlist" className="relative p-2 rounded-full hover:bg-surface-container-low transition-all">
+              <span className="material-symbols-outlined">favorite</span>
+              {wishlistCount > 0 && (
+                <span className="absolute top-0 right-0 bg-primary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
 
             <Link to="/cart" className="relative p-2 rounded-full hover:bg-surface-container-low transition-all">
               <span className="material-symbols-outlined">shopping_cart</span>

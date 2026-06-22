@@ -164,11 +164,12 @@ export default function SellerProductsPage() {
                           <div className="flex items-center gap-4">
                             <div className="h-10 w-10 rounded-md bg-background border border-border overflow-hidden shrink-0">
                               <img
-                                src={product.imageUrl}
+                                src={product.imageUrl || "https://placehold.co/150x150?text=No+Image"}
                                 alt={product.name}
                                 className="h-full w-full object-cover"
                                 onError={(e) => {
-                                  e.currentTarget.style.display = "none";
+                                  e.currentTarget.onerror = null; // Prevent infinite loop
+                                  e.currentTarget.src = "https://placehold.co/150x150?text=Error";
                                 }}
                               />
                             </div>

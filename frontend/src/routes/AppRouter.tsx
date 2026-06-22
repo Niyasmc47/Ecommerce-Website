@@ -32,6 +32,7 @@ import AdminSupportPage from "../pages/Admin/AdminSupportPage";
 import SupportPage from "../pages/Support/SupportPage";
 import AdminSupportTicketPage from "../pages/Admin/AdminSupportTicketPage";
 import SupportTicketPage from "../pages/Support/SupportTicketPage";
+import WishlistPage from "../pages/Wishlist/WishlistPage";
 
 export default function AppRouter() {
   return (
@@ -56,6 +57,7 @@ export default function AppRouter() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/support" element={<SupportPage />} />
         <Route path="/support/:id" element={<SupportTicketPage />} />
+        <Route path="/wishlist" element={<WishlistPage />} />
 
         {/* Admin Routes */}
         <Route

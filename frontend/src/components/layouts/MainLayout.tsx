@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import AIChatWidget from "../ui/AIChatWidget";
 
 interface Props {
   children: ReactNode;
@@ -12,6 +13,7 @@ export default function MainLayout({ children }: Props) {
       <Navbar />
       <main className="flex-1 flex flex-col">{children}</main>
       <Footer />
+      <AIChatWidget />
     </div>
   );
 }

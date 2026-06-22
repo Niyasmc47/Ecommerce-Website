@@ -81,8 +81,11 @@ export default function CartPage() {
                       className="group flex flex-col sm:flex-row items-center gap-6 rounded-2xl bg-surface p-6 border border-border shadow-sm hover:border-primary/30 transition-all premium-card"
                     >
                       <div className="h-24 w-24 bg-background rounded-xl border border-border/50 flex items-center justify-center p-2">
-                        {/* Placeholder for item image if available in future API */}
-                        <div className="font-mono text-xs text-foreground/20">IMG_N/A</div>
+                        {item.imageUrl ? (
+                          <img src={item.imageUrl} alt={item.productName} className="h-full w-full object-contain" />
+                        ) : (
+                          <div className="font-mono text-xs text-foreground/20">IMG_N/A</div>
+                        )}
                       </div>
                       
                       <div className="flex-1 flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4">

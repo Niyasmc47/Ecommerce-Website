@@ -43,6 +43,7 @@ public class CartService : ICartService
                 Id = item.Id,
                 ProductId = item.ProductId,
                 ProductName = product.Name,
+                ImageUrl = product.ImageUrl,
                 Price = product.Price,
                 Quantity = item.Quantity,
                 TotalPrice = product.Price * item.Quantity
@@ -104,11 +105,10 @@ public class CartService : ICartService
                 Id = existingItem.Id,
                 ProductId = product.Id,
                 ProductName = product.Name,
+                ImageUrl = product.ImageUrl,
                 Price = product.Price,
                 Quantity = existingItem.Quantity,
-                TotalPrice =
-                    product.Price *
-                    existingItem.Quantity
+                TotalPrice = product.Price * existingItem.Quantity
             };
         }
 
@@ -126,11 +126,10 @@ public class CartService : ICartService
             Id = cartItem.Id,
             ProductId = product.Id,
             ProductName = product.Name,
+            ImageUrl = product.ImageUrl,
             Price = product.Price,
             Quantity = cartItem.Quantity,
-            TotalPrice =
-                product.Price *
-                cartItem.Quantity
+            TotalPrice = product.Price * cartItem.Quantity
         };
     }
 
@@ -175,11 +174,10 @@ public class CartService : ICartService
             Id = cartItem.Id,
             ProductId = product.Id,
             ProductName = product.Name,
+            ImageUrl = product.ImageUrl,
             Price = product.Price,
             Quantity = cartItem.Quantity,
-            TotalPrice =
-                product.Price *
-                cartItem.Quantity
+            TotalPrice = product.Price * cartItem.Quantity
         };
     }
 

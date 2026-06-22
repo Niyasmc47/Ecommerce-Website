@@ -48,6 +48,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
 
+    public DbSet<WishlistItem> Wishlists { get; set; }
+
 
 
     protected override void OnModelCreating(
@@ -154,5 +156,17 @@ public class ApplicationDbContext : DbContext
             .WithMany()
             .HasForeignKey(x => x.SenderId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<WishlistItem>()
+            .HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<WishlistItem>()
+            .HasOne(x => x.Product)
+            .WithMany()
+            .HasForeignKey(x => x.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

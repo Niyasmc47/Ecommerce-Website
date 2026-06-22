@@ -6,6 +6,7 @@ import MainLayout from "../../components/layouts/MainLayout";
 import { getProductById, getProducts } from "../../services/productService";
 import { addToCart } from "../../services/cartService";
 import { getReviews, createReview } from "../../services/reviewService";
+import { useWishlist } from "../../contexts/WishlistContext";
 
 import type { Product } from "../../types/product";
 import type { Review } from "../../types/review";
@@ -42,6 +43,18 @@ export default function ProductDetailsPage() {
   const [activeTab, setActiveTab] = useState("description");
   const [mainImage, setMainImage] = useState("");
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
+
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const isWishlisted = product ? isInWishlist(product.id) : false;
+
+  async function handleToggleWishlist() {
+    if (!product) return;
+    if (isWishlisted) {
+      await removeFromWishlist(product.id);
+    } else {
+      await addToWishlist(product.id);
+    }
+  }
 
   useEffect(() => {
     async function loadData() {
@@ -300,7 +313,7 @@ export default function ProductDetailsPage() {
             )}
 
             {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="grid grid-cols-2 gap-4 mb-4">
               <button
                 onClick={handleAddToCart}
                 disabled={product.stock === 0}
@@ -316,6 +329,13 @@ export default function ProductDetailsPage() {
                 Buy Now
               </button>
             </div>
+            <button
+              onClick={handleToggleWishlist}
+              className={`w-full flex items-center justify-center gap-2 font-bold py-4 rounded-xl mb-8 transition-all border ${isWishlisted ? 'border-red-500 text-red-500 bg-red-50' : 'border-outline-variant text-on-surface-variant hover:border-red-500 hover:text-red-500'}`}
+            >
+              <span className={`material-symbols-outlined ${isWishlisted ? '[font-variation-settings:"FILL"1]' : ''}`}>favorite</span>
+              {isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
+            </button>
 
             {/* Features list */}
             <div className="grid grid-cols-2 gap-4 pt-6 border-t border-outline-variant">
