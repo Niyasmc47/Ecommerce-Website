@@ -4,7 +4,7 @@ import AdminLayout from "../../components/layouts/AdminLayout";
 import { getOrderById, updateOrderStatus } from "../../services/adminService";
 import type { AdminOrderDetails } from "../../types/admin";
 import toast from "react-hot-toast";
-import { BsArrowLeft, BsPerson, BsEnvelope, BsBox, BsReceipt } from "react-icons/bs";
+import { Button } from "../../components/buttons/Button";
 
 const ORDER_STATUSES = [
   { value: "Pending",          label: "Pending" },
@@ -53,9 +53,9 @@ export default function AdminOrderDetailsPage() {
     return (
        <AdminLayout>
          <div className="flex h-[60vh] items-center justify-center">
-            <div className="flex flex-col items-center gap-4">
-               <div className="h-10 w-10 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
-               <span className="font-mono text-xs uppercase tracking-widest text-primary animate-pulse">Loading Order Data...</span>
+            <div className="flex flex-col items-center gap-4 text-smoke">
+               <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
+               <span className="font-graphik text-[12px] uppercase tracking-widest animate-pulse">Loading Order Data...</span>
             </div>
          </div>
        </AdminLayout>
@@ -65,9 +65,9 @@ export default function AdminOrderDetailsPage() {
   if (!order) {
     return (
        <AdminLayout>
-         <div className="flex flex-col items-center justify-center h-[60vh] text-foreground/40 border-2 border-dashed border-border rounded-3xl bg-surface/50">
-            <span className="text-4xl mb-4">⚠️</span>
-            <p className="font-mono text-sm uppercase tracking-widest">Order not found</p>
+         <div className="flex flex-col items-center justify-center h-[60vh] text-smoke border border-dashed border-ash rounded-[4px] bg-cream-paper p-12">
+            <span className="material-symbols-outlined text-[48px] mb-4">error</span>
+            <p className="font-graphik text-[12px] uppercase tracking-widest">Order not found</p>
          </div>
        </AdminLayout>
     );
@@ -75,68 +75,73 @@ export default function AdminOrderDetailsPage() {
 
   return (
     <AdminLayout>
-      <div className="py-10">
-        <Link to="/admin/orders" className="inline-flex items-center gap-2 text-foreground/50 hover:text-primary transition-colors font-mono text-xs uppercase tracking-widest mb-8">
-           <BsArrowLeft size={16} /> Return to Orders
+      <div className="py-8">
+        <Link to="/admin/orders" className="inline-flex items-center gap-2 text-smoke hover:text-ink-black transition-colors font-graphik text-[12px] font-bold uppercase tracking-widest mb-12">
+           <span className="material-symbols-outlined text-[16px]">arrow_back</span> Return to Orders
         </Link>
         
-        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="mb-12 border-b border-ash pb-6 flex flex-col md:flex-row md:items-end justify-between gap-6">
            <div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
-                Order <span className="text-primary font-mono">#{order.id}</span>
+              <span className="inline-block text-[12px] font-graphik font-bold uppercase tracking-[0.1em] text-ink-black mb-2">
+                Order Details
+              </span>
+              <h1 className="text-[32px] font-nantes text-ink-black tracking-normal">
+                Order #{order.id}
               </h1>
-              <p className="text-foreground/50 font-mono mt-2 uppercase tracking-widest text-sm">Order Details</p>
            </div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
            {/* Status Panel */}
            <div className="lg:col-span-1 space-y-8">
-              <div className="rounded-3xl border border-border bg-surface p-6 premium-card shadow-sm">
-                 <h2 className="text-sm font-mono font-bold uppercase tracking-widest border-b border-border/50 pb-4 mb-6 flex items-center gap-2 text-foreground/70">
-                   <BsReceipt className="text-primary" /> Current Status
+              <div className="rounded-[4px] border border-ash bg-pure-white p-8 shadow-sm">
+                 <h2 className="text-[16px] font-nantes border-b border-ash pb-4 mb-6 flex items-center gap-2 text-ink-black">
+                   <span className="material-symbols-outlined text-[20px]">receipt_long</span> Current Status
                  </h2>
-                 <div className="space-y-4">
-                    <div>
+                 <div className="space-y-6">
+                    <div className="relative">
                        <select
                          value={status}
                          onChange={(e) => setStatus(e.target.value)}
-                         className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-bold tracking-wider outline-none transition-all cursor-pointer hover:border-primary"
+                         className="w-full h-[52px] rounded-[4px] border border-ash bg-pure-white px-4 text-[16px] font-graphik text-ink-black focus:border-ink-black focus:ring-1 focus:ring-ink-black outline-none transition-all cursor-pointer appearance-none"
                        >
                          {ORDER_STATUSES.map((s) => (
                            <option key={s.value} value={s.value}>{s.label}</option>
                          ))}
                        </select>
+                       <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-smoke text-[20px] pointer-events-none">expand_more</span>
                     </div>
-                    <button
+                    <Button
                       onClick={handleStatusUpdate}
                       disabled={status === order.status}
-                      className={`w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 font-bold transition-all ${
-                         status !== order.status ? 'bg-primary text-white shadow-lg shadow-primary/20 hover:shadow-primary/40 cyber-glow-hover' : 'bg-surface border border-border text-foreground/40 cursor-not-allowed'
-                      }`}
+                      className="w-full"
                     >
                       Update Status
-                    </button>
+                    </Button>
                  </div>
               </div>
 
-              <div className="rounded-3xl border border-border bg-surface p-6 premium-card shadow-sm">
-                 <h2 className="text-sm font-mono font-bold uppercase tracking-widest border-b border-border/50 pb-4 mb-6 flex items-center gap-2 text-foreground/70">
-                   <BsPerson className="text-primary" /> Customer Info
+              <div className="rounded-[4px] border border-ash bg-pure-white p-8 shadow-sm">
+                 <h2 className="text-[16px] font-nantes border-b border-ash pb-4 mb-6 flex items-center gap-2 text-ink-black">
+                   <span className="material-symbols-outlined text-[20px]">person</span> Customer Info
                  </h2>
-                 <div className="space-y-4 font-mono text-sm">
-                    <div className="flex items-center gap-3">
-                       <div className="p-2 bg-background rounded-lg border border-border text-foreground/50"><BsPerson size={14} /></div>
+                 <div className="space-y-6">
+                    <div className="flex items-center gap-4">
+                       <div className="w-10 h-10 bg-cream-paper rounded-[2px] border border-ash flex items-center justify-center text-smoke">
+                         <span className="material-symbols-outlined text-[20px]">person</span>
+                       </div>
                        <div>
-                          <p className="text-xs text-foreground/40 uppercase tracking-widest">Name</p>
-                          <p className="font-bold text-foreground">{order.customerName}</p>
+                          <p className="font-graphik text-[10px] font-bold uppercase tracking-widest text-smoke mb-1">Name</p>
+                          <p className="font-graphik font-bold text-[14px] text-ink-black">{order.customerName}</p>
                        </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                       <div className="p-2 bg-background rounded-lg border border-border text-foreground/50"><BsEnvelope size={14} /></div>
+                    <div className="flex items-center gap-4">
+                       <div className="w-10 h-10 bg-cream-paper rounded-[2px] border border-ash flex items-center justify-center text-smoke">
+                         <span className="material-symbols-outlined text-[20px]">mail</span>
+                       </div>
                        <div>
-                          <p className="text-xs text-foreground/40 uppercase tracking-widest">Email</p>
-                          <p className="font-bold text-foreground">{order.customerEmail}</p>
+                          <p className="font-graphik text-[10px] font-bold uppercase tracking-widest text-smoke mb-1">Email</p>
+                          <p className="font-graphik text-[14px] text-ink-black break-all">{order.customerEmail}</p>
                        </div>
                     </div>
                  </div>
@@ -145,38 +150,38 @@ export default function AdminOrderDetailsPage() {
 
            {/* Order Items */}
            <div className="lg:col-span-2">
-              <div className="rounded-3xl border border-border bg-surface premium-card shadow-sm overflow-hidden h-full flex flex-col">
-                 <div className="p-6 border-b border-border/50 flex items-center justify-between">
-                    <h2 className="text-sm font-mono font-bold uppercase tracking-widest flex items-center gap-2 text-foreground/70">
-                      <BsBox className="text-primary" /> Order Items
+              <div className="rounded-[4px] border border-ash bg-pure-white shadow-sm overflow-hidden h-full flex flex-col">
+                 <div className="p-8 border-b border-ash flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <h2 className="text-[16px] font-nantes flex items-center gap-2 text-ink-black">
+                      <span className="material-symbols-outlined text-[20px]">inventory_2</span> Order Items
                     </h2>
-                    <div className="text-right">
-                       <p className="text-xs font-mono uppercase tracking-widest text-foreground/50">Total Value</p>
-                       <p className="text-2xl font-black text-foreground tracking-tighter">₹{order.totalAmount.toLocaleString()}</p>
+                    <div className="sm:text-right">
+                       <p className="font-graphik text-[10px] font-bold uppercase tracking-widest text-smoke mb-1">Total Value</p>
+                       <p className="text-[24px] font-nantes text-ink-black">₹{order.totalAmount.toLocaleString()}</p>
                     </div>
                  </div>
                  
-                 <div className="flex-1 overflow-x-auto p-6">
-                    <table className="w-full text-sm text-left">
-                      <thead className="font-mono text-xs uppercase text-foreground/50 border-b border-border">
+                 <div className="flex-1 overflow-x-auto p-8">
+                    <table className="w-full text-left">
+                      <thead className="bg-ash/30 font-graphik text-[12px] uppercase tracking-widest text-smoke border-b border-ash">
                         <tr>
-                          <th className="pb-4 font-bold tracking-wider">Product</th>
-                          <th className="pb-4 font-bold tracking-wider text-center">Units</th>
-                          <th className="pb-4 font-bold tracking-wider text-right">Value</th>
+                          <th className="px-6 py-4 font-bold">Product</th>
+                          <th className="px-6 py-4 font-bold text-center">Units</th>
+                          <th className="px-6 py-4 font-bold text-right">Value</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-border/50">
+                      <tbody className="divide-y divide-ash">
                         {order.items.map((item, index) => (
-                          <tr key={index} className="group">
-                            <td className="py-4">
-                               <div className="font-bold text-foreground group-hover:text-primary transition-colors">{item.productName}</div>
+                          <tr key={index} className="hover:bg-cream-paper transition-colors">
+                            <td className="px-6 py-4">
+                               <div className="font-graphik font-bold text-[14px] text-ink-black">{item.productName}</div>
                             </td>
-                            <td className="py-4 text-center">
-                               <span className="inline-block px-2 py-1 rounded bg-background border border-border font-mono text-xs">
-                                 x{item.quantity}
+                            <td className="px-6 py-4 text-center">
+                               <span className="inline-block px-3 py-1 rounded-[2px] bg-pure-white border border-ash font-graphik text-[12px] font-bold text-ink-black">
+                                 ×{item.quantity}
                                </span>
                             </td>
-                            <td className="py-4 text-right font-mono font-bold">
+                            <td className="px-6 py-4 text-right font-graphik font-bold text-[14px] text-ink-black">
                                ₹{item.price.toLocaleString()}
                             </td>
                           </tr>

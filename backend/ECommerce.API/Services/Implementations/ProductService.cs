@@ -39,12 +39,15 @@ public class ProductService : IProductService
     {
         var query = _context.Products
             .Include(p => p.Seller)
+            .Include(p => p.Category)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
+            var searchTerm = request.Search.ToLower();
             query = query.Where(x =>
-                x.Name.Contains(request.Search));
+                x.Name.ToLower().Contains(searchTerm) || 
+                (x.Category != null && x.Category.Name.ToLower().Contains(searchTerm)));
         }
 
         if (request.CategoryIds != null &&

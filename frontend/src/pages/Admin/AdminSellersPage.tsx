@@ -10,14 +10,8 @@ import { getUsers } from "../../services/adminService";
 import toast from "react-hot-toast";
 import type { Seller } from "../../types/seller";
 import type { AdminUser } from "../../types/admin";
-import {
-  BsSearch,
-  BsShop,
-  BsCheckCircle,
-  BsXCircle,
-  BsPauseCircle,
-  BsTrash,
-} from "react-icons/bs";
+import { Input } from "../../components/inputs/Input";
+import { Button } from "../../components/buttons/Button";
 
 export default function AdminSellersPage() {
   const [sellers, setSellers] = useState<Seller[]>([]);
@@ -119,10 +113,10 @@ export default function AdminSellersPage() {
     return (
       <AdminLayout>
         <div className="flex h-[60vh] items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="h-10 w-10 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
-            <span className="font-mono text-xs uppercase tracking-widest text-primary animate-pulse">
-              Loading Sellers...
+          <div className="flex flex-col items-center gap-4 text-smoke">
+            <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
+            <span className="font-graphik text-[12px] uppercase tracking-widest animate-pulse">
+              Loading Sellers
             </span>
           </div>
         </div>
@@ -132,49 +126,47 @@ export default function AdminSellersPage() {
 
   return (
     <AdminLayout>
-      <div className="py-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+      <div className="py-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-ash pb-6">
           <div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
+            <span className="inline-block text-[12px] font-graphik font-bold uppercase tracking-[0.1em] text-ink-black mb-2">
+              Partners
+            </span>
+            <h1 className="text-[32px] font-nantes text-ink-black tracking-normal">
               Sellers
             </h1>
-            <p className="text-foreground/50 font-mono mt-2 uppercase tracking-widest text-sm">
-              Manage marketplace vendors
-            </p>
           </div>
-          <button
+          <Button
             onClick={() => setShowCreateForm(!showCreateForm)}
-            className="inline-flex items-center justify-center rounded-lg bg-primary hover:opacity-90 text-white px-6 py-3 text-sm font-bold transition-all"
           >
-            {showCreateForm ? "Cancel" : "+ Add Seller"}
-          </button>
+            {showCreateForm ? "Cancel" : "Add Seller"}
+          </Button>
         </div>
 
         {/* Create Form */}
         {showCreateForm && (
-          <div className="rounded-2xl border border-primary/30 bg-surface p-8 mb-8 shadow-sm">
-            <h3 className="text-lg font-bold mb-6">Create New Seller</h3>
-            <div className="grid md:grid-cols-2 gap-4 mb-4">
+          <div className="rounded-[4px] border border-ash bg-pure-white p-8 mb-8 shadow-sm">
+            <h3 className="text-[20px] font-nantes text-ink-black mb-6">Create New Seller</h3>
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
-                <label className="block text-xs font-mono uppercase tracking-widest text-foreground/50 mb-2">
+                <label className="block font-graphik text-[12px] font-bold uppercase tracking-widest text-ink-black mb-2">
                   Company Name *
                 </label>
-                <input
+                <Input
                   type="text"
                   value={newCompanyName}
                   onChange={(e) => setNewCompanyName(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm outline-none focus:border-primary"
                   placeholder="e.g. Apple Store"
                 />
               </div>
               <div>
-                <label className="block text-xs font-mono uppercase tracking-widest text-foreground/50 mb-2">
+                <label className="block font-graphik text-[12px] font-bold uppercase tracking-widest text-ink-black mb-2">
                   Assign User *
                 </label>
                 <select
                   value={newUserId}
                   onChange={(e) => setNewUserId(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm outline-none focus:border-primary"
+                  className="w-full h-[52px] rounded-[4px] border border-ash bg-pure-white px-4 text-[16px] font-graphik text-ink-black focus:border-ink-black focus:ring-1 focus:ring-ink-black outline-none transition-all"
                 >
                   <option value="">Select a user</option>
                   {availableUsers.map((u) => (
@@ -185,98 +177,83 @@ export default function AdminSellersPage() {
                 </select>
               </div>
             </div>
-            <div className="mb-4">
-              <label className="block text-xs font-mono uppercase tracking-widest text-foreground/50 mb-2">
+            <div className="mb-6">
+              <label className="block font-graphik text-[12px] font-bold uppercase tracking-widest text-ink-black mb-2">
                 Description
               </label>
               <textarea
                 value={newDescription}
                 onChange={(e) => setNewDescription(e.target.value)}
-                className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm outline-none focus:border-primary min-h-[80px]"
+                className="w-full min-h-[120px] rounded-[4px] border border-ash bg-pure-white px-4 py-3 text-[14px] font-graphik text-ink-black focus:border-ink-black focus:ring-1 focus:ring-ink-black outline-none transition-all placeholder:text-smoke resize-none"
                 placeholder="Brief company description..."
               />
             </div>
-            <div className="mb-6">
-              <label className="block text-xs font-mono uppercase tracking-widest text-foreground/50 mb-2">
+            <div className="mb-8">
+              <label className="block font-graphik text-[12px] font-bold uppercase tracking-widest text-ink-black mb-2">
                 Logo URL
               </label>
-              <input
+              <Input
                 type="text"
                 value={newLogoUrl}
                 onChange={(e) => setNewLogoUrl(e.target.value)}
-                className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm outline-none focus:border-primary"
                 placeholder="https://..."
               />
             </div>
-            <button
-              onClick={handleCreate}
-              className="bg-primary text-white px-6 py-3 rounded-xl text-sm font-bold hover:opacity-90 transition-all"
-            >
+            <Button onClick={handleCreate}>
               Create Seller
-            </button>
+            </Button>
           </div>
         )}
 
         {/* Search */}
-        <div className="relative mb-8">
-          <BsSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40" />
-          <input
+        <div className="mb-8">
+          <Input
             type="text"
             placeholder="Search sellers..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-2xl border border-border bg-surface pl-11 pr-4 py-4 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all premium-card shadow-sm"
+            icon={<span className="material-symbols-outlined text-smoke text-[20px]">search</span>}
           />
         </div>
 
         {/* Sellers Table */}
-        <div className="rounded-3xl border border-border bg-surface premium-card shadow-sm overflow-hidden">
+        <div className="rounded-[4px] border border-ash bg-pure-white shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-background/50 font-mono text-xs uppercase text-foreground/50 border-b border-border">
+            <table className="w-full text-left">
+              <thead className="bg-ash/30 font-graphik text-[12px] uppercase tracking-widest text-smoke border-b border-ash">
                 <tr>
-                  <th className="px-6 py-4 font-bold tracking-wider">
-                    Seller
-                  </th>
-                  <th className="px-6 py-4 font-bold tracking-wider">Owner</th>
-                  <th className="px-6 py-4 font-bold tracking-wider">
-                    Products
-                  </th>
-                  <th className="px-6 py-4 font-bold tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-4 font-bold tracking-wider">
-                    Created
-                  </th>
-                  <th className="px-6 py-4 font-bold tracking-wider text-right">
-                    Actions
-                  </th>
+                  <th className="px-6 py-4 font-bold">Seller</th>
+                  <th className="px-6 py-4 font-bold">Owner</th>
+                  <th className="px-6 py-4 font-bold">Products</th>
+                  <th className="px-6 py-4 font-bold">Status</th>
+                  <th className="px-6 py-4 font-bold">Created</th>
+                  <th className="px-6 py-4 font-bold text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/50">
+              <tbody className="divide-y divide-ash">
                 {filteredSellers.map((seller) => (
                   <tr
                     key={seller.id}
-                    className="hover:bg-background/50 transition-colors"
+                    className="hover:bg-cream-paper transition-colors"
                   >
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 rounded-[2px] bg-ash/30 flex items-center justify-center overflow-hidden">
                           {seller.logoUrl ? (
                             <img
                               src={seller.logoUrl}
                               alt={seller.companyName}
-                              className="h-full w-full rounded-full object-cover"
+                              className="h-full w-full object-cover mix-blend-multiply"
                             />
                           ) : (
-                            <BsShop className="text-primary" />
+                            <span className="material-symbols-outlined text-[20px] text-ink-black">store</span>
                           )}
                         </div>
                         <div>
-                          <p className="font-bold text-foreground">
+                          <p className="font-graphik font-bold text-[14px] text-ink-black">
                             {seller.companyName}
                           </p>
-                          <p className="text-xs text-foreground/50">
+                          <p className="font-graphik text-[12px] text-smoke mt-0.5">
                             {seller.totalProducts} products
                           </p>
                         </div>
@@ -284,52 +261,52 @@ export default function AdminSellersPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div>
-                        <p className="font-bold text-foreground text-xs">
+                        <p className="font-graphik font-bold text-[14px] text-ink-black">
                           {seller.userName}
                         </p>
-                        <p className="text-xs text-foreground/50">
+                        <p className="font-graphik text-[12px] text-smoke mt-0.5">
                           {seller.userEmail}
                         </p>
                       </div>
                     </td>
-                    <td className="px-6 py-4 font-mono">
+                    <td className="px-6 py-4 font-graphik font-bold text-[14px] text-ink-black">
                       {seller.totalProducts}
                     </td>
                     <td className="px-6 py-4">
                       {seller.isSuspended ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold font-mono uppercase tracking-widest bg-error/10 text-error border border-error/20">
-                          <BsPauseCircle size={10} /> Suspended
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] text-[10px] font-graphik font-bold uppercase tracking-widest border border-ash bg-ash/30 text-ink-black">
+                          <span className="material-symbols-outlined text-[14px]">pause_circle</span> Suspended
                         </span>
                       ) : seller.isApproved ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold font-mono uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
-                          <BsCheckCircle size={10} /> Active
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] text-[10px] font-graphik font-bold uppercase tracking-widest border border-ink-black bg-ink-black text-pure-white">
+                          <span className="material-symbols-outlined text-[14px]">check_circle</span> Active
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold font-mono uppercase tracking-widest bg-secondary/10 text-secondary border border-secondary/20">
-                          <BsXCircle size={10} /> Pending
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] text-[10px] font-graphik font-bold uppercase tracking-widest border border-ash bg-ash/10 text-smoke">
+                          <span className="material-symbols-outlined text-[14px]">cancel</span> Pending
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-foreground/50 font-mono text-xs">
+                    <td className="px-6 py-4 font-graphik text-[12px] text-smoke">
                       {new Date(seller.createdDate).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleToggleSuspend(seller)}
-                          className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all ${
+                          className={`px-3 py-1.5 rounded-[4px] border text-[12px] font-graphik font-bold transition-all ${
                             seller.isSuspended
-                              ? "border-primary bg-primary/10 text-primary hover:bg-primary/20"
-                              : "border-secondary bg-secondary/10 text-secondary hover:bg-secondary/20"
+                              ? "border-ink-black bg-ink-black text-pure-white hover:bg-charcoal"
+                              : "border-ash bg-pure-white text-ink-black hover:bg-ash/30"
                           }`}
                         >
                           {seller.isSuspended ? "Reactivate" : "Suspend"}
                         </button>
                         <button
                           onClick={() => handleDelete(seller.id)}
-                          className="p-1.5 rounded-lg text-error/70 hover:text-error hover:bg-error/10 transition-all"
+                          className="p-1.5 rounded-[4px] text-smoke hover:text-charcoal hover:bg-ash/30 transition-all"
                         >
-                          <BsTrash size={14} />
+                          <span className="material-symbols-outlined text-[20px]">delete</span>
                         </button>
                       </div>
                     </td>
@@ -339,7 +316,7 @@ export default function AdminSellersPage() {
                   <tr>
                     <td
                       colSpan={6}
-                      className="px-6 py-12 text-center text-foreground/40"
+                      className="px-6 py-12 text-center font-graphik text-[14px] text-smoke"
                     >
                       No sellers found
                     </td>

@@ -11,14 +11,15 @@ import { useWishlist } from "../../contexts/WishlistContext";
 import type { Product } from "../../types/product";
 import type { Review } from "../../types/review";
 import ProductCard from "../../components/cards/ProductCard";
+import { Button } from "../../components/buttons/Button";
 
 const COLOR_MAP: Record<string, string> = {
   "Space Gray": "bg-[#4B4C4F]",
   "Silver": "bg-[#E3E4E5]",
   "Starlight": "bg-[#F3EFE9]",
   "Midnight": "bg-[#2E3642]",
-  "Black": "bg-black",
-  "White": "bg-white border-outline-variant",
+  "Black": "bg-ink-black",
+  "White": "bg-pure-white border-ash",
   "Red": "bg-red-500",
   "Blue": "bg-blue-600",
   "Green": "bg-emerald-500",
@@ -144,8 +145,13 @@ export default function ProductDetailsPage() {
   if (loading) {
     return (
       <MainLayout>
-        <div className="flex h-[60vh] items-center justify-center">
-          <div className="h-12 w-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
+        <div className="flex h-[60vh] items-center justify-center bg-cream-paper">
+          <div className="flex flex-col items-center gap-4 text-smoke">
+             <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
+             <span className="font-graphik text-[12px] uppercase tracking-widest animate-pulse">
+                Loading Product Details
+             </span>
+          </div>
         </div>
       </MainLayout>
     );
@@ -154,9 +160,9 @@ export default function ProductDetailsPage() {
   if (!product) {
     return (
       <MainLayout>
-        <div className="flex h-[60vh] items-center justify-center flex-col gap-4">
-          <span className="text-4xl">⚠️</span>
-          <div className="font-mono text-sm uppercase tracking-widest text-error">Product Not Found</div>
+        <div className="flex h-[60vh] items-center justify-center flex-col gap-4 bg-cream-paper">
+          <span className="material-symbols-outlined text-4xl text-smoke">error_outline</span>
+          <div className="font-graphik text-[14px] uppercase tracking-widest text-smoke">Product Not Found</div>
         </div>
       </MainLayout>
     );
@@ -169,363 +175,357 @@ export default function ProductDetailsPage() {
 
   return (
     <MainLayout>
-      <div className="max-w-[1280px] mx-auto px-6 py-8">
-        
-        {/* Breadcrumbs */}
-        <nav className="flex items-center gap-2 text-sm text-on-surface-variant mb-8">
-          <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-          <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-          <Link to="/products" className="hover:text-primary transition-colors">Products</Link>
-          <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-          <span className="text-on-surface font-semibold">{product.name}</span>
-        </nav>
-
-        {/* Main Product Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+      <div className="bg-cream-paper min-h-screen pb-20">
+        <div className="max-w-[1280px] mx-auto px-6 py-8">
           
-          {/* Left Column - Gallery */}
-          <div className="lg:col-span-6 flex flex-col gap-4">
-            <div className="aspect-square w-full rounded-2xl border border-outline-variant bg-surface-container-lowest flex items-center justify-center p-8 overflow-hidden">
-              <img src={mainImage} alt={product.name} className="w-full h-full object-contain" />
-            </div>
+          {/* Breadcrumbs */}
+          <nav className="flex items-center gap-2 text-[12px] font-graphik text-smoke mb-8 uppercase tracking-widest">
+            <Link to="/" className="hover:text-ink-black hover:underline underline-offset-4 transition-all">Home</Link>
+            <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+            <Link to="/products" className="hover:text-ink-black hover:underline underline-offset-4 transition-all">Catalog</Link>
+            <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+            <span className="text-ink-black font-bold">{product.name}</span>
+          </nav>
+
+          {/* Main Product Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
             
-            {galleryImages.length > 1 && (
-               <div className="grid grid-cols-5 gap-4">
-                 {galleryImages.map((img, idx) => (
-                   <button 
-                     key={idx}
-                     onClick={() => setMainImage(img)}
-                     className={`aspect-square rounded-xl border-2 flex items-center justify-center p-2 bg-surface-container-lowest transition-all ${mainImage === img ? 'border-primary' : 'border-outline-variant hover:border-primary/50'}`}
-                   >
-                     <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-contain" />
-                   </button>
-                 ))}
-               </div>
-            )}
-          </div>
-
-          {/* Right Column - Details */}
-          <div className="lg:col-span-6 flex flex-col">
-            <div className="mb-6">
-              {product.brand && (
-                 <span className="inline-block bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-micro-tag font-micro-tag uppercase tracking-widest mb-4 mr-2">{product.brand}</span>
-              )}
-              {product.tags && product.tags.slice(0, 2).map(tag => (
-                 <span key={tag} className="inline-block bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-micro-tag font-micro-tag uppercase tracking-widest mb-4 mr-2">{tag}</span>
-              ))}
-              <h1 className="text-display-sm font-headline-lg font-bold text-on-surface mb-4 leading-tight">{product.name}</h1>
+            {/* Left Column - Gallery */}
+            <div className="lg:col-span-6 flex flex-col gap-4">
+              <div className="aspect-square w-full rounded-[4px] border border-ash bg-pure-white flex items-center justify-center p-8 overflow-hidden">
+                <img src={mainImage} alt={product.name} className="w-full h-full object-contain mix-blend-multiply" />
+              </div>
               
-              {product.sellerName && (
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-sm text-on-surface-variant">Sold by</span>
-                  <span className="inline-flex items-center gap-1.5 bg-tertiary-container/30 text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold">
-                    <span className="material-symbols-outlined text-[14px]">storefront</span>
-                    {product.sellerName}
-                  </span>
-                </div>
+              {galleryImages.length > 1 && (
+                 <div className="grid grid-cols-5 gap-2 md:gap-4">
+                   {galleryImages.map((img, idx) => (
+                     <button 
+                       key={idx}
+                       onClick={() => setMainImage(img)}
+                       className={`aspect-square rounded-[4px] border flex items-center justify-center p-2 bg-pure-white transition-all ${mainImage === img ? 'border-ink-black' : 'border-ash hover:border-smoke'}`}
+                     >
+                       <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-contain mix-blend-multiply" />
+                     </button>
+                   ))}
+                 </div>
               )}
-              
-              <div className="flex items-center gap-4 text-sm">
-                <div className="flex items-center text-tertiary-fixed-dim">
-                  <span className="material-symbols-outlined text-[16px]">star</span>
-                  <span className="material-symbols-outlined text-[16px]">star</span>
-                  <span className="material-symbols-outlined text-[16px]">star</span>
-                  <span className="material-symbols-outlined text-[16px]">star</span>
-                  <span className="material-symbols-outlined text-[16px]">star_half</span>
-                </div>
-                <span className="text-on-surface-variant">{averageRating} ({reviews.length > 0 ? reviews.length : '128'} Reviews)</span>
-                <span className="text-outline-variant">|</span>
-                {product.stock > 0 ? (
-                  <span className="text-[#059669] font-bold">In Stock</span>
-                ) : (
-                  <span className="text-error font-bold">Out of Stock</span>
+            </div>
+
+            {/* Right Column - Details */}
+            <div className="lg:col-span-6 flex flex-col pt-4">
+              <div className="mb-6">
+                {product.brand && (
+                   <span className="inline-block bg-ash text-ink-black px-3 py-1 rounded-[4px] text-[10px] font-graphik font-bold uppercase tracking-widest mb-4 mr-2">{product.brand}</span>
                 )}
-              </div>
-            </div>
-
-            {/* Price Box */}
-            <div className="bg-primary-container/20 rounded-2xl p-6 mb-8 border border-primary/10">
-              <div className="flex items-end gap-3 mb-2">
-                <span className="text-display-md text-primary font-bold">₹{product.price.toLocaleString()}</span>
-                {product.compareAtPrice && (
-                  <span className="text-body-lg text-on-surface-variant line-through mb-1">₹{product.compareAtPrice.toLocaleString()}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2 text-sm text-primary font-medium bg-primary-container/50 w-max px-3 py-1.5 rounded-lg">
-                <span className="material-symbols-outlined text-[16px]">calendar_month</span>
-                0% Installment available up to 24 months
-              </div>
-            </div>
-
-            {/* Options */}
-            {Object.keys(parsedVariants).length > 0 && (
-               <div className="space-y-6 mb-8">
-                 {Object.entries(parsedVariants).map(([variantName, options]) => {
-                    const isColorVariant = variantName.toLowerCase().includes('color') || variantName.toLowerCase().includes('finish');
-                    
-                    // If it's not a color variant and only has 1 option, just show it as text
-                    if (options.length === 1 && !isColorVariant) {
-                       return (
-                         <div key={variantName} className="flex items-center gap-2">
-                           <h3 className="text-label-md font-bold">{variantName}:</h3>
-                           <span className="text-on-surface-variant font-normal">{options[0]}</span>
-                         </div>
-                       );
-                    }
-
-                    return (
-                       <div key={variantName}>
-                         <h3 className="text-label-md font-bold mb-3">{variantName}: <span className="text-on-surface-variant font-normal">{selectedVariants[variantName] || ''}</span></h3>
-                         
-                         <div className={`flex flex-wrap gap-3 ${isColorVariant ? 'items-center' : ''}`}>
-                           {options.map((option) => {
-                             const isSelected = selectedVariants[variantName] === option;
-                             
-                             if (isColorVariant) {
-                               const bgColor = COLOR_MAP[option] || 'bg-outline-variant';
-                               return (
-                                 <button
-                                   key={option}
-                                   onClick={() => setSelectedVariants(curr => ({...curr, [variantName]: option}))}
-                                   className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${isSelected ? 'ring-2 ring-primary ring-offset-2' : 'hover:scale-110'}`}
-                                   title={option}
-                                 >
-                                   <span className={`w-full h-full rounded-full border shadow-inner ${bgColor}`}></span>
-                                 </button>
-                               );
-                             } else {
-                               return (
-                                 <button
-                                   key={option}
-                                   onClick={() => setSelectedVariants(curr => ({...curr, [variantName]: option}))}
-                                   className={`px-6 py-2.5 rounded-lg border font-medium transition-all ${isSelected ? 'border-primary bg-primary/5 text-primary' : 'border-outline-variant text-on-surface-variant hover:border-primary/50'}`}
-                                 >
-                                   {option}
-                                 </button>
-                               );
-                             }
-                           })}
-                         </div>
-                       </div>
-                    );
-                 })}
-               </div>
-            )}
-
-            {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <button
-                onClick={handleAddToCart}
-                disabled={product.stock === 0}
-                className="bg-primary text-white font-bold py-4 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
-              >
-                Add to Cart
-              </button>
-              <button
-                onClick={handleBuyNow}
-                disabled={product.stock === 0}
-                className="bg-primary-container text-primary font-bold py-4 rounded-xl hover:bg-primary-container/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Buy Now
-              </button>
-            </div>
-            <button
-              onClick={handleToggleWishlist}
-              className={`w-full flex items-center justify-center gap-2 font-bold py-4 rounded-xl mb-8 transition-all border ${isWishlisted ? 'border-red-500 text-red-500 bg-red-50' : 'border-outline-variant text-on-surface-variant hover:border-red-500 hover:text-red-500'}`}
-            >
-              <span className={`material-symbols-outlined ${isWishlisted ? '[font-variation-settings:"FILL"1]' : ''}`}>favorite</span>
-              {isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
-            </button>
-
-            {/* Features list */}
-            <div className="grid grid-cols-2 gap-4 pt-6 border-t border-outline-variant">
-              <div className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-[20px] text-on-surface-variant">local_shipping</span>
-                <div>
-                  <div className="font-bold text-sm">Free Delivery</div>
-                  <div className="text-[12px] text-on-surface-variant">Ships in 24 hours</div>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-[20px] text-on-surface-variant">verified_user</span>
-                <div>
-                  <div className="font-bold text-sm">1 Year Warranty</div>
-                  <div className="text-[12px] text-on-surface-variant">Official Manufacturer Warranty</div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Tabs Section */}
-        <div className="mt-16">
-          <div className="flex items-center gap-8 border-b border-outline-variant overflow-x-auto hide-scrollbar">
-            {[
-              { id: "description", label: "Product Description" },
-              { id: "specs", label: "Specifications" },
-              { id: "reviews", label: `Customer Reviews (${reviews.length > 0 ? reviews.length : '128'})` },
-              { id: "qa", label: "Q&A" }
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`pb-4 text-label-md font-bold transition-all whitespace-nowrap ${activeTab === tab.id ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-on-surface'}`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="py-8">
-            {activeTab === "description" && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div className="space-y-6">
-                  {product.features && product.features.length > 0 && (
-                     <h3 className="font-headline-sm font-bold">Key Features</h3>
-                  )}
-                  <p className="text-on-surface-variant leading-relaxed">
-                    {product.description}
-                  </p>
-                  
-                  {product.features && product.features.length > 0 && (
-                     <ul className="space-y-4 pt-4 border-t border-outline-variant">
-                       {product.features.map((feature, idx) => (
-                         <li key={idx} className="flex items-start gap-3">
-                           <span className="material-symbols-outlined text-primary text-[20px]">check_circle</span>
-                           <span className="text-on-surface-variant">{feature}</span>
-                         </li>
-                       ))}
-                     </ul>
-                  )}
-                </div>
+                {product.tags && product.tags.slice(0, 2).map(tag => (
+                   <span key={tag} className="inline-block bg-pure-white border border-ash text-ink-black px-3 py-1 rounded-[4px] text-[10px] font-graphik font-bold uppercase tracking-widest mb-4 mr-2">{tag}</span>
+                ))}
                 
-                {Object.keys(parsedSpecs).length > 0 && (
-                  <div className="bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant h-max">
-                    {Object.entries(parsedSpecs).map(([key, value], index) => (
-                      <div key={key} className={`grid grid-cols-3 p-4 ${index % 2 === 0 ? 'bg-primary/5' : 'bg-transparent'}`}>
-                        <div className="font-bold text-sm col-span-1">{key}</div>
-                        <div className="text-sm text-on-surface-variant col-span-2">{value}</div>
-                      </div>
-                    ))}
+                <h1 className="text-3xl md:text-[48px] font-nantes text-ink-black mb-4 leading-tight">{product.name}</h1>
+                
+                {product.sellerName && (
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-[14px] font-graphik text-smoke">Sold by</span>
+                    <span className="inline-flex items-center gap-1.5 border border-ash bg-pure-white text-ink-black px-3 py-1 rounded-[4px] text-[12px] font-graphik font-bold">
+                      <span className="material-symbols-outlined text-[14px]">storefront</span>
+                      {product.sellerName}
+                    </span>
                   </div>
                 )}
+                
+                <div className="flex items-center gap-4 text-[14px] font-graphik">
+                  <div className="flex items-center text-ink-black">
+                    <span className="material-symbols-outlined text-[16px] [font-variation-settings:'FILL'1]">star</span>
+                    <span className="ml-1 font-bold">{averageRating}</span>
+                  </div>
+                  <span className="text-smoke underline underline-offset-4 cursor-pointer hover:text-ink-black transition-colors" onClick={() => setActiveTab("reviews")}>
+                    {reviews.length > 0 ? reviews.length : '128'} Reviews
+                  </span>
+                  <span className="text-ash">|</span>
+                  {product.stock > 0 ? (
+                    <span className="text-[#2c322b] font-bold">In Stock</span>
+                  ) : (
+                    <span className="text-red-800 font-bold">Out of Stock</span>
+                  )}
+                </div>
               </div>
-            )}
 
-            {activeTab === "specs" && (
-              <div className="bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant max-w-3xl">
-                {Object.keys(parsedSpecs).length === 0 ? (
-                  <div className="p-8 text-center text-on-surface-variant">No technical specifications provided for this product.</div>
-                ) : (
-                  Object.entries(parsedSpecs).map(([key, value], index) => (
-                    <div key={key} className={`grid grid-cols-3 p-4 ${index % 2 === 0 ? 'bg-primary/5' : 'bg-transparent'}`}>
-                      <div className="font-bold text-sm col-span-1">{key}</div>
-                      <div className="text-sm text-on-surface-variant col-span-2">{value}</div>
-                    </div>
-                  ))
-                )}
+              {/* Price Box */}
+              <div className="bg-pure-white rounded-[4px] p-6 mb-8 border border-ash">
+                <div className="flex items-end gap-3 mb-2">
+                  <span className="text-[32px] font-nantes text-ink-black">₹{product.price.toLocaleString()}</span>
+                  {product.compareAtPrice && (
+                    <span className="text-[16px] font-graphik text-smoke line-through mb-1.5">₹{product.compareAtPrice.toLocaleString()}</span>
+                  )}
+                </div>
               </div>
-            )}
 
-            {activeTab === "reviews" && (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                <div className="lg:col-span-1 bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant h-max">
-                  <h3 className="text-headline-sm font-bold mb-4">Write a Review</h3>
-                  <div className="space-y-4">
-                    <select
-                      value={rating}
-                      onChange={(e) => setRating(Number(e.target.value))}
-                      className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest p-3 focus:border-primary outline-none"
-                    >
-                      <option value={5}>5 Stars - Excellent</option>
-                      <option value={4}>4 Stars - Good</option>
-                      <option value={3}>3 Stars - Average</option>
-                      <option value={2}>2 Stars - Poor</option>
-                      <option value={1}>1 Star - Terrible</option>
-                    </select>
-                    <textarea
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                      placeholder="Share your thoughts..."
-                      rows={4}
-                      className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest p-3 focus:border-primary outline-none resize-none"
-                    />
-                    <button
-                      onClick={handleReviewSubmit}
-                      className="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-primary/90 transition-all"
-                    >
-                      Submit Review
-                    </button>
+              {/* Options */}
+              {Object.keys(parsedVariants).length > 0 && (
+                 <div className="space-y-6 mb-8">
+                   {Object.entries(parsedVariants).map(([variantName, options]) => {
+                      const isColorVariant = variantName.toLowerCase().includes('color') || variantName.toLowerCase().includes('finish');
+                      
+                      if (options.length === 1 && !isColorVariant) {
+                         return (
+                           <div key={variantName} className="flex items-center gap-2 font-graphik text-[14px]">
+                             <h3 className="font-bold text-ink-black">{variantName}:</h3>
+                             <span className="text-smoke">{options[0]}</span>
+                           </div>
+                         );
+                      }
+
+                      return (
+                         <div key={variantName}>
+                           <h3 className="font-graphik text-[14px] font-bold mb-3 text-ink-black uppercase tracking-widest">{variantName}: <span className="text-smoke font-normal capitalize">{selectedVariants[variantName] || ''}</span></h3>
+                           
+                           <div className={`flex flex-wrap gap-3 ${isColorVariant ? 'items-center' : ''}`}>
+                             {options.map((option) => {
+                               const isSelected = selectedVariants[variantName] === option;
+                               
+                               if (isColorVariant) {
+                                 const bgColor = COLOR_MAP[option] || 'bg-smoke';
+                                 return (
+                                   <button
+                                     key={option}
+                                     onClick={() => setSelectedVariants(curr => ({...curr, [variantName]: option}))}
+                                     className={`w-10 h-10 rounded-[4px] flex items-center justify-center transition-all ${isSelected ? 'ring-1 ring-ink-black ring-offset-2 ring-offset-cream-paper' : 'hover:opacity-80'}`}
+                                     title={option}
+                                   >
+                                     <span className={`w-full h-full rounded-[4px] border border-ash shadow-inner ${bgColor}`}></span>
+                                   </button>
+                                 );
+                               } else {
+                                 return (
+                                   <button
+                                     key={option}
+                                     onClick={() => setSelectedVariants(curr => ({...curr, [variantName]: option}))}
+                                     className={`px-6 py-2.5 rounded-[4px] border font-graphik text-[14px] transition-all ${isSelected ? 'border-ink-black bg-ink-black text-pure-white' : 'border-ash text-smoke hover:border-ink-black hover:text-ink-black bg-pure-white'}`}
+                                   >
+                                     {option}
+                                   </button>
+                                 );
+                               }
+                             })}
+                           </div>
+                         </div>
+                      );
+                   })}
+                 </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={handleAddToCart}
+                  disabled={product.stock === 0}
+                  className="w-full justify-center"
+                >
+                  Add to Cart
+                </Button>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  onClick={handleBuyNow}
+                  disabled={product.stock === 0}
+                  className="w-full justify-center"
+                >
+                  Buy Now
+                </Button>
+              </div>
+              <button
+                onClick={handleToggleWishlist}
+                className={`w-full flex items-center justify-center gap-2 font-graphik font-bold text-[14px] py-4 rounded-[4px] mb-8 transition-all border ${isWishlisted ? 'border-ink-black text-ink-black bg-ash/30' : 'border-ash text-smoke hover:border-ink-black hover:text-ink-black bg-pure-white'}`}
+              >
+                <span className={`material-symbols-outlined ${isWishlisted ? '[font-variation-settings:"FILL"1]' : ''}`}>favorite</span>
+                {isWishlisted ? 'Remove from Wishlist' : 'Save to Wishlist'}
+              </button>
+
+              {/* Features list */}
+              <div className="grid grid-cols-2 gap-4 pt-6 border-t border-ash">
+                <div className="flex items-start gap-3">
+                  <span className="material-symbols-outlined text-[20px] text-ink-black">local_shipping</span>
+                  <div>
+                    <div className="font-graphik font-bold text-[14px] text-ink-black">Complimentary Shipping</div>
+                    <div className="font-graphik text-[12px] text-smoke mt-1">Dispatches within 24 hours</div>
                   </div>
                 </div>
+                <div className="flex items-start gap-3">
+                  <span className="material-symbols-outlined text-[20px] text-ink-black">verified_user</span>
+                  <div>
+                    <div className="font-graphik font-bold text-[14px] text-ink-black">Extended Warranty</div>
+                    <div className="font-graphik text-[12px] text-smoke mt-1">12-month manufacturer guarantee</div>
+                  </div>
+                </div>
+              </div>
 
-                <div className="lg:col-span-2">
-                  {reviews.length === 0 ? (
-                    <div className="text-center py-12 text-on-surface-variant">
-                      <span className="material-symbols-outlined text-4xl mb-2 opacity-50">forum</span>
-                      <p>No reviews yet. Be the first to review!</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-6">
-                      {reviews.map((review) => (
-                        <div key={review.id} className="border-b border-outline-variant pb-6 last:border-0">
-                          <div className="flex items-center gap-3 mb-2">
-                            <div className="w-10 h-10 rounded-full bg-primary-container text-primary flex items-center justify-center font-bold">
-                              {review.userName.charAt(0).toUpperCase()}
-                            </div>
-                            <div>
-                              <div className="font-bold">{review.userName}</div>
-                              <div className="text-xs text-on-surface-variant">{new Date(review.createdDate).toLocaleDateString()}</div>
-                            </div>
-                          </div>
-                          <div className="flex text-tertiary-fixed-dim mb-3">
-                            {[...Array(5)].map((_, i) => (
-                              <span key={i} className="material-symbols-outlined text-[14px]">
-                                {i < review.rating ? 'star' : 'star_outline'}
-                              </span>
-                            ))}
-                          </div>
-                          <p className="text-on-surface-variant">{review.comment}</p>
+            </div>
+          </div>
+
+          {/* Tabs Section */}
+          <div className="mt-20">
+            <div className="flex items-center gap-8 border-b border-ash overflow-x-auto hide-scrollbar">
+              {[
+                { id: "description", label: "Editorial Details" },
+                { id: "specs", label: "Specifications" },
+                { id: "reviews", label: `Reviews (${reviews.length > 0 ? reviews.length : '128'})` }
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`pb-4 font-graphik text-[14px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === tab.id ? 'text-ink-black border-b-[3px] border-butter-highlight' : 'text-smoke hover:text-ink-black'}`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="py-12">
+              {activeTab === "description" && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                  <div className="space-y-6">
+                    <p className="font-graphik text-[16px] text-charcoal leading-[1.6]">
+                      {product.description}
+                    </p>
+                    
+                    {product.features && product.features.length > 0 && (
+                       <ul className="space-y-4 pt-8 border-t border-ash">
+                         {product.features.map((feature, idx) => (
+                           <li key={idx} className="flex items-start gap-4">
+                             <span className="h-[2px] w-4 bg-butter-highlight mt-2.5 shrink-0"></span>
+                             <span className="font-graphik text-[14px] text-smoke">{feature}</span>
+                           </li>
+                         ))}
+                       </ul>
+                    )}
+                  </div>
+                  
+                  {Object.keys(parsedSpecs).length > 0 && (
+                    <div className="bg-pure-white rounded-[4px] border border-ash h-max">
+                      {Object.entries(parsedSpecs).map(([key, value], index) => (
+                        <div key={key} className={`grid grid-cols-3 p-5 ${index !== 0 ? 'border-t border-ash' : ''}`}>
+                          <div className="font-graphik font-bold text-[12px] uppercase tracking-widest text-ink-black col-span-1">{key}</div>
+                          <div className="font-graphik text-[14px] text-smoke col-span-2">{value}</div>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
-              </div>
-            )}
+              )}
 
-            {activeTab === "qa" && (
-              <div className="text-center py-12 text-on-surface-variant">
-                <span className="material-symbols-outlined text-4xl mb-2 opacity-50">help</span>
-                <p>No questions asked yet.</p>
-              </div>
-            )}
+              {activeTab === "specs" && (
+                <div className="bg-pure-white rounded-[4px] border border-ash max-w-3xl">
+                  {Object.keys(parsedSpecs).length === 0 ? (
+                    <div className="p-8 text-center font-graphik text-[14px] text-smoke">Technical specifications are currently unavailable.</div>
+                  ) : (
+                    Object.entries(parsedSpecs).map(([key, value], index) => (
+                      <div key={key} className={`grid grid-cols-3 p-5 ${index !== 0 ? 'border-t border-ash' : ''}`}>
+                        <div className="font-graphik font-bold text-[12px] uppercase tracking-widest text-ink-black col-span-1">{key}</div>
+                        <div className="font-graphik text-[14px] text-smoke col-span-2">{value}</div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+
+              {activeTab === "reviews" && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
+                  <div className="lg:col-span-1 bg-pure-white p-8 rounded-[4px] border border-ash h-max">
+                    <h3 className="font-nantes text-[24px] text-ink-black mb-6">Leave a Review</h3>
+                    <div className="space-y-5">
+                      <div>
+                        <label className="block font-graphik text-[12px] font-bold uppercase tracking-widest text-ink-black mb-2">Rating</label>
+                        <select
+                          value={rating}
+                          onChange={(e) => setRating(Number(e.target.value))}
+                          className="w-full rounded-[4px] border border-ash bg-pure-white p-3 font-graphik text-[14px] text-ink-black focus:border-ink-black outline-none"
+                        >
+                          <option value={5}>5 Stars - Exceptional</option>
+                          <option value={4}>4 Stars - Very Good</option>
+                          <option value={3}>3 Stars - Average</option>
+                          <option value={2}>2 Stars - Below Average</option>
+                          <option value={1}>1 Star - Poor</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block font-graphik text-[12px] font-bold uppercase tracking-widest text-ink-black mb-2">Review</label>
+                        <textarea
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
+                          placeholder="Your experience with this item..."
+                          rows={4}
+                          className="w-full rounded-[4px] border border-ash bg-pure-white p-3 font-graphik text-[14px] text-ink-black focus:border-ink-black outline-none resize-none"
+                        />
+                      </div>
+                      <Button
+                        className="w-full justify-center"
+                        onClick={handleReviewSubmit}
+                      >
+                        Submit Review
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-2">
+                    {reviews.length === 0 ? (
+                      <div className="text-center py-16 bg-pure-white border border-ash rounded-[4px]">
+                        <span className="material-symbols-outlined text-4xl mb-4 text-smoke">format_quote</span>
+                        <p className="font-graphik text-[14px] text-smoke">No customer reviews yet. Share your experience.</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-8">
+                        {reviews.map((review) => (
+                          <div key={review.id} className="border-b border-ash pb-8 last:border-0">
+                            <div className="flex items-center justify-between mb-4">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-[4px] bg-ash text-ink-black flex items-center justify-center font-nantes text-[18px]">
+                                  {review.userName.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                  <div className="font-graphik font-bold text-[14px] text-ink-black">{review.userName}</div>
+                                  <div className="font-graphik text-[12px] text-smoke uppercase tracking-wider mt-0.5">{new Date(review.createdDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                                </div>
+                              </div>
+                              <div className="flex text-ink-black">
+                                {[...Array(5)].map((_, i) => (
+                                  <span key={i} className={`material-symbols-outlined text-[16px] ${i < review.rating ? '[font-variation-settings:"FILL"1]' : ''}`}>
+                                    star
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                            <p className="font-graphik text-[14px] text-charcoal leading-[1.6]">{review.comment}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
+
+          {/* You might also like */}
+          {relatedProducts.length > 0 && (
+            <div className="mt-20 pt-16 border-t border-ash">
+              <div className="flex items-end justify-between mb-10">
+                <div>
+                   <h2 className="font-nantes text-[32px] text-ink-black">Curated for You</h2>
+                   <div className="h-[3px] w-12 bg-butter-highlight mt-4"></div>
+                </div>
+                <Link to="/products" className="font-graphik text-[12px] font-bold uppercase tracking-widest text-ink-black hover:underline underline-offset-4">View Collection</Link>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {relatedProducts.map(product => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            </div>
+          )}
+
         </div>
-
-        {/* You might also like */}
-        {relatedProducts.length > 0 && (
-          <div className="mt-16 border-t border-outline-variant pt-12">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-headline-md font-bold">You might also like</h2>
-              <div className="flex items-center gap-2">
-                <button className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center hover:border-primary hover:text-primary transition-all">
-                  <span className="material-symbols-outlined">chevron_left</span>
-                </button>
-                <button className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center hover:border-primary hover:text-primary transition-all">
-                  <span className="material-symbols-outlined">chevron_right</span>
-                </button>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {relatedProducts.map(product => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          </div>
-        )}
-
       </div>
     </MainLayout>
   );

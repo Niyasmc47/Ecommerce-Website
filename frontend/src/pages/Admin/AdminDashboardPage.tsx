@@ -1,19 +1,7 @@
 import { useEffect, useState } from "react";
 import AdminLayout from "../../components/layouts/AdminLayout";
 import { getDashboardStats, getUsers, getOrders } from "../../services/adminService";
-import { FaUsers, FaBox, FaShoppingCart } from "react-icons/fa";
-import { FaIndianRupeeSign } from "react-icons/fa6";
 import type { DashboardStats, AdminUser, AdminOrder } from "../../types/admin";
-
-const STATUS_COLORS: Record<string, string> = {
-  Delivered: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
-  OutForDelivery: "bg-violet-500/10 text-violet-600 border-violet-500/20",
-  Assigned: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-  Pending: "bg-amber-500/10 text-amber-600 border-amber-500/20",
-  ReturnRequested: "bg-orange-500/10 text-orange-600 border-orange-500/20",
-  Returned: "bg-rose-500/10 text-rose-600 border-rose-500/20",
-  Cancelled: "bg-red-500/10 text-red-600 border-red-500/20",
-};
 
 const STATUS_LABELS: Record<string, string> = {
   OutForDelivery: "Out for Delivery",
@@ -48,10 +36,10 @@ export default function AdminDashboardPage() {
     return (
       <AdminLayout>
         <div className="flex h-[60vh] items-center justify-center">
-           <div className="flex flex-col items-center gap-4">
-              <div className="h-10 w-10 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
-              <span className="font-mono text-xs uppercase tracking-widest text-primary animate-pulse">Loading Dashboard...</span>
-           </div>
+          <div className="flex flex-col items-center gap-4 text-smoke">
+            <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
+            <span className="font-graphik text-[12px] uppercase tracking-widest animate-pulse">Loading Dashboard</span>
+          </div>
         </div>
       </AdminLayout>
     );
@@ -59,121 +47,118 @@ export default function AdminDashboardPage() {
 
   return (
     <AdminLayout>
-      <div className="py-10">
-        <div className="mb-10">
-           <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
-             Dashboard
-           </h1>
-           <p className="text-foreground/50 font-mono mt-2 uppercase tracking-widest text-sm">Overview & Analytics</p>
+      <div className="py-8">
+        <div className="mb-12 border-b border-ash pb-6">
+          <span className="inline-block text-[12px] font-graphik font-bold uppercase tracking-[0.1em] text-ink-black mb-2">
+            Overview & Analytics
+          </span>
+          <h1 className="text-[32px] font-nantes text-ink-black tracking-normal">
+            Dashboard
+          </h1>
         </div>
 
         {/* Stats Cards */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12">
-          <div className="rounded-2xl border border-border bg-surface p-6 premium-card shadow-sm relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-[30px] group-hover:bg-primary/10 transition-colors"></div>
+          <div className="rounded-[4px] border border-ash bg-pure-white p-6 shadow-sm relative overflow-hidden group hover:border-ink-black transition-all">
             <div className="flex items-center justify-between mb-4 relative z-10">
-               <FaUsers className="text-2xl text-primary" />
-               <span className="text-xs font-mono uppercase tracking-wider text-foreground/40">Total Users</span>
+              <span className="material-symbols-outlined text-ink-black text-[24px]">group</span>
+              <span className="font-graphik text-[12px] uppercase tracking-widest text-smoke">Total Users</span>
             </div>
-            <h2 className="text-4xl font-black text-foreground relative z-10">{stats?.totalUsers.toLocaleString()}</h2>
+            <h2 className="font-nantes text-[36px] text-ink-black relative z-10">{stats?.totalUsers.toLocaleString()}</h2>
           </div>
 
-          <div className="rounded-2xl border border-border bg-surface p-6 premium-card shadow-sm relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-[30px] group-hover:bg-primary/10 transition-colors"></div>
+          <div className="rounded-[4px] border border-ash bg-pure-white p-6 shadow-sm relative overflow-hidden group hover:border-ink-black transition-all">
             <div className="flex items-center justify-between mb-4 relative z-10">
-               <FaBox className="text-2xl text-primary" />
-               <span className="text-xs font-mono uppercase tracking-wider text-foreground/40">Total Products</span>
+              <span className="material-symbols-outlined text-ink-black text-[24px]">inventory_2</span>
+              <span className="font-graphik text-[12px] uppercase tracking-widest text-smoke">Total Products</span>
             </div>
-            <h2 className="text-4xl font-black text-foreground relative z-10">{stats?.totalProducts.toLocaleString()}</h2>
+            <h2 className="font-nantes text-[36px] text-ink-black relative z-10">{stats?.totalProducts.toLocaleString()}</h2>
           </div>
 
-          <div className="rounded-2xl border border-border bg-surface p-6 premium-card shadow-sm relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-[30px] group-hover:bg-primary/10 transition-colors"></div>
+          <div className="rounded-[4px] border border-ash bg-pure-white p-6 shadow-sm relative overflow-hidden group hover:border-ink-black transition-all">
             <div className="flex items-center justify-between mb-4 relative z-10">
-               <FaShoppingCart className="text-2xl text-primary" />
-               <span className="text-xs font-mono uppercase tracking-wider text-foreground/40">Total Orders</span>
+              <span className="material-symbols-outlined text-ink-black text-[24px]">shopping_bag</span>
+              <span className="font-graphik text-[12px] uppercase tracking-widest text-smoke">Total Orders</span>
             </div>
-            <h2 className="text-4xl font-black text-foreground relative z-10">{stats?.totalOrders.toLocaleString()}</h2>
+            <h2 className="font-nantes text-[36px] text-ink-black relative z-10">{stats?.totalOrders.toLocaleString()}</h2>
           </div>
 
-          <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 premium-card shadow-lg shadow-primary/5 relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-50"></div>
+          <div className="rounded-[4px] border border-ink-black bg-ink-black text-pure-white p-6 shadow-sm relative overflow-hidden group">
             <div className="flex items-center justify-between mb-4 relative z-10">
-               <FaIndianRupeeSign className="text-2xl text-primary" />
-               <span className="text-xs font-mono font-bold uppercase tracking-wider text-primary">Total Revenue</span>
+              <span className="material-symbols-outlined text-butter-highlight text-[24px]">payments</span>
+              <span className="font-graphik text-[12px] uppercase tracking-widest text-pure-white/70">Total Revenue</span>
             </div>
-            <h2 className="text-3xl font-black text-foreground relative z-10 tracking-tighter">₹{stats?.totalRevenue.toLocaleString()}</h2>
+            <h2 className="font-nantes text-[32px] text-pure-white relative z-10">₹{stats?.totalRevenue.toLocaleString()}</h2>
           </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-           {/* Recent Users Table */}
-           <div className="rounded-2xl border border-border bg-surface shadow-sm premium-card flex flex-col">
-             <div className="p-6 border-b border-border/50">
-               <h2 className="text-xl font-bold">Recent Users</h2>
-             </div>
-             <div className="overflow-x-auto">
-               <table className="w-full text-sm text-left">
-                 <thead className="bg-background/50 font-mono text-xs uppercase text-foreground/50 border-b border-border">
-                   <tr>
-                     <th className="px-6 py-4 font-bold tracking-wider">ID</th>
-                     <th className="px-6 py-4 font-bold tracking-wider">User</th>
-                     <th className="px-6 py-4 font-bold tracking-wider">Role</th>
-                   </tr>
-                 </thead>
-                 <tbody className="divide-y divide-border/50">
-                   {users.slice(0, 5).map((user) => (
-                     <tr key={user.id} className="hover:bg-background/50 transition-colors">
-                       <td className="px-6 py-4 font-mono text-xs text-foreground/50">#{user.id}</td>
-                       <td className="px-6 py-4">
-                          <div className="font-bold text-foreground">{user.name}</div>
-                          <div className="text-xs text-foreground/50">{user.email}</div>
-                       </td>
-                       <td className="px-6 py-4">
-                          <span className={`inline-flex px-2 py-1 rounded text-[10px] font-bold font-mono uppercase tracking-widest ${user.role === 'Admin' ? 'bg-primary/20 text-primary border border-primary/30' : 'bg-surface border border-border text-foreground/70'}`}>
-                            {user.role}
-                          </span>
-                       </td>
-                     </tr>
-                   ))}
-                 </tbody>
-               </table>
-             </div>
-           </div>
+          {/* Recent Users Table */}
+          <div className="rounded-[4px] border border-ash bg-pure-white shadow-sm flex flex-col">
+            <div className="p-6 border-b border-ash flex items-center justify-between">
+              <h2 className="font-nantes text-[20px] text-ink-black">Recent Users</h2>
+              <span className="font-graphik text-[12px] font-bold uppercase tracking-widest text-smoke">View All</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead className="bg-ash/30 font-graphik text-[12px] uppercase tracking-widest text-smoke border-b border-ash">
+                  <tr>
+                    <th className="px-6 py-4 font-bold">ID</th>
+                    <th className="px-6 py-4 font-bold">User</th>
+                    <th className="px-6 py-4 font-bold">Role</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-ash">
+                  {users.slice(0, 5).map((user) => (
+                    <tr key={user.id} className="hover:bg-cream-paper transition-colors">
+                      <td className="px-6 py-4 font-graphik text-[12px] text-smoke">#{user.id}</td>
+                      <td className="px-6 py-4">
+                        <div className="font-graphik font-bold text-[14px] text-ink-black">{user.name}</div>
+                        <div className="font-graphik text-[12px] text-smoke">{user.email}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex px-2 py-1 rounded-[2px] text-[10px] font-graphik font-bold uppercase tracking-widest ${user.role === 'Admin' ? 'bg-ink-black text-pure-white' : 'bg-ash/50 text-ink-black'}`}>
+                          {user.role}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-           {/* Recent Orders Table */}
-           <div className="rounded-2xl border border-border bg-surface shadow-sm premium-card flex flex-col">
-             <div className="p-6 border-b border-border/50">
-               <h2 className="text-xl font-bold">Recent Orders</h2>
-             </div>
-             <div className="overflow-x-auto">
-               <table className="w-full text-sm text-left">
-                 <thead className="bg-background/50 font-mono text-xs uppercase text-foreground/50 border-b border-border">
-                   <tr>
-                     <th className="px-6 py-4 font-bold tracking-wider">ID</th>
-                     <th className="px-6 py-4 font-bold tracking-wider">Value</th>
-                     <th className="px-6 py-4 font-bold tracking-wider">Status</th>
-                   </tr>
-                 </thead>
-                 <tbody className="divide-y divide-border/50">
-                   {orders.slice(0, 5).map((order) => (
-                     <tr key={order.id} className="hover:bg-background/50 transition-colors">
-                       <td className="px-6 py-4 font-mono text-xs text-foreground/50">#{order.id}</td>
-                       <td className="px-6 py-4 font-bold text-foreground">₹{order.totalAmount.toLocaleString()}</td>
-                       <td className="px-6 py-4">
-                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold font-mono uppercase tracking-widest border ${
-                            STATUS_COLORS[order.status] || 'bg-surface border-border text-foreground/70'
-                          }`}>
-                            {(order.status === 'Assigned' || order.status === 'OutForDelivery') && <span className="w-1 h-1 rounded-full bg-current animate-pulse"></span>}
-                            {STATUS_LABELS[order.status] || order.status}
-                          </span>
-                       </td>
-                     </tr>
-                   ))}
-                 </tbody>
-               </table>
-             </div>
-           </div>
+          {/* Recent Orders Table */}
+          <div className="rounded-[4px] border border-ash bg-pure-white shadow-sm flex flex-col">
+            <div className="p-6 border-b border-ash flex items-center justify-between">
+              <h2 className="font-nantes text-[20px] text-ink-black">Recent Orders</h2>
+              <span className="font-graphik text-[12px] font-bold uppercase tracking-widest text-smoke">View All</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead className="bg-ash/30 font-graphik text-[12px] uppercase tracking-widest text-smoke border-b border-ash">
+                  <tr>
+                    <th className="px-6 py-4 font-bold">ID</th>
+                    <th className="px-6 py-4 font-bold">Value</th>
+                    <th className="px-6 py-4 font-bold">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-ash">
+                  {orders.slice(0, 5).map((order) => (
+                    <tr key={order.id} className="hover:bg-cream-paper transition-colors">
+                      <td className="px-6 py-4 font-graphik text-[12px] text-smoke">#{order.id}</td>
+                      <td className="px-6 py-4 font-graphik font-bold text-[14px] text-ink-black">₹{order.totalAmount.toLocaleString()}</td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] text-[10px] font-graphik font-bold uppercase tracking-widest border border-ash bg-ash/30 text-ink-black`}>
+                          {STATUS_LABELS[order.status] || order.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </AdminLayout>

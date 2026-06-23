@@ -7,7 +7,7 @@ import Container from "../../components/common/Container";
 import { getOrders } from "../../services/orderService";
 
 import type { Order } from "../../types/order";
-import { BsBox, BsTruck, BsCheck2Circle, BsArrowRepeat, BsHourglass, BsPerson } from "react-icons/bs";
+import { BsBox } from "react-icons/bs";
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string }> = {
   Pending:         { label: "Pending",          bg: "bg-amber-100",   text: "text-amber-700" },

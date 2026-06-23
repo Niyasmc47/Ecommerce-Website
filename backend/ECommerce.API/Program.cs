@@ -73,6 +73,10 @@ builder.Services.AddScoped<JwtTokenGenerator>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddScoped<
+    IMarketingService,
+    MarketingService>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));

@@ -6,16 +6,11 @@ import {
   getAllDeliveries,
 } from "../../services/adminDeliveryService";
 import toast from "react-hot-toast";
-import { BsTruck, BsPerson, BsBox, BsCheck2Circle, BsHourglass, BsArrowRepeat } from "react-icons/bs";
+import { Button } from "../../components/buttons/Button";
 
-const STATUS_CONFIG: Record<string, { label: string; classes: string }> = {
-  Pending:         { label: "Pending",          classes: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
-  Assigned:        { label: "Assigned",         classes: "bg-blue-500/10 text-blue-600 border-blue-500/20" },
-  OutForDelivery:  { label: "Out for Delivery", classes: "bg-violet-500/10 text-violet-600 border-violet-500/20" },
-  Delivered:       { label: "Delivered",        classes: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" },
-  ReturnRequested: { label: "Return Requested", classes: "bg-orange-500/10 text-orange-600 border-orange-500/20" },
-  Returned:        { label: "Returned",         classes: "bg-rose-500/10 text-rose-600 border-rose-500/20" },
-  Cancelled:       { label: "Cancelled",        classes: "bg-red-500/10 text-red-600 border-red-500/20" },
+const STATUS_LABELS: Record<string, string> = {
+  OutForDelivery: "Out for Delivery",
+  ReturnRequested: "Return Requested",
 };
 
 const ALL_STATUSES = ["All", "Pending", "Assigned", "OutForDelivery", "Delivered", "ReturnRequested", "Returned", "Cancelled"];
@@ -72,9 +67,9 @@ export default function DeliveryManagementPage() {
     return (
       <AdminLayout>
         <div className="flex h-[60vh] items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="h-10 w-10 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
-            <span className="font-mono text-xs uppercase tracking-widest text-primary animate-pulse">Loading Deliveries...</span>
+          <div className="flex flex-col items-center gap-4 text-smoke">
+            <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
+            <span className="font-graphik text-[12px] uppercase tracking-widest animate-pulse">Loading Deliveries...</span>
           </div>
         </div>
       </AdminLayout>
@@ -83,41 +78,41 @@ export default function DeliveryManagementPage() {
 
   return (
     <AdminLayout>
-      <div className="py-10">
-        <div className="mb-10">
-          <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
+      <div className="py-8">
+        <div className="mb-12 border-b border-ash pb-6">
+          <span className="inline-block text-[12px] font-graphik font-bold uppercase tracking-[0.1em] text-ink-black mb-2">
+            Logistics
+          </span>
+          <h1 className="text-[32px] font-nantes text-ink-black tracking-normal">
             Delivery Management
           </h1>
-          <p className="text-foreground/50 font-mono mt-2 uppercase tracking-widest text-sm">
-            Assign & track delivery agents
-          </p>
         </div>
 
         {/* Assignment Panel */}
-        <div className="rounded-2xl border border-border bg-surface p-6 premium-card shadow-sm mb-8">
-          <h2 className="text-sm font-mono font-bold uppercase tracking-widest text-foreground/70 mb-6 flex items-center gap-2">
-            <BsTruck className="text-primary" /> Assign Delivery Agent
+        <div className="rounded-[4px] border border-ash bg-pure-white p-8 shadow-sm mb-8">
+          <h2 className="text-[16px] font-nantes text-ink-black mb-6 flex items-center gap-2">
+            <span className="material-symbols-outlined text-[20px]">local_shipping</span> Assign Delivery Agent
           </h2>
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-6">
             <div>
-              <label className="block text-xs font-mono uppercase tracking-widest text-foreground/50 mb-2">Order</label>
+              <label className="block font-graphik text-[12px] font-bold uppercase tracking-widest text-ink-black mb-2">Order</label>
               <select
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-bold outline-none cursor-pointer hover:border-primary transition-all"
+                className="w-full h-[52px] rounded-[4px] border border-ash bg-pure-white px-4 text-[16px] font-graphik text-ink-black focus:border-ink-black focus:ring-1 focus:ring-ink-black outline-none transition-all"
                 value={orderId}
                 onChange={(e) => setOrderId(e.target.value)}
               >
                 <option value="">Select Order</option>
                 {orders.map((o: any) => (
                   <option key={o.orderId} value={o.orderId}>
-                    #{o.orderId} — {o.customerName} ({STATUS_CONFIG[o.status]?.label ?? o.status})
+                    #{o.orderId} — {o.customerName} ({STATUS_LABELS[o.status] ?? o.status})
                   </option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-mono uppercase tracking-widest text-foreground/50 mb-2">Delivery Agent</label>
+              <label className="block font-graphik text-[12px] font-bold uppercase tracking-widest text-ink-black mb-2">Delivery Agent</label>
               <select
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-bold outline-none cursor-pointer hover:border-primary transition-all"
+                className="w-full h-[52px] rounded-[4px] border border-ash bg-pure-white px-4 text-[16px] font-graphik text-ink-black focus:border-ink-black focus:ring-1 focus:ring-ink-black outline-none transition-all"
                 value={agentId}
                 onChange={(e) => setAgentId(e.target.value)}
               >
@@ -130,30 +125,27 @@ export default function DeliveryManagementPage() {
               </select>
             </div>
             <div className="flex items-end">
-              <button
-                onClick={handleAssign}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-bold text-white transition-all hover:opacity-90 shadow-lg shadow-primary/20"
-              >
-                <BsArrowRepeat size={14} /> Assign / Reassign
-              </button>
+              <Button onClick={handleAssign} className="w-full flex items-center justify-center gap-2 h-[52px]">
+                <span className="material-symbols-outlined text-[16px]">sync</span> Assign / Reassign
+              </Button>
             </div>
           </div>
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
           {[
-            { label: "Total", count: orders.length, icon: <BsBox size={18} />, color: "text-primary" },
-            { label: "Assigned", count: statusCounts["Assigned"] ?? 0, icon: <BsPerson size={18} />, color: "text-blue-500" },
-            { label: "Out for Delivery", count: statusCounts["OutForDelivery"] ?? 0, icon: <BsTruck size={18} />, color: "text-violet-500" },
-            { label: "Delivered", count: statusCounts["Delivered"] ?? 0, icon: <BsCheck2Circle size={18} />, color: "text-emerald-500" },
+            { label: "Total", count: orders.length, icon: "inventory_2" },
+            { label: "Assigned", count: statusCounts["Assigned"] ?? 0, icon: "person" },
+            { label: "Out for Delivery", count: statusCounts["OutForDelivery"] ?? 0, icon: "local_shipping" },
+            { label: "Delivered", count: statusCounts["Delivered"] ?? 0, icon: "check_circle" },
           ].map((card) => (
-            <div key={card.label} className="rounded-2xl border border-border bg-surface p-5 premium-card shadow-sm">
-              <div className="flex items-center justify-between mb-3">
-                <span className={card.color}>{card.icon}</span>
-                <span className="text-3xl font-black text-foreground tracking-tighter">{card.count}</span>
+            <div key={card.label} className="rounded-[4px] border border-ash bg-pure-white p-6 shadow-sm hover:border-ink-black transition-colors">
+              <div className="flex items-center justify-between mb-4">
+                <span className="material-symbols-outlined text-ink-black text-[24px]">{card.icon}</span>
+                <span className="font-nantes text-[32px] text-ink-black">{card.count}</span>
               </div>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-foreground/50">{card.label}</p>
+              <p className="font-graphik text-[12px] font-bold uppercase tracking-widest text-smoke">{card.label}</p>
             </div>
           ))}
         </div>
@@ -162,21 +154,21 @@ export default function DeliveryManagementPage() {
         <div className="flex flex-wrap gap-2 mb-8">
           {ALL_STATUSES.map((s) => {
             const count = statusCounts[s] ?? 0;
-            const label = s === "All" ? "All" : (STATUS_CONFIG[s]?.label ?? s);
+            const label = s === "All" ? "All" : (STATUS_LABELS[s] ?? s);
             const isActive = activeFilter === s;
             return (
               <button
                 key={s}
                 onClick={() => setActiveFilter(s)}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold font-mono uppercase tracking-wider transition-all ${
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-[2px] font-graphik text-[12px] font-bold uppercase tracking-widest transition-all ${
                   isActive
-                    ? "bg-primary text-white shadow-lg shadow-primary/20"
-                    : "bg-surface border border-border text-foreground/60 hover:border-primary/40 hover:text-primary"
+                    ? "bg-ink-black text-pure-white"
+                    : "bg-pure-white border border-ash text-smoke hover:border-ink-black hover:text-ink-black"
                 }`}
               >
                 {label}
-                <span className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-bold ${
-                  isActive ? "bg-white/20 text-white" : "bg-background text-foreground/50"
+                <span className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-[2px] font-graphik text-[10px] font-bold ${
+                  isActive ? "bg-pure-white/20 text-pure-white" : "bg-ash/50 text-ink-black"
                 }`}>
                   {count}
                 </span>
@@ -186,50 +178,47 @@ export default function DeliveryManagementPage() {
         </div>
 
         {/* Deliveries Table */}
-        <div className="rounded-2xl border border-border bg-surface shadow-sm premium-card overflow-hidden">
+        <div className="rounded-[4px] border border-ash bg-pure-white shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-background/50 font-mono text-xs uppercase text-foreground/50 border-b border-border">
+            <table className="w-full text-left">
+              <thead className="bg-ash/30 font-graphik text-[12px] uppercase tracking-widest text-smoke border-b border-ash">
                 <tr>
-                  <th className="px-6 py-4 font-bold tracking-wider">Order</th>
-                  <th className="px-6 py-4 font-bold tracking-wider">Customer</th>
-                  <th className="px-6 py-4 font-bold tracking-wider">Amount</th>
-                  <th className="px-6 py-4 font-bold tracking-wider">Agent</th>
-                  <th className="px-6 py-4 font-bold tracking-wider">Status</th>
+                  <th className="px-6 py-4 font-bold">Order</th>
+                  <th className="px-6 py-4 font-bold">Customer</th>
+                  <th className="px-6 py-4 font-bold">Amount</th>
+                  <th className="px-6 py-4 font-bold">Agent</th>
+                  <th className="px-6 py-4 font-bold">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/50">
+              <tbody className="divide-y divide-ash">
                 {filteredOrders.length === 0 ? (
                   <tr>
                     <td colSpan={5} className="px-6 py-16 text-center">
-                      <div className="flex flex-col items-center gap-3 text-foreground/40">
-                        <BsTruck size={32} />
-                        <p className="font-mono text-xs uppercase tracking-widest">No deliveries found</p>
+                      <div className="flex flex-col items-center gap-3 text-smoke">
+                        <span className="material-symbols-outlined text-[32px]">local_shipping</span>
+                        <p className="font-graphik text-[12px] uppercase tracking-widest">No deliveries found</p>
                       </div>
                     </td>
                   </tr>
                 ) : (
                   filteredOrders.map((o: any) => {
-                    const config = STATUS_CONFIG[o.status];
                     return (
-                      <tr key={o.orderId} className="hover:bg-background/50 transition-colors">
-                        <td className="px-6 py-4 font-mono text-xs text-foreground/50">#{o.orderId}</td>
-                        <td className="px-6 py-4 font-medium text-foreground">{o.customerName}</td>
-                        <td className="px-6 py-4 font-bold text-foreground">₹{o.totalAmount.toLocaleString()}</td>
+                      <tr key={o.orderId} className="hover:bg-cream-paper transition-colors">
+                        <td className="px-6 py-4 font-graphik text-[12px] text-smoke">#{o.orderId}</td>
+                        <td className="px-6 py-4 font-graphik font-bold text-[14px] text-ink-black">{o.customerName}</td>
+                        <td className="px-6 py-4 font-graphik font-bold text-[14px] text-ink-black">₹{o.totalAmount.toLocaleString()}</td>
                         <td className="px-6 py-4">
                           {o.deliveryAgentName === "Not Assigned" ? (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold font-mono uppercase tracking-widest bg-amber-500/10 text-amber-600 border border-amber-500/20">
-                              <BsHourglass size={10} /> Unassigned
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] text-[10px] font-graphik font-bold uppercase tracking-widest bg-ash/10 text-smoke border border-ash">
+                              <span className="material-symbols-outlined text-[14px]">hourglass_empty</span> Unassigned
                             </span>
                           ) : (
-                            <span className="font-medium text-foreground">{o.deliveryAgentName}</span>
+                            <span className="font-graphik font-bold text-[14px] text-ink-black">{o.deliveryAgentName}</span>
                           )}
                         </td>
                         <td className="px-6 py-4">
-                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold font-mono uppercase tracking-widest border ${
-                            config?.classes || 'bg-surface border-border text-foreground/70'
-                          }`}>
-                            {config?.label ?? o.status}
+                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] text-[10px] font-graphik font-bold uppercase tracking-widest border border-ash bg-ash/30 text-ink-black`}>
+                            {STATUS_LABELS[o.status] ?? o.status}
                           </span>
                         </td>
                       </tr>

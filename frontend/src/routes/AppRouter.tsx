@@ -33,6 +33,7 @@ import SupportPage from "../pages/Support/SupportPage";
 import AdminSupportTicketPage from "../pages/Admin/AdminSupportTicketPage";
 import SupportTicketPage from "../pages/Support/SupportTicketPage";
 import WishlistPage from "../pages/Wishlist/WishlistPage";
+import AdminMarketingPage from "../pages/Admin/AdminMarketingPage";
 
 export default function AppRouter() {
   return (
@@ -65,6 +66,15 @@ export default function AppRouter() {
           element={
             <ProtectedAdminRoute>
               <AdminDashboardPage />
+            </ProtectedAdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/marketing"
+          element={
+            <ProtectedAdminRoute>
+              <AdminMarketingPage />
             </ProtectedAdminRoute>
           }
         />

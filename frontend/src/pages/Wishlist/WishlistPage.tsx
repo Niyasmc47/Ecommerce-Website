@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Link } from "react-router-dom";
 import MainLayout from "../../components/layouts/MainLayout";
 import { useWishlist } from "../../contexts/WishlistContext";
@@ -55,11 +55,11 @@ export default function WishlistPage() {
                   name: item.productName,
                   imageUrl: item.imageUrl,
                   price: item.price,
-                  compareAtPrice: item.compareAtPrice,
+                  compareAtPrice: item.compareAtPrice ?? undefined,
                   brand: item.brand,
                   stock: item.stock,
-                  categoryId: 0, // Not used in this context
-                  categoryName: "Category"
+                  categoryId: 0,
+                  description: "Wishlist item"
                 }}
               />
             ))}

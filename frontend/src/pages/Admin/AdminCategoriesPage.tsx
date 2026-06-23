@@ -8,7 +8,8 @@ import {
 } from "../../services/categoryService";
 import type { Category } from "../../types/category";
 import toast from "react-hot-toast";
-import { BsSearch, BsPencil, BsTrash, BsPlusLg } from "react-icons/bs";
+import { Input } from "../../components/inputs/Input";
+import { Button } from "../../components/buttons/Button";
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -83,21 +84,15 @@ export default function AdminCategoriesPage() {
 
   function startEdit(category: Category) {
     setEditingCategory(category);
-
     setName(category.name);
-
     setImageUrl(category.imageUrl);
-
     setIconName(category.iconName || "category");
   }
 
   function cancelEdit() {
     setEditingCategory(null);
-
     setName("");
-
     setImageUrl("");
-
     setIconName("category");
   }
 
@@ -106,257 +101,171 @@ export default function AdminCategoriesPage() {
   );
 
   return (
-  <AdminLayout>
-    <div className="py-10">
-      <div className="mb-10">
-        <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
-          Categories
-        </h1>
+    <AdminLayout>
+      <div className="py-8">
+        <div className="mb-12 border-b border-ash pb-6">
+          <span className="inline-block text-[12px] font-graphik font-bold uppercase tracking-[0.1em] text-ink-black mb-2">
+            Catalog
+          </span>
+          <h1 className="text-[32px] font-nantes text-ink-black tracking-normal">
+            Categories
+          </h1>
+        </div>
 
-        <p className="text-foreground/50 font-mono mt-2 uppercase tracking-widest text-sm">
-          Manage your store categories
-        </p>
-      </div>
+        <div className="grid lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-4">
+            <div className="rounded-[4px] border border-ash bg-pure-white p-8 shadow-sm sticky top-28">
+              <h2 className="mb-6 text-[20px] font-nantes text-ink-black border-b border-ash pb-4">
+                {editingCategory ? "Edit Category" : "Create Category"}
+              </h2>
 
-      <div className="grid lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-4">
-          <div className="rounded-3xl border border-border bg-surface p-6 premium-card shadow-sm sticky top-28">
-            <h2 className="mb-6 text-xl font-bold border-b border-border/50 pb-4">
-              {editingCategory
-                ? "Edit Category"
-                : "Create Category"}
-            </h2>
+              <div className="space-y-6">
+                <div>
+                  <label className="block font-graphik text-[12px] font-bold uppercase tracking-widest text-ink-black mb-2">
+                    Category Name
+                  </label>
+                  <Input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="e.g. Laptops"
+                  />
+                </div>
 
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-foreground/50 mb-2">
-                  Category Name
-                </label>
+                <div>
+                  <label className="block font-graphik text-[12px] font-bold uppercase tracking-widest text-ink-black mb-2">
+                    Image URL
+                  </label>
+                  <Input
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    placeholder="https://..."
+                  />
+                </div>
 
-                <input
-                  value={name}
-                  onChange={(e) =>
-                    setName(e.target.value)
-                  }
-                  placeholder="e.g. Laptops"
-                  className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
-                />
-              </div>
+                <div>
+                  <label className="block font-graphik text-[12px] font-bold uppercase tracking-widest text-ink-black mb-2">
+                    Material Icon Name
+                  </label>
+                  <Input
+                    value={iconName}
+                    onChange={(e) => setIconName(e.target.value)}
+                    placeholder="laptop"
+                  />
+                  <p className="mt-2 font-graphik text-[12px] text-smoke">
+                    Examples: laptop, desktop_windows, monitor, memory, developer_board, keyboard
+                  </p>
+                </div>
 
-              <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-foreground/50 mb-2">
-                  Category Image URL
-                </label>
-
-                <input
-                  value={imageUrl}
-                  onChange={(e) =>
-                    setImageUrl(
-                      e.target.value
-                    )
-                  }
-                  placeholder="https://..."
-                  className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-foreground/50 mb-2">
-                  Material Icon Name
-                </label>
-
-                <input
-                  value={iconName}
-                  onChange={(e) =>
-                    setIconName(
-                      e.target.value
-                    )
-                  }
-                  placeholder="laptop"
-                  className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
-                />
-
-                <p className="mt-2 text-xs text-foreground/50">
-                  Examples:
-                  laptop,
-                  desktop_windows,
-                  monitor,
-                  memory,
-                  developer_board,
-                  keyboard
-                </p>
-              </div>
-
-              <div className="pt-4 flex gap-3">
-                <button
-                  onClick={
-                    editingCategory
-                      ? handleUpdate
-                      : handleCreate
-                  }
-                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-bold text-white transition-all hover:bg-primary/90 shadow-lg shadow-primary/20"
-                >
-                  {editingCategory ? (
-                    <BsPencil size={14} />
-                  ) : (
-                    <BsPlusLg size={14} />
-                  )}
-
-                  {editingCategory
-                    ? "Save Changes"
-                    : "Create Category"}
-                </button>
-
-                {editingCategory && (
-                  <button
-                    onClick={cancelEdit}
-                    className="px-4 py-3 rounded-xl border border-border font-bold hover:bg-background transition-colors"
+                <div className="pt-4 flex gap-3">
+                  <Button
+                    onClick={editingCategory ? handleUpdate : handleCreate}
+                    className="flex-1 flex justify-center items-center gap-2"
                   >
-                    Cancel
-                  </button>
-                )}
+                    {editingCategory ? (
+                      <><span className="material-symbols-outlined text-[16px]">edit</span> Save Changes</>
+                    ) : (
+                      <><span className="material-symbols-outlined text-[16px]">add</span> Create Category</>
+                    )}
+                  </Button>
+
+                  {editingCategory && (
+                    <Button variant="outline" onClick={cancelEdit}>
+                      Cancel
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {/* List Section */}
-<div className="lg:col-span-8 space-y-6">
-  <div className="relative">
-    <BsSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40" />
 
-    <input
-      type="text"
-      placeholder="Search categories..."
-      value={search}
-      onChange={(e) =>
-        setSearch(e.target.value)
-      }
-      className="w-full rounded-2xl border border-border bg-surface pl-11 pr-4 py-4 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all premium-card shadow-sm"
-    />
-  </div>
+          {/* List Section */}
+          <div className="lg:col-span-8 space-y-6">
+            <div className="mb-8">
+              <Input
+                type="text"
+                placeholder="Search categories..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                icon={<span className="material-symbols-outlined text-smoke text-[20px]">search</span>}
+              />
+            </div>
 
-  {loading ? (
-    <div className="flex h-64 items-center justify-center border border-border rounded-3xl bg-surface premium-card">
-      <div className="flex flex-col items-center gap-4">
-        <div className="h-8 w-8 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
-
-        <span className="font-mono text-xs uppercase tracking-widest text-primary animate-pulse">
-          Loading Categories...
-        </span>
-      </div>
-    </div>
-  ) : (
-    <div className="rounded-3xl border border-border bg-surface premium-card shadow-sm overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm text-left">
-          <thead className="bg-background/50 font-mono text-xs uppercase text-foreground/50 border-b border-border">
-            <tr>
-              <th className="px-6 py-4 font-bold tracking-wider w-16">
-                ID
-              </th>
-
-              <th className="px-6 py-4 font-bold tracking-wider">
-                Image
-              </th>
-
-              <th className="px-6 py-4 font-bold tracking-wider">
-                Icon
-              </th>
-
-              <th className="px-6 py-4 font-bold tracking-wider">
-                Category
-              </th>
-
-              <th className="px-6 py-4 font-bold tracking-wider text-right">
-                Actions
-              </th>
-            </tr>
-          </thead>
-
-          <tbody className="divide-y divide-border/50">
-            {filteredCategories.map(
-              (category) => (
-                <tr
-                  key={category.id}
-                  className="hover:bg-background/50 transition-colors"
-                >
-                  <td className="px-6 py-4 font-mono text-xs text-foreground/50">
-                    #{category.id}
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <div className="h-12 w-12 rounded-xl bg-background border border-border overflow-hidden">
-                      <img
-                        src={
-                          category.imageUrl
-                        }
-                        alt={
-                          category.name
-                        }
-                        className="h-full w-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.style.display =
-                            "none";
-                        }}
-                      />
-                    </div>
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <span className="material-symbols-outlined">
-                      {
-                        category.iconName
-                      }
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-4 font-bold text-foreground">
-                    {category.name}
-                  </td>
-
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={() =>
-                          startEdit(
-                            category
-                          )
-                        }
-                        className="inline-flex items-center justify-center p-2 rounded-lg bg-surface border border-border text-foreground hover:border-primary hover:text-primary transition-all"
-                        title="Edit"
-                      >
-                        <BsPencil
-                          size={14}
-                        />
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          handleDelete(
-                            category.id
-                          )
-                        }
-                        className="inline-flex items-center justify-center p-2 rounded-lg bg-surface border border-border text-foreground hover:border-danger hover:text-danger hover:bg-danger/10 transition-all"
-                        title="Delete"
-                      >
-                        <BsTrash
-                          size={14}
-                        />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              )
+            {loading ? (
+              <div className="flex h-64 items-center justify-center border border-ash rounded-[4px] bg-pure-white">
+                <div className="flex flex-col items-center gap-4 text-smoke">
+                  <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
+                  <span className="font-graphik text-[12px] uppercase tracking-widest animate-pulse">
+                    Loading Categories...
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-[4px] border border-ash bg-pure-white shadow-sm overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead className="bg-ash/30 font-graphik text-[12px] uppercase tracking-widest text-smoke border-b border-ash">
+                      <tr>
+                        <th className="px-6 py-4 font-bold w-16">ID</th>
+                        <th className="px-6 py-4 font-bold">Icon</th>
+                        <th className="px-6 py-4 font-bold">Category</th>
+                        <th className="px-6 py-4 font-bold text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-ash">
+                      {filteredCategories.map((category) => (
+                        <tr
+                          key={category.id}
+                          className="hover:bg-cream-paper transition-colors"
+                        >
+                          <td className="px-6 py-4 font-graphik text-[12px] text-smoke">
+                            #{category.id}
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className="material-symbols-outlined text-ink-black">
+                              {category.iconName}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 font-graphik font-bold text-[14px] text-ink-black">
+                            {category.name}
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => startEdit(category)}
+                                className="p-1.5 rounded-[4px] text-smoke hover:text-ink-black hover:bg-ash/30 transition-all"
+                                title="Edit"
+                              >
+                                <span className="material-symbols-outlined text-[20px]">edit</span>
+                              </button>
+                              <button
+                                onClick={() => handleDelete(category.id)}
+                                className="p-1.5 rounded-[4px] text-smoke hover:text-charcoal hover:bg-ash/30 transition-all"
+                                title="Delete"
+                              >
+                                <span className="material-symbols-outlined text-[20px]">delete</span>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                      {filteredCategories.length === 0 && (
+                        <tr>
+                          <td
+                            colSpan={4}
+                            className="px-6 py-12 text-center font-graphik text-[14px] text-smoke"
+                          >
+                            No categories found.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             )}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
-    </div>
-  )}
-</div>
-      </div>
-    </div>
-  </AdminLayout>
-);
+    </AdminLayout>
+  );
 }
-

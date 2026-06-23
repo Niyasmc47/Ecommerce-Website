@@ -6,15 +6,11 @@ import {
   createProduct,
   updateProduct,
 } from "../../services/productService";
+import { getCategories } from "../../services/categoryService";
 import toast from "react-hot-toast";
 import type { Product } from "../../types/product";
-import {
-  BsSearch,
-  BsFilter,
-  BsDownload,
-  BsChevronLeft,
-  BsChevronRight,
-} from "react-icons/bs";
+import { Input } from "../../components/inputs/Input";
+import { Button } from "../../components/buttons/Button";
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -38,18 +34,29 @@ export default function AdminProductsPage() {
     [products],
   );
 
+  const [categories, setCategories] = useState<Record<number, string>>({});
+
   useEffect(() => {
-    async function loadProducts() {
+    async function loadData() {
       try {
-        const data = await getProducts({ page: 1, pageSize: 100 });
-        setProducts(data);
+        const [productsData, categoriesData] = await Promise.all([
+          getProducts({ page: 1, pageSize: 100 }),
+          getCategories()
+        ]);
+        setProducts(productsData);
+        
+        const categoryMap: Record<number, string> = {};
+        categoriesData.forEach(c => {
+          categoryMap[c.id] = c.name;
+        });
+        setCategories(categoryMap);
       } catch {
-        toast.error("Failed to fetch products");
+        toast.error("Failed to fetch data");
       } finally {
         setLoading(false);
       }
     }
-    loadProducts();
+    loadData();
   }, []);
 
   async function handleCreate(data: any) {
@@ -81,32 +88,19 @@ export default function AdminProductsPage() {
     <AdminLayout>
       {/* Top Navigation Bar */}
       <div className="flex items-center justify-between mb-8">
-        <div className="relative w-96">
-          <BsSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/50" />
-          <input
+        <div className="w-96">
+          <Input
             type="text"
-            placeholder="Search products, SKUs, or categor..."
+            placeholder="Search products, SKUs..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-full border border-border bg-surface pl-11 pr-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+            icon={<span className="material-symbols-outlined text-smoke text-[20px]">search</span>}
           />
         </div>
-        {/* <div className="flex items-center gap-6 text-foreground/70">
-            <button className="hover:text-foreground transition-colors"><BsBell size={20} /></button>
-            <button className="hover:text-foreground transition-colors"><BsEnvelope size={20} /></button>
-            <div className="flex items-center gap-3 border-l border-border pl-6">
-               <img src="https://ui-avatars.com/api/?name=Alex+Rivera&background=random" alt="Admin" className="w-8 h-8 rounded-full border border-border" />
-               <div className="hidden md:block">
-                  <p className="text-sm font-bold text-foreground">Alex Rivera</p>
-                  <p className="text-[10px] font-mono uppercase tracking-widest">Senior Admin</p>
-               </div>
-            </div>
-         </div> */}
       </div>
 
       {showCreateForm || editingProduct ? (
-        <div className="mb-10 rounded-3xl border border-primary/30 bg-surface/80 backdrop-blur-xl p-8 premium-card shadow-2xl relative z-20 cyber-glow">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[50px] pointer-events-none"></div>
+        <div className="mb-10 rounded-[4px] border border-ash bg-pure-white p-8 relative z-20 shadow-sm">
           <div className="relative z-10">
             {editingProduct ? (
               <ProductForm
@@ -127,105 +121,81 @@ export default function AdminProductsPage() {
       ) : (
         <>
           {/* Header & Actions */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-ash pb-6">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight text-foreground">
-                Product Inventory
+              <span className="inline-block text-[12px] font-graphik font-bold uppercase tracking-[0.1em] text-ink-black mb-2">
+                Inventory
+              </span>
+              <h1 className="text-[32px] font-nantes text-ink-black tracking-normal">
+                Product Catalog
               </h1>
-              <p className="text-foreground/60 text-sm mt-1">
-                Manage your catalog, stock levels, and technical specifications.
-              </p>
             </div>
             <div className="flex gap-3">
-              <button className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-bold transition-all hover:bg-background">
-                <BsFilter /> Filters
-              </button>
-              <button className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-bold transition-all hover:bg-background">
-                <BsDownload /> Export
-              </button>
+              <Button variant="outline" className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-[18px]">filter_list</span> Filters
+              </Button>
+              <Button variant="outline" className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-[18px]">download</span> Export
+              </Button>
             </div>
           </div>
 
           {/* KPI Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-surface border border-border rounded-xl p-6 shadow-sm">
-              <p className="text-xs font-mono font-bold uppercase tracking-widest text-foreground/50 mb-2">
+            <div className="bg-pure-white border border-ash rounded-[4px] p-6 shadow-sm hover:border-ink-black transition-colors">
+              <p className="font-graphik text-[12px] font-bold uppercase tracking-widest text-smoke mb-2">
                 Total Products
               </p>
-              <h2 className="text-4xl font-bold">
+              <h2 className="font-nantes text-[36px] text-ink-black">
                 {products.length.toLocaleString()}
               </h2>
-              <p className="text-xs text-primary font-bold mt-2">
-                ↗ +12% from last month
-              </p>
             </div>
-            <div className="bg-surface border border-border rounded-xl p-6 shadow-sm">
-              <p className="text-xs font-mono font-bold uppercase tracking-widest text-secondary mb-2">
+            <div className="bg-pure-white border border-ash rounded-[4px] p-6 shadow-sm hover:border-ink-black transition-colors">
+              <p className="font-graphik text-[12px] font-bold uppercase tracking-widest text-smoke mb-2">
                 Low Stock Alert
               </p>
-              <h2 className="text-4xl font-bold">{lowStockCount}</h2>
-              <p className="text-xs text-secondary font-bold mt-2">
-                ! Action required
-              </p>
+              <h2 className="font-nantes text-[36px] text-ink-black">{lowStockCount}</h2>
             </div>
-            <div className="bg-surface border border-border rounded-xl p-6 shadow-sm relative overflow-hidden">
-              <p className="text-xs font-mono font-bold uppercase tracking-widest text-foreground/50 mb-2">
+            <div className="bg-pure-white border border-ash rounded-[4px] p-6 shadow-sm hover:border-ink-black transition-colors">
+              <p className="font-graphik text-[12px] font-bold uppercase tracking-widest text-smoke mb-2">
                 Revenue Forecast
               </p>
-              <h2 className="text-4xl font-bold">
+              <h2 className="font-nantes text-[36px] text-ink-black">
                 ₹
                 {revenueForecast.toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                 })}
               </h2>
-              {/* Decorative Chart Bars */}
-              <div className="absolute right-6 bottom-6 flex items-end gap-1 opacity-20">
-                <div className="w-2 bg-foreground h-4 rounded-t-sm"></div>
-                <div className="w-2 bg-foreground h-8 rounded-t-sm"></div>
-                <div className="w-2 bg-foreground h-6 rounded-t-sm"></div>
-                <div className="w-2 bg-foreground h-10 rounded-t-sm"></div>
-                <div className="w-2 bg-foreground h-12 rounded-t-sm"></div>
-              </div>
             </div>
           </div>
 
           {loading ? (
-            <div className="flex h-64 items-center justify-center border border-border rounded-2xl bg-surface premium-card">
-              <div className="flex flex-col items-center gap-4">
-                <div className="h-8 w-8 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
-                <span className="font-mono text-xs uppercase tracking-widest text-primary animate-pulse">
-                  Loading Products...
+            <div className="flex h-64 items-center justify-center border border-ash rounded-[4px] bg-pure-white">
+              <div className="flex flex-col items-center gap-4 text-smoke">
+                <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
+                <span className="font-graphik text-[12px] uppercase tracking-widest animate-pulse">
+                  Loading Catalog
                 </span>
               </div>
             </div>
           ) : (
-            <div className="rounded-xl border border-border bg-surface shadow-sm overflow-hidden mb-8">
+            <div className="rounded-[4px] border border-ash bg-pure-white shadow-sm overflow-hidden mb-8">
               <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-background/50 font-mono text-xs uppercase text-foreground/50 border-b border-border">
+                <table className="w-full text-left">
+                  <thead className="bg-ash/30 font-graphik text-[12px] uppercase tracking-widest text-smoke border-b border-ash">
                     <tr>
-                      <th className="px-6 py-4 font-bold tracking-wider">
-                        Product
-                      </th>
-                      <th className="px-6 py-4 font-bold tracking-wider">
-                        Category
-                      </th>
-                      <th className="px-6 py-4 font-bold tracking-wider">
-                        Price
-                      </th>
-                      <th className="px-6 py-4 font-bold tracking-wider">
-                        Stock Status
-                      </th>
-                      <th className="px-6 py-4 font-bold tracking-wider text-right">
-                        Actions
-                      </th>
+                      <th className="px-6 py-4 font-bold">Product</th>
+                      <th className="px-6 py-4 font-bold">Category</th>
+                      <th className="px-6 py-4 font-bold">Price</th>
+                      <th className="px-6 py-4 font-bold">Stock Status</th>
+                      <th className="px-6 py-4 font-bold text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-border/50">
+                  <tbody className="divide-y divide-ash">
                     {filteredProducts.map((product) => (
                       <tr
                         key={product.id}
-                        className="hover:bg-background/50 transition-colors cursor-pointer"
+                        className="hover:bg-cream-paper transition-colors cursor-pointer"
                         onClick={() => {
                           setEditingProduct(product);
                           window.scrollTo({ top: 0, behavior: "smooth" });
@@ -233,36 +203,32 @@ export default function AdminProductsPage() {
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 rounded-md bg-background border border-border overflow-hidden shrink-0">
+                            <div className="h-12 w-12 rounded-[2px] bg-cream-paper border border-ash overflow-hidden shrink-0">
                               <img
                                 src={product.imageUrl}
                                 alt={product.name}
-                                className="h-full w-full object-cover"
+                                className="h-full w-full object-cover mix-blend-multiply"
                                 onError={(e) => {
                                   e.currentTarget.style.display = "none";
                                 }}
                               />
                             </div>
                             <div>
-                              <p className="font-bold text-foreground">
+                              <p className="font-graphik font-bold text-[14px] text-ink-black">
                                 {product.name}
                               </p>
-                              <p className="text-xs text-foreground/50 mt-0.5">
+                              <p className="text-[12px] font-graphik text-smoke mt-0.5">
                                 SKU: {product.sku || "N/A"}
                               </p>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <span className="inline-flex border border-border/50 bg-background/50 px-2 py-1 rounded text-xs text-foreground/70">
-                            {product.categoryId === 1
-                              ? "Electronics"
-                              : product.categoryId === 2
-                                ? "Footwear"
-                                : "Accessories"}
+                          <span className="inline-flex border border-ash bg-ash/30 px-2 py-1 rounded-[2px] font-graphik text-[10px] font-bold uppercase tracking-widest text-ink-black">
+                            {categories[product.categoryId] || "Uncategorized"}
                           </span>
                         </td>
-                        <td className="px-6 py-4 font-mono">
+                        <td className="px-6 py-4 font-graphik font-bold text-[14px] text-ink-black">
                           ₹
                           {product.price.toLocaleString(undefined, {
                             minimumFractionDigits: 2,
@@ -273,13 +239,13 @@ export default function AdminProductsPage() {
                             <span
                               className={`h-2 w-2 rounded-full ${
                                 product.stock > 10
-                                  ? "bg-primary"
+                                  ? "bg-ink-black"
                                   : product.stock > 0
-                                    ? "bg-secondary"
-                                    : "bg-danger"
+                                    ? "bg-smoke"
+                                    : "bg-charcoal"
                               }`}
                             ></span>
-                            <span className="text-sm">
+                            <span className="font-graphik text-[14px] text-ink-black">
                               {product.stock > 10
                                 ? `In Stock (${product.stock})`
                                 : product.stock > 0
@@ -289,8 +255,8 @@ export default function AdminProductsPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <button className="text-foreground/40 hover:text-foreground transition-colors p-2">
-                            ...
+                          <button className="text-smoke hover:text-ink-black transition-colors p-2">
+                            <span className="material-symbols-outlined">more_horiz</span>
                           </button>
                         </td>
                       </tr>
@@ -300,26 +266,26 @@ export default function AdminProductsPage() {
               </div>
 
               {/* Pagination Bar */}
-              <div className="border-t border-border bg-background/30 px-6 py-4 flex items-center justify-between">
-                <p className="text-sm text-foreground/60">
+              <div className="border-t border-ash bg-pure-white px-6 py-4 flex items-center justify-between">
+                <p className="font-graphik text-[14px] text-smoke">
                   Showing 1 to {Math.min(filteredProducts.length, 10)} of{" "}
                   {filteredProducts.length.toLocaleString()} products
                 </p>
                 <div className="flex gap-1">
-                  <button className="w-8 h-8 flex items-center justify-center rounded-md border border-border bg-surface text-foreground hover:bg-background transition-colors">
-                    <BsChevronLeft size={12} />
+                  <button className="w-8 h-8 flex items-center justify-center rounded-[4px] border border-ash bg-pure-white text-ink-black hover:bg-ash/30 transition-colors">
+                    <span className="material-symbols-outlined text-[16px]">chevron_left</span>
                   </button>
-                  <button className="w-8 h-8 flex items-center justify-center rounded-md bg-primary text-white font-bold transition-colors">
+                  <button className="w-8 h-8 flex items-center justify-center rounded-[4px] bg-ink-black text-pure-white font-graphik font-bold transition-colors">
                     1
                   </button>
-                  <button className="w-8 h-8 flex items-center justify-center rounded-md border border-transparent hover:bg-surface text-foreground transition-colors">
+                  <button className="w-8 h-8 flex items-center justify-center rounded-[4px] border border-transparent hover:bg-ash/30 text-ink-black font-graphik transition-colors">
                     2
                   </button>
-                  <button className="w-8 h-8 flex items-center justify-center rounded-md border border-transparent hover:bg-surface text-foreground transition-colors">
+                  <button className="w-8 h-8 flex items-center justify-center rounded-[4px] border border-transparent hover:bg-ash/30 text-ink-black font-graphik transition-colors">
                     3
                   </button>
-                  <button className="w-8 h-8 flex items-center justify-center rounded-md border border-border bg-surface text-foreground hover:bg-background transition-colors">
-                    <BsChevronRight size={12} />
+                  <button className="w-8 h-8 flex items-center justify-center rounded-[4px] border border-ash bg-pure-white text-ink-black hover:bg-ash/30 transition-colors">
+                    <span className="material-symbols-outlined text-[16px]">chevron_right</span>
                   </button>
                 </div>
               </div>

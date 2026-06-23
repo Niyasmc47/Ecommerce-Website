@@ -5,7 +5,7 @@ import Container from "../../components/common/Container";
 
 import { getCart } from "../../services/cartService";
 import type { CartItem } from "../../types/cartItem";
-import { BsCartX, BsShieldCheck } from "react-icons/bs";
+import { Button } from "../../components/buttons/Button";
 
 export default function CartPage() {
   const navigate = useNavigate();
@@ -32,74 +32,74 @@ export default function CartPage() {
 
   return (
     <MainLayout>
-      <div className="bg-background min-h-[90vh]">
-        <Container>
-          <div className="py-20">
-            <div className="mb-12 border-b border-border pb-8">
-              <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-mono font-bold uppercase tracking-widest text-primary mb-4 cyber-glow">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-                Shopping Cart
+      <div className="bg-cream-paper min-h-screen">
+        <Container className="max-w-[1280px]">
+          <div className="py-12 md:py-20">
+            <div className="mb-12 border-b border-ash pb-8">
+              <span className="inline-block text-[12px] font-graphik font-bold uppercase tracking-[0.1em] text-ink-black mb-4">
+                Your Selection
               </span>
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
-                Command Center Cart
+              <h1 className="font-nantes text-display text-ink-black tracking-normal leading-[1.23] mb-4">
+                Shopping Cart
               </h1>
-              <p className="mt-4 text-lg text-foreground/60 leading-relaxed max-w-2xl">
-                Review your selected products before checkout.
+              <div className="h-[3px] w-12 bg-butter-highlight mb-4"></div>
+              <p className="max-w-2xl text-body text-smoke font-graphik">
+                Review your items before proceeding to checkout.
               </p>
             </div>
 
             {loading ? (
               <div className="flex h-64 items-center justify-center">
-                 <div className="flex flex-col items-center gap-4">
-                    <div className="h-10 w-10 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
-                    <span className="font-mono text-xs uppercase tracking-widest text-primary animate-pulse">Loading Inventory...</span>
+                 <div className="flex flex-col items-center gap-4 text-smoke">
+                    <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
+                    <span className="font-graphik text-[12px] uppercase tracking-widest animate-pulse">Loading Selection</span>
                  </div>
               </div>
             ) : items.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-80 text-foreground/40 border-2 border-dashed border-border rounded-3xl bg-surface/50">
-                 <BsCartX size={48} className="mb-6 opacity-50" />
-                 <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
-                 <p className="font-mono text-sm uppercase tracking-widest">Add products to start shopping.</p>
-                 <button 
+              <div className="flex flex-col items-center justify-center h-80 text-smoke border border-dashed border-ash rounded-[4px] bg-pure-white/50">
+                 <span className="material-symbols-outlined text-4xl mb-6">shopping_bag</span>
+                 <h2 className="text-[24px] font-nantes text-ink-black mb-2">Your cart is empty</h2>
+                 <p className="font-graphik text-[14px] uppercase tracking-widest text-smoke">Add products to start shopping.</p>
+                 <Button 
+                   variant="outline"
                    onClick={() => navigate('/products')}
-                   className="mt-8 px-6 py-3 bg-surface border border-border rounded-xl font-bold text-foreground hover:border-primary hover:text-primary transition-all"
+                   className="mt-8"
                  >
-                    Browse Products
-                 </button>
+                    Browse Catalog
+                 </Button>
               </div>
             ) : (
               <div className="grid gap-12 lg:grid-cols-12 items-start">
                 {/* Cart Items */}
                 <div className="lg:col-span-8 space-y-6">
-                  <div className="flex items-center justify-between pb-4 border-b border-border/50 text-xs font-mono font-bold uppercase tracking-wider text-foreground/50">
+                  <div className="flex items-center justify-between pb-4 border-b border-ash text-[12px] font-graphik font-bold uppercase tracking-widest text-smoke">
                      <span>Product</span>
-                     <span>Authorization Value</span>
+                     <span>Total</span>
                   </div>
                   {items.map((item) => (
                     <div
                       key={item.id}
-                      className="group flex flex-col sm:flex-row items-center gap-6 rounded-2xl bg-surface p-6 border border-border shadow-sm hover:border-primary/30 transition-all premium-card"
+                      className="group flex flex-col sm:flex-row items-center gap-6 rounded-[4px] bg-pure-white p-6 border border-ash transition-all hover:border-ink-black"
                     >
-                      <div className="h-24 w-24 bg-background rounded-xl border border-border/50 flex items-center justify-center p-2">
+                      <div className="h-24 w-24 bg-pure-white flex items-center justify-center p-2">
                         {item.imageUrl ? (
-                          <img src={item.imageUrl} alt={item.productName} className="h-full w-full object-contain" />
+                          <img src={item.imageUrl} alt={item.productName} className="h-full w-full object-contain mix-blend-multiply" />
                         ) : (
-                          <div className="font-mono text-xs text-foreground/20">IMG_N/A</div>
+                          <div className="font-graphik text-[12px] text-smoke">IMG_N/A</div>
                         )}
                       </div>
                       
                       <div className="flex-1 flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4">
                         <div>
-                          <h3 className="text-xl font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
+                          <h3 className="text-[18px] font-nantes text-ink-black mb-2 group-hover:text-smoke transition-colors">
                             {item.productName}
                           </h3>
-                          <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-foreground/50">
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary/50"></span>
+                          <div className="inline-flex items-center gap-2 text-[12px] font-graphik uppercase tracking-widest text-smoke">
                             Qty: {item.quantity}
                           </div>
                         </div>
 
-                        <div className="text-2xl font-black text-foreground">
+                        <div className="text-[20px] font-graphik font-bold text-ink-black">
                           ₹{item.totalPrice.toLocaleString()}
                         </div>
                       </div>
@@ -109,37 +109,36 @@ export default function CartPage() {
 
                 {/* Order Summary */}
                 <div className="lg:col-span-4 sticky top-28">
-                  <div className="rounded-3xl bg-card-bg border border-card-border p-8 shadow-2xl premium-card relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary"></div>
-                    
-                    <h2 className="text-2xl font-extrabold text-foreground mb-6 pb-6 border-b border-border/50">
+                  <div className="rounded-[4px] bg-pure-white border border-ash p-8 relative overflow-hidden">
+                    <h2 className="text-[24px] font-nantes text-ink-black mb-6 pb-6 border-b border-ash">
                       Order Summary
                     </h2>
 
                     <div className="space-y-4 mb-8">
-                       <div className="flex justify-between text-foreground/70 text-sm">
+                       <div className="flex justify-between text-smoke text-[14px] font-graphik">
                           <span>Subtotal</span>
-                          <span className="font-mono">₹{total.toLocaleString()}</span>
+                          <span className="font-bold text-ink-black">₹{total.toLocaleString()}</span>
                        </div>
-                       <div className="flex justify-between text-foreground/70 text-sm">
-                          <span>Processing Fee</span>
-                          <span className="font-mono">₹0</span>
+                       <div className="flex justify-between text-smoke text-[14px] font-graphik">
+                          <span>Shipping</span>
+                          <span className="font-bold text-ink-black">Calculated at checkout</span>
                        </div>
-                       <div className="flex justify-between items-center text-foreground mt-4 pt-4 border-t border-border/50">
-                          <span className="font-bold">Total</span>
-                          <span className="text-3xl font-black text-primary">₹{total.toLocaleString()}</span>
+                       <div className="flex justify-between items-center text-ink-black mt-4 pt-4 border-t border-ash">
+                          <span className="font-graphik font-bold">Total</span>
+                          <span className="text-[28px] font-nantes">₹{total.toLocaleString()}</span>
                        </div>
                     </div>
 
-                    <button
+                    <Button
                       onClick={handleCheckout}
-                      className="w-full relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-xl bg-primary px-8 py-4 font-bold text-white shadow-lg shadow-primary/25 transition-all hover:scale-105 hover:shadow-primary/40 cyber-glow-hover mb-4"
+                      className="w-full justify-center mb-6 py-4"
+                      size="lg"
                     >
-                      Checkout
-                    </button>
+                      Proceed to Checkout
+                    </Button>
                     
-                    <div className="flex items-center justify-center gap-2 text-xs text-foreground/40 font-mono">
-                       <BsShieldCheck /> Secure 256-bit Encryption
+                    <div className="flex items-center justify-center gap-2 text-[12px] text-smoke font-graphik uppercase tracking-widest">
+                       <span className="material-symbols-outlined text-[16px]">lock</span> Secure Encryption
                     </div>
                   </div>
                 </div>

@@ -9,8 +9,6 @@ import {
   rejectReturn,
 } from "../../services/returnService";
 
-import { BsArrowRepeat, BsCheck2Circle, BsXCircle, BsHourglass, BsBox, BsExclamationTriangle } from "react-icons/bs";
-
 interface ReturnRequest {
   id: number;
   orderId: number;
@@ -24,12 +22,6 @@ interface ReturnRequest {
 }
 
 const STATUS_TABS = ["All", "Pending", "Approved", "Rejected"] as const;
-
-const STATUS_BADGE: Record<string, { label: string; classes: string; icon: React.ReactNode }> = {
-  Pending:  { label: "Pending",  classes: "bg-amber-500/10 text-amber-600 border-amber-500/20",     icon: <BsHourglass size={10} /> },
-  Approved: { label: "Approved", classes: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20", icon: <BsCheck2Circle size={10} /> },
-  Rejected: { label: "Rejected", classes: "bg-rose-500/10 text-rose-600 border-rose-500/20",         icon: <BsXCircle size={10} /> },
-};
 
 export default function AdminReturnsPage() {
   const [requests, setRequests] = useState<ReturnRequest[]>([]);
@@ -95,9 +87,9 @@ export default function AdminReturnsPage() {
     return (
       <AdminLayout>
         <div className="flex h-[60vh] items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="h-10 w-10 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
-            <span className="font-mono text-xs uppercase tracking-widest text-primary animate-pulse">Loading Returns...</span>
+          <div className="flex flex-col items-center gap-4 text-smoke">
+            <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
+            <span className="font-graphik text-[12px] uppercase tracking-widest animate-pulse">Loading Returns...</span>
           </div>
         </div>
       </AdminLayout>
@@ -106,31 +98,31 @@ export default function AdminReturnsPage() {
 
   return (
     <AdminLayout>
-      <div className="py-10">
+      <div className="py-8">
         {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
+        <div className="mb-12 border-b border-ash pb-6">
+          <span className="inline-block text-[12px] font-graphik font-bold uppercase tracking-[0.1em] text-ink-black mb-2">
+            Operations
+          </span>
+          <h1 className="text-[32px] font-nantes text-ink-black tracking-normal">
             Return Requests
           </h1>
-          <p className="text-foreground/50 font-mono mt-2 uppercase tracking-widest text-sm">
-            Review & manage product returns
-          </p>
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
           {[
-            { label: "Total", count: counts.All, icon: <BsArrowRepeat size={18} />, color: "text-primary" },
-            { label: "Pending", count: counts.Pending, icon: <BsHourglass size={18} />, color: "text-amber-500" },
-            { label: "Approved", count: counts.Approved, icon: <BsCheck2Circle size={18} />, color: "text-emerald-500" },
-            { label: "Rejected", count: counts.Rejected, icon: <BsXCircle size={18} />, color: "text-rose-500" },
+            { label: "Total", count: counts.All, icon: "sync" },
+            { label: "Pending", count: counts.Pending, icon: "hourglass_empty" },
+            { label: "Approved", count: counts.Approved, icon: "check_circle" },
+            { label: "Rejected", count: counts.Rejected, icon: "cancel" },
           ].map((card) => (
-            <div key={card.label} className="rounded-2xl border border-border bg-surface p-5 premium-card shadow-sm">
-              <div className="flex items-center justify-between mb-3">
-                <span className={`${card.color}`}>{card.icon}</span>
-                <span className="text-3xl font-black text-foreground tracking-tighter">{card.count}</span>
+            <div key={card.label} className="rounded-[4px] border border-ash bg-pure-white p-6 shadow-sm hover:border-ink-black transition-colors">
+              <div className="flex items-center justify-between mb-4">
+                <span className="material-symbols-outlined text-ink-black text-[24px]">{card.icon}</span>
+                <span className="font-nantes text-[32px] text-ink-black">{card.count}</span>
               </div>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-foreground/50">{card.label}</p>
+              <p className="font-graphik text-[12px] font-bold uppercase tracking-widest text-smoke">{card.label}</p>
             </div>
           ))}
         </div>
@@ -143,15 +135,15 @@ export default function AdminReturnsPage() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold font-mono uppercase tracking-wider transition-all ${
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-[2px] font-graphik text-[12px] font-bold uppercase tracking-widest transition-all ${
                   isActive
-                    ? "bg-primary text-white shadow-lg shadow-primary/20"
-                    : "bg-surface border border-border text-foreground/60 hover:border-primary/40 hover:text-primary"
+                    ? "bg-ink-black text-pure-white"
+                    : "bg-pure-white border border-ash text-smoke hover:border-ink-black hover:text-ink-black"
                 }`}
               >
                 {tab}
-                <span className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-bold ${
-                  isActive ? "bg-white/20 text-white" : "bg-background text-foreground/50"
+                <span className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-[2px] font-graphik text-[10px] font-bold ${
+                  isActive ? "bg-pure-white/20 text-pure-white" : "bg-ash/50 text-ink-black"
                 }`}>
                   {counts[tab as keyof typeof counts]}
                 </span>
@@ -161,62 +153,66 @@ export default function AdminReturnsPage() {
         </div>
 
         {/* Table */}
-        <div className="rounded-2xl border border-border bg-surface shadow-sm premium-card overflow-hidden">
+        <div className="rounded-[4px] border border-ash bg-pure-white shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-background/50 font-mono text-xs uppercase text-foreground/50 border-b border-border">
+            <table className="w-full text-left">
+              <thead className="bg-ash/30 font-graphik text-[12px] uppercase tracking-widest text-smoke border-b border-ash">
                 <tr>
-                  <th className="px-6 py-4 font-bold tracking-wider">ID</th>
-                  <th className="px-6 py-4 font-bold tracking-wider">Customer</th>
-                  <th className="px-6 py-4 font-bold tracking-wider">Order</th>
-                  <th className="px-6 py-4 font-bold tracking-wider">Product</th>
-                  <th className="px-6 py-4 font-bold tracking-wider">Reason</th>
-                  <th className="px-6 py-4 font-bold tracking-wider">Status</th>
-                  <th className="px-6 py-4 font-bold tracking-wider">Date</th>
-                  <th className="px-6 py-4 font-bold tracking-wider text-right">Actions</th>
+                  <th className="px-6 py-4 font-bold">ID</th>
+                  <th className="px-6 py-4 font-bold">Customer</th>
+                  <th className="px-6 py-4 font-bold">Order</th>
+                  <th className="px-6 py-4 font-bold">Product</th>
+                  <th className="px-6 py-4 font-bold">Reason</th>
+                  <th className="px-6 py-4 font-bold">Status</th>
+                  <th className="px-6 py-4 font-bold">Date</th>
+                  <th className="px-6 py-4 font-bold text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/50">
+              <tbody className="divide-y divide-ash">
                 {filteredRequests.length === 0 ? (
                   <tr>
                     <td colSpan={8} className="px-6 py-16 text-center">
-                      <div className="flex flex-col items-center gap-3 text-foreground/40">
-                        <BsBox size={32} />
-                        <p className="font-mono text-xs uppercase tracking-widest">No return requests found</p>
+                      <div className="flex flex-col items-center gap-3 text-smoke">
+                        <span className="material-symbols-outlined text-[32px]">sync</span>
+                        <p className="font-graphik text-[12px] uppercase tracking-widest">No return requests found</p>
                       </div>
                     </td>
                   </tr>
                 ) : (
                   filteredRequests.map((request) => {
-                    const badge = STATUS_BADGE[request.status];
                     const isProcessing = processingId === request.id;
                     return (
-                      <tr key={request.id} className="hover:bg-background/50 transition-colors">
-                        <td className="px-6 py-4 font-mono text-xs text-foreground/50">#{request.id}</td>
-                        <td className="px-6 py-4 font-medium text-foreground">{request.customerName}</td>
-                        <td className="px-6 py-4 font-mono text-xs text-foreground/70">#{request.orderId}</td>
-                        <td className="px-6 py-4 text-foreground">
-                          <div className="max-w-[180px] truncate" title={request.productName}>{request.productName}</div>
+                      <tr key={request.id} className="hover:bg-cream-paper transition-colors">
+                        <td className="px-6 py-4 font-graphik text-[12px] text-smoke">#{request.id}</td>
+                        <td className="px-6 py-4 font-graphik font-bold text-[14px] text-ink-black">{request.customerName}</td>
+                        <td className="px-6 py-4 font-graphik text-[12px] text-smoke">#{request.orderId}</td>
+                        <td className="px-6 py-4">
+                          <div className="max-w-[180px] truncate font-graphik font-bold text-[14px] text-ink-black" title={request.productName}>{request.productName}</div>
                         </td>
-                        <td className="px-6 py-4 text-foreground/70">
+                        <td className="px-6 py-4 font-graphik text-[14px] text-smoke">
                           <div className="max-w-[200px] truncate" title={request.reason}>{request.reason}</div>
                         </td>
                         <td className="px-6 py-4">
-                          {badge ? (
-                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold font-mono uppercase tracking-widest border ${badge.classes}`}>
-                              {badge.icon}
-                              {badge.label}
+                          {request.status === "Pending" && (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] text-[10px] font-graphik font-bold uppercase tracking-widest bg-ash/10 text-smoke border border-ash">
+                              <span className="material-symbols-outlined text-[14px]">hourglass_empty</span> Pending
                             </span>
-                          ) : (
-                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold font-mono uppercase tracking-widest bg-surface border border-border text-foreground/70">
-                              {request.status}
+                          )}
+                          {request.status === "Approved" && (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] text-[10px] font-graphik font-bold uppercase tracking-widest bg-ink-black text-pure-white border border-ink-black">
+                              <span className="material-symbols-outlined text-[14px]">check_circle</span> Approved
+                            </span>
+                          )}
+                          {request.status === "Rejected" && (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] text-[10px] font-graphik font-bold uppercase tracking-widest bg-ash/30 text-ink-black border border-ash">
+                              <span className="material-symbols-outlined text-[14px]">cancel</span> Rejected
                             </span>
                           )}
                         </td>
-                        <td className="px-6 py-4 text-foreground/70 text-xs">
+                        <td className="px-6 py-4 font-graphik text-[12px] text-smoke">
                           <div>{new Date(request.requestedAt).toLocaleDateString()}</div>
                           {request.processedAt && (
-                            <div className="text-foreground/40 mt-0.5">
+                            <div className="text-smoke/70 mt-0.5">
                               Processed: {new Date(request.processedAt).toLocaleDateString()}
                             </div>
                           )}
@@ -227,22 +223,20 @@ export default function AdminReturnsPage() {
                               <button
                                 onClick={() => handleApprove(request.id)}
                                 disabled={isProcessing}
-                                className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-600 transition hover:bg-emerald-500 hover:text-white disabled:opacity-50"
+                                className="inline-flex items-center gap-1.5 rounded-[4px] border border-ink-black bg-ink-black text-pure-white px-3 py-1.5 text-[12px] font-graphik font-bold transition hover:bg-charcoal disabled:opacity-50"
                               >
-                                <BsCheck2Circle size={12} />
                                 {isProcessing ? "..." : "Approve"}
                               </button>
                               <button
                                 onClick={() => handleReject(request.id)}
                                 disabled={isProcessing}
-                                className="inline-flex items-center gap-1.5 rounded-lg bg-rose-500/10 px-3 py-2 text-xs font-bold text-rose-600 transition hover:bg-rose-500 hover:text-white disabled:opacity-50"
+                                className="inline-flex items-center gap-1.5 rounded-[4px] border border-ash bg-pure-white text-ink-black px-3 py-1.5 text-[12px] font-graphik font-bold transition hover:bg-ash/30 disabled:opacity-50"
                               >
-                                <BsXCircle size={12} />
                                 {isProcessing ? "..." : "Reject"}
                               </button>
                             </div>
                           ) : (
-                            <span className="text-xs text-foreground/30 font-mono uppercase tracking-widest">
+                            <span className="font-graphik text-[10px] font-bold uppercase tracking-widest text-smoke">
                               {request.status === "Approved" ? "Completed" : "Closed"}
                             </span>
                           )}

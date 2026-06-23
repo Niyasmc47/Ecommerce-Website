@@ -9,7 +9,8 @@ import {
 } from "../../services/sellerService";
 import toast from "react-hot-toast";
 import type { Product } from "../../types/product";
-import { BsSearch, BsTrash } from "react-icons/bs";
+import { Input } from "../../components/inputs/Input";
+import { Button } from "../../components/buttons/Button";
 
 export default function SellerProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -74,9 +75,8 @@ export default function SellerProductsPage() {
   return (
     <SellerLayout>
       {showCreateForm || editingProduct ? (
-        <div className="py-10">
-          <div className="mb-10 rounded-3xl border border-primary/30 bg-surface/80 backdrop-blur-xl p-8 premium-card shadow-2xl relative z-20">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[50px] pointer-events-none"></div>
+        <div className="py-8">
+          <div className="mb-10 rounded-[4px] border border-ash bg-pure-white p-8 relative z-20 shadow-sm">
             <div className="relative z-10">
               {editingProduct ? (
                 <ProductForm
@@ -96,94 +96,92 @@ export default function SellerProductsPage() {
           </div>
         </div>
       ) : (
-        <div className="py-10">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        <div className="py-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-ash pb-6">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight text-foreground">
+              <span className="inline-block text-[12px] font-graphik font-bold uppercase tracking-[0.1em] text-ink-black mb-2">
+                Inventory
+              </span>
+              <h1 className="text-[32px] font-nantes text-ink-black tracking-normal">
                 Your Products
               </h1>
-              <p className="text-foreground/60 text-sm mt-1">
-                Manage your product catalog
-              </p>
             </div>
-            <button
+            <Button
               onClick={() => setShowCreateForm(true)}
-              className="inline-flex items-center justify-center rounded-lg bg-primary hover:opacity-90 text-white px-6 py-3 text-sm font-bold transition-all"
             >
-              + Add Product
-            </button>
+              Add Product
+            </Button>
           </div>
 
-          <div className="relative mb-8">
-            <BsSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40" />
-            <input
+          <div className="mb-8">
+            <Input
               type="text"
               placeholder="Search your products..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-2xl border border-border bg-surface pl-11 pr-4 py-4 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all premium-card shadow-sm"
+              icon={<span className="material-symbols-outlined text-smoke text-[20px]">search</span>}
             />
           </div>
 
           {loading ? (
-            <div className="flex h-64 items-center justify-center border border-border rounded-2xl bg-surface">
-              <div className="flex flex-col items-center gap-4">
-                <div className="h-8 w-8 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
-                <span className="font-mono text-xs uppercase tracking-widest text-primary animate-pulse">
-                  Loading Products...
+            <div className="flex h-64 items-center justify-center border border-ash rounded-[4px] bg-pure-white">
+              <div className="flex flex-col items-center gap-4 text-smoke">
+                <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
+                <span className="font-graphik text-[12px] uppercase tracking-widest animate-pulse">
+                  Loading Products
                 </span>
               </div>
             </div>
           ) : (
-            <div className="rounded-xl border border-border bg-surface shadow-sm overflow-hidden">
+            <div className="rounded-[4px] border border-ash bg-pure-white shadow-sm overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-background/50 font-mono text-xs uppercase text-foreground/50 border-b border-border">
+                <table className="w-full text-left">
+                  <thead className="bg-ash/30 font-graphik text-[12px] uppercase tracking-widest text-smoke border-b border-ash">
                     <tr>
-                      <th className="px-6 py-4 font-bold tracking-wider">
+                      <th className="px-6 py-4 font-bold">
                         Product
                       </th>
-                      <th className="px-6 py-4 font-bold tracking-wider">
+                      <th className="px-6 py-4 font-bold">
                         Price
                       </th>
-                      <th className="px-6 py-4 font-bold tracking-wider">
+                      <th className="px-6 py-4 font-bold">
                         Stock
                       </th>
-                      <th className="px-6 py-4 font-bold tracking-wider text-right">
+                      <th className="px-6 py-4 font-bold text-right">
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-border/50">
+                  <tbody className="divide-y divide-ash">
                     {filteredProducts.map((product) => (
                       <tr
                         key={product.id}
-                        className="hover:bg-background/50 transition-colors"
+                        className="hover:bg-cream-paper transition-colors"
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 rounded-md bg-background border border-border overflow-hidden shrink-0">
+                            <div className="h-12 w-12 rounded-[2px] bg-cream-paper border border-ash overflow-hidden shrink-0">
                               <img
                                 src={product.imageUrl || "https://placehold.co/150x150?text=No+Image"}
                                 alt={product.name}
-                                className="h-full w-full object-cover"
+                                className="h-full w-full object-cover mix-blend-multiply"
                                 onError={(e) => {
-                                  e.currentTarget.onerror = null; // Prevent infinite loop
+                                  e.currentTarget.onerror = null;
                                   e.currentTarget.src = "https://placehold.co/150x150?text=Error";
                                 }}
                               />
                             </div>
                             <div>
-                              <p className="font-bold text-foreground">
+                              <p className="font-graphik font-bold text-[14px] text-ink-black">
                                 {product.name}
                               </p>
-                              <p className="text-xs text-foreground/50 mt-0.5">
+                              <p className="font-graphik text-[12px] text-smoke mt-0.5">
                                 SKU: {product.sku || "N/A"}
                               </p>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 font-mono">
+                        <td className="px-6 py-4 font-graphik font-bold text-[14px] text-ink-black">
                           ₹
                           {product.price.toLocaleString(undefined, {
                             minimumFractionDigits: 2,
@@ -194,13 +192,13 @@ export default function SellerProductsPage() {
                             <span
                               className={`h-2 w-2 rounded-full ${
                                 product.stock > 10
-                                  ? "bg-primary"
+                                  ? "bg-ink-black"
                                   : product.stock > 0
-                                    ? "bg-secondary"
-                                    : "bg-error"
+                                    ? "bg-smoke"
+                                    : "bg-charcoal"
                               }`}
                             ></span>
-                            <span className="text-sm">{product.stock}</span>
+                            <span className="font-graphik text-[14px] text-ink-black">{product.stock}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4 text-right">
@@ -213,15 +211,15 @@ export default function SellerProductsPage() {
                                   behavior: "smooth",
                                 });
                               }}
-                              className="px-3 py-1.5 rounded-lg border border-border bg-surface text-xs font-bold hover:bg-background transition-all"
+                              className="px-3 py-1.5 rounded-[4px] border border-ash bg-pure-white text-[12px] font-graphik font-bold hover:bg-ash/30 transition-all text-ink-black"
                             >
                               Edit
                             </button>
                             <button
                               onClick={() => handleDelete(product.id)}
-                              className="p-1.5 rounded-lg text-error/70 hover:text-error hover:bg-error/10 transition-all"
+                              className="p-1.5 rounded-[4px] text-smoke hover:text-charcoal hover:bg-ash/30 transition-all"
                             >
-                              <BsTrash size={14} />
+                              <span className="material-symbols-outlined text-[20px]">delete</span>
                             </button>
                           </div>
                         </td>
@@ -231,7 +229,7 @@ export default function SellerProductsPage() {
                       <tr>
                         <td
                           colSpan={4}
-                          className="px-6 py-12 text-center text-foreground/40"
+                          className="px-6 py-12 text-center font-graphik text-[14px] text-smoke"
                         >
                           No products yet. Create your first listing!
                         </td>

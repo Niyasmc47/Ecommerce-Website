@@ -7,13 +7,12 @@ import {
 } from "../../services/deliveryService";
 
 import toast from "react-hot-toast";
-import { BsTruck, BsCheck2Circle, BsPlay, BsShieldLock, BsBox, BsPerson, BsTelephone, BsGeoAlt } from "react-icons/bs";
+import { Input } from "../../components/inputs/Input";
+import { Button } from "../../components/buttons/Button";
 
-const STATUS_CONFIG: Record<string, { label: string; classes: string; icon: React.ReactNode }> = {
-  Assigned:       { label: "Assigned",         classes: "bg-blue-500/10 text-blue-600 border-blue-500/20",       icon: <BsPerson size={10} /> },
-  OutForDelivery: { label: "Out for Delivery", classes: "bg-violet-500/10 text-violet-600 border-violet-500/20", icon: <BsTruck size={10} /> },
-  Delivered:      { label: "Delivered",        classes: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20", icon: <BsCheck2Circle size={10} /> },
-  Cancelled:      { label: "Cancelled",        classes: "bg-red-500/10 text-red-600 border-red-500/20", icon: <BsBox size={10} /> },
+const STATUS_LABELS: Record<string, string> = {
+  OutForDelivery: "Out for Delivery",
+  ReturnRequested: "Return Requested",
 };
 
 interface DeliveryOrder {
@@ -61,42 +60,42 @@ export default function DeliveryPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
-          <span className="font-mono text-xs uppercase tracking-widest text-primary animate-pulse">Loading Deliveries...</span>
+      <div className="min-h-screen bg-cream-paper flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4 text-smoke">
+          <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
+          <span className="font-graphik text-[12px] uppercase tracking-widest animate-pulse">Loading Deliveries...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto px-6 py-10">
+    <div className="min-h-screen bg-cream-paper">
+      <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
+        <div className="mb-12 border-b border-ash pb-6">
+          <span className="inline-block text-[12px] font-graphik font-bold uppercase tracking-[0.1em] text-ink-black mb-2">
+            Field Operations
+          </span>
+          <h1 className="text-[32px] font-nantes text-ink-black tracking-normal">
             Delivery Dashboard
           </h1>
-          <p className="text-foreground/50 font-mono mt-2 uppercase tracking-widest text-sm">
-            Your assigned deliveries
-          </p>
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           {[
-            { label: "Total", count: orders.length, icon: <BsBox size={18} />, color: "text-primary" },
-            { label: "To Start", count: statusCounts["Assigned"] ?? 0, icon: <BsPlay size={18} />, color: "text-blue-500" },
-            { label: "In Transit", count: statusCounts["OutForDelivery"] ?? 0, icon: <BsTruck size={18} />, color: "text-violet-500" },
-            { label: "Completed", count: statusCounts["Delivered"] ?? 0, icon: <BsCheck2Circle size={18} />, color: "text-emerald-500" },
+            { label: "Total", count: orders.length, icon: "inventory_2" },
+            { label: "To Start", count: statusCounts["Assigned"] ?? 0, icon: "play_circle" },
+            { label: "In Transit", count: statusCounts["OutForDelivery"] ?? 0, icon: "local_shipping" },
+            { label: "Completed", count: statusCounts["Delivered"] ?? 0, icon: "check_circle" },
           ].map((card) => (
-            <div key={card.label} className="rounded-2xl border border-border bg-surface p-5 premium-card shadow-sm">
-              <div className="flex items-center justify-between mb-3">
-                <span className={card.color}>{card.icon}</span>
-                <span className="text-3xl font-black text-foreground tracking-tighter">{card.count}</span>
+            <div key={card.label} className="rounded-[4px] border border-ash bg-pure-white p-6 shadow-sm hover:border-ink-black transition-colors">
+              <div className="flex items-center justify-between mb-4">
+                <span className="material-symbols-outlined text-ink-black text-[24px]">{card.icon}</span>
+                <span className="font-nantes text-[32px] text-ink-black">{card.count}</span>
               </div>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-foreground/50">{card.label}</p>
+              <p className="font-graphik text-[12px] font-bold uppercase tracking-widest text-smoke">{card.label}</p>
             </div>
           ))}
         </div>
@@ -105,20 +104,20 @@ export default function DeliveryPage() {
         <div className="flex flex-wrap gap-2 mb-8">
           {filterTabs.map((tab) => {
             const isActive = activeFilter === tab;
-            const label = tab === "All" ? "All" : (STATUS_CONFIG[tab]?.label ?? tab);
+            const label = tab === "All" ? "All" : (STATUS_LABELS[tab] ?? tab);
             return (
               <button
                 key={tab}
                 onClick={() => setActiveFilter(tab)}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold font-mono uppercase tracking-wider transition-all ${
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-[2px] font-graphik text-[12px] font-bold uppercase tracking-widest transition-all ${
                   isActive
-                    ? "bg-primary text-white shadow-lg shadow-primary/20"
-                    : "bg-surface border border-border text-foreground/60 hover:border-primary/40 hover:text-primary"
+                    ? "bg-ink-black text-pure-white"
+                    : "bg-pure-white border border-ash text-smoke hover:border-ink-black hover:text-ink-black"
                 }`}
               >
                 {label}
-                <span className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-bold ${
-                  isActive ? "bg-white/20 text-white" : "bg-background text-foreground/50"
+                <span className={`inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-[2px] font-graphik text-[10px] font-bold ${
+                  isActive ? "bg-pure-white/20 text-pure-white" : "bg-ash/50 text-ink-black"
                 }`}>
                   {statusCounts[tab] ?? 0}
                 </span>
@@ -129,69 +128,65 @@ export default function DeliveryPage() {
 
         {/* Orders Grid */}
         {filteredOrders.length === 0 ? (
-          <div className="rounded-2xl border-2 border-dashed border-border p-16 flex flex-col items-center gap-4 text-foreground/40">
-            <BsTruck size={40} />
-            <p className="font-mono text-xs uppercase tracking-widest">No deliveries found</p>
+          <div className="rounded-[4px] border border-dashed border-ash p-16 flex flex-col items-center gap-4 text-smoke bg-pure-white/50">
+            <span className="material-symbols-outlined text-[40px]">local_shipping</span>
+            <p className="font-graphik text-[12px] uppercase tracking-widest font-bold">No deliveries found</p>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-8">
             {filteredOrders.map((order) => {
-              const config = STATUS_CONFIG[order.status];
               const isProcessing = processingId === order.orderId;
               return (
                 <div
                   key={order.orderId}
-                  className="rounded-2xl border border-border bg-surface premium-card shadow-sm overflow-hidden"
+                  className="rounded-[4px] border border-ash bg-pure-white shadow-sm overflow-hidden flex flex-col"
                 >
                   {/* Card Header */}
-                  <div className="p-5 border-b border-border/50 flex items-center justify-between">
+                  <div className="p-6 border-b border-ash flex items-start justify-between bg-ash/10">
                     <div>
-                      <h2 className="text-lg font-bold text-foreground">Order #{order.orderId}</h2>
-                      <p className="text-xs font-mono text-foreground/50 mt-0.5">₹{order.totalAmount.toLocaleString()}</p>
+                      <h2 className="text-[20px] font-nantes text-ink-black mb-1">Order #{order.orderId}</h2>
+                      <p className="text-[14px] font-graphik font-bold text-ink-black">₹{order.totalAmount.toLocaleString()}</p>
                     </div>
-                    {config && (
-                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold font-mono uppercase tracking-widest border ${config.classes}`}>
-                        {config.icon}
-                        {config.label}
-                      </span>
-                    )}
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] text-[10px] font-graphik font-bold uppercase tracking-widest border border-ash bg-pure-white text-ink-black">
+                      {STATUS_LABELS[order.status] ?? order.status}
+                    </span>
                   </div>
 
                   {/* Card Body */}
-                  <div className="p-5 space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-background rounded-lg border border-border text-foreground/50">
-                        <BsPerson size={14} />
+                  <div className="p-6 space-y-6 flex-1">
+                    <div className="flex gap-4">
+                      <div className="w-10 h-10 bg-cream-paper rounded-[2px] border border-ash flex items-center justify-center text-smoke shrink-0">
+                        <span className="material-symbols-outlined text-[20px]">person</span>
                       </div>
                       <div>
-                        <p className="text-xs text-foreground/40 font-mono uppercase tracking-widest">Customer</p>
-                        <p className="font-bold text-foreground text-sm">{order.customerName}</p>
+                        <p className="text-[10px] text-smoke font-graphik font-bold uppercase tracking-widest mb-1">Customer</p>
+                        <p className="font-bold text-ink-black font-graphik text-[14px]">{order.customerName}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-background rounded-lg border border-border text-foreground/50">
-                        <BsTelephone size={14} />
+                    <div className="flex gap-4">
+                      <div className="w-10 h-10 bg-cream-paper rounded-[2px] border border-ash flex items-center justify-center text-smoke shrink-0">
+                        <span className="material-symbols-outlined text-[20px]">call</span>
                       </div>
                       <div>
-                        <p className="text-xs text-foreground/40 font-mono uppercase tracking-widest">Phone</p>
-                        <p className="font-bold text-foreground text-sm">{order.phoneNumber}</p>
+                        <p className="text-[10px] text-smoke font-graphik font-bold uppercase tracking-widest mb-1">Phone</p>
+                        <p className="font-bold text-ink-black font-graphik text-[14px]">{order.phoneNumber}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-background rounded-lg border border-border text-foreground/50">
-                        <BsGeoAlt size={14} />
+                    <div className="flex gap-4">
+                      <div className="w-10 h-10 bg-cream-paper rounded-[2px] border border-ash flex items-center justify-center text-smoke shrink-0">
+                        <span className="material-symbols-outlined text-[20px]">location_on</span>
                       </div>
                       <div>
-                        <p className="text-xs text-foreground/40 font-mono uppercase tracking-widest">Address</p>
-                        <p className="font-bold text-foreground text-sm">{order.address}</p>
+                        <p className="text-[10px] text-smoke font-graphik font-bold uppercase tracking-widest mb-1">Address</p>
+                        <p className="font-bold text-ink-black font-graphik text-[14px] leading-relaxed">{order.address}</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Card Actions */}
-                  <div className="p-5 border-t border-border/50 bg-background/30">
+                  <div className="p-6 border-t border-ash bg-cream-paper/50">
                     {order.status === "Assigned" ? (
-                      <button
+                      <Button
                         disabled={isProcessing}
                         onClick={async () => {
                           setProcessingId(order.orderId);
@@ -205,44 +200,50 @@ export default function DeliveryPage() {
                             setProcessingId(null);
                           }
                         }}
-                        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 font-bold text-white transition-all hover:bg-violet-700 disabled:opacity-50 shadow-lg shadow-violet-600/20"
+                        className="w-full flex justify-center items-center gap-2"
                       >
-                        <BsPlay size={16} /> {isProcessing ? "Starting..." : "Start Delivery"}
-                      </button>
+                        <span className="material-symbols-outlined text-[16px]">play_arrow</span> {isProcessing ? "Starting..." : "Start Delivery"}
+                      </Button>
                     ) : order.status === "OutForDelivery" ? (
-                      <div className="space-y-3">
+                      <div className="space-y-4">
                         {selectedOrderId === order.orderId ? (
-                          <div className="flex gap-2">
-                            <input
+                          <div className="flex flex-col gap-3">
+                            <Input
                               type="text"
                               placeholder="Enter OTP"
                               value={otp}
                               onChange={(e) => setOtp(e.target.value)}
-                              className="flex-1 rounded-xl border border-border bg-surface px-4 py-3 text-sm font-mono tracking-widest text-center outline-none focus:border-primary transition-all"
+                              className="text-center tracking-[0.2em]"
                             />
-                            <button
-                              disabled={isProcessing}
-                              onClick={async () => {
-                                setProcessingId(order.orderId);
-                                try {
-                                  await verifyDeliveryOtp(order.orderId, otp);
-                                  toast.success("Delivery confirmed!");
-                                  setOtp("");
-                                  setSelectedOrderId(null);
-                                  await loadOrders();
-                                } catch {
-                                  toast.error("Invalid OTP");
-                                } finally {
-                                  setProcessingId(null);
-                                }
-                              }}
-                              className="rounded-xl bg-emerald-600 px-5 py-3 font-bold text-white transition-all hover:bg-emerald-700 disabled:opacity-50"
-                            >
-                              {isProcessing ? "..." : "Verify"}
-                            </button>
+                            <div className="flex gap-2">
+                               <Button variant="outline" onClick={() => { setSelectedOrderId(null); setOtp(""); }} className="flex-1">
+                                  Cancel
+                               </Button>
+                               <Button
+                                  disabled={isProcessing}
+                                  onClick={async () => {
+                                    setProcessingId(order.orderId);
+                                    try {
+                                      await verifyDeliveryOtp(order.orderId, otp);
+                                      toast.success("Delivery confirmed!");
+                                      setOtp("");
+                                      setSelectedOrderId(null);
+                                      await loadOrders();
+                                    } catch {
+                                      toast.error("Invalid OTP");
+                                    } finally {
+                                      setProcessingId(null);
+                                    }
+                                  }}
+                                  className="flex-1"
+                               >
+                                  {isProcessing ? "..." : "Verify OTP"}
+                               </Button>
+                            </div>
                           </div>
                         ) : (
-                          <button
+                          <Button
+                            variant="outline"
                             disabled={isProcessing}
                             onClick={async () => {
                               setProcessingId(order.orderId);
@@ -256,15 +257,15 @@ export default function DeliveryPage() {
                                 setProcessingId(null);
                               }
                             }}
-                            className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-bold text-white transition-all hover:opacity-90 disabled:opacity-50 shadow-lg shadow-primary/20"
+                            className="w-full flex justify-center items-center gap-2"
                           >
-                            <BsShieldLock size={14} /> {isProcessing ? "Sending..." : "Request OTP & Confirm Delivery"}
-                          </button>
+                            <span className="material-symbols-outlined text-[16px]">lock</span> {isProcessing ? "Sending..." : "Request OTP & Confirm"}
+                          </Button>
                         )}
                       </div>
                     ) : (
-                      <div className="flex items-center justify-center gap-2 py-2 text-emerald-600 font-bold">
-                        <BsCheck2Circle size={18} />
+                      <div className="flex items-center justify-center gap-2 py-3 text-ink-black font-graphik font-bold text-[14px]">
+                        <span className="material-symbols-outlined text-[20px]">check_circle</span>
                         <span>Delivery Completed</span>
                       </div>
                     )}

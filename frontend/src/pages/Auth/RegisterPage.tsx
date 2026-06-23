@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { register } from "../../services/authService";
+import { Button } from "../../components/buttons/Button";
+import { Input } from "../../components/inputs/Input";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -38,130 +40,119 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+    <div className="min-h-screen flex flex-col bg-cream-paper">
       {/* Header - Only visible on mobile/tablet */}
-      <header className="lg:hidden px-8 py-6 flex items-center justify-between bg-white border-b border-slate-200">
-        <Link to="/" className="text-xl font-black text-[#0D47A1] tracking-tight">Velocity.Shop</Link>
+      <header className="lg:hidden px-8 py-6 flex items-center justify-between bg-pure-white border-b border-ash">
+        <Link to="/" className="text-[20px] font-nantes text-ink-black tracking-tight">E-Commerce</Link>
       </header>
 
       <main className="flex-1 flex flex-col lg:flex-row">
-        {/* Left Side - Blue Splash */}
-        <div className="hidden lg:flex flex-col justify-between w-[45%] bg-[#2563EB] text-white p-12 xl:p-20 relative overflow-hidden">
-          {/* Decorative blur */}
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/3"></div>
+        {/* Left Side - Editorial Look */}
+        <div className="hidden lg:flex flex-col justify-between w-[45%] bg-charcoal text-pure-white p-12 xl:p-20 relative overflow-hidden">
           
           <div className="relative z-10">
-            <Link to="/" className="text-2xl font-black tracking-tight text-white hover:opacity-80 transition-opacity">Velocity.Shop</Link>
+            <Link to="/" className="text-[24px] font-nantes text-pure-white hover:text-cream-paper transition-colors">E-Commerce</Link>
           </div>
           
-          <div className="space-y-6 relative z-10">
-            <h1 className="text-4xl xl:text-5xl font-bold leading-tight">Evolve Your Shopping Experience.</h1>
-            <p className="text-blue-100 text-lg max-w-md">
-              Join thousands of smart shoppers who trust Velocity for a seamless, secure, and premium retail journey.
+          <div className="space-y-6 relative z-10 mt-12">
+            <span className="inline-block text-[12px] font-graphik font-bold uppercase tracking-[0.1em] text-cream-paper mb-4 opacity-70">
+              Membership
+            </span>
+            <h1 className="text-[48px] font-nantes leading-[1.2]">Curate Your <br />Lifestyle.</h1>
+            <div className="h-[3px] w-12 bg-butter-highlight mt-6 mb-6"></div>
+            <p className="font-graphik text-[16px] text-cream-paper/80 max-w-md leading-[1.6]">
+              Join our community for access to exclusive collections, priority support, and a seamless retail experience.
             </p>
             
-            <div className="flex flex-col xl:flex-row items-center gap-4 pt-8">
-              <div className="bg-blue-600/50 border border-blue-400/30 p-5 rounded-xl w-full backdrop-blur-sm">
-                <span className="material-symbols-outlined text-2xl mb-2">verified_user</span>
-                <div className="font-bold text-sm">Secure Checkout</div>
+            <div className="flex flex-col xl:flex-row items-center gap-6 pt-12">
+              <div className="border border-pure-white/20 p-6 rounded-[4px] w-full bg-pure-white/5">
+                <span className="material-symbols-outlined text-[24px] mb-3 text-butter-highlight">verified_user</span>
+                <div className="font-graphik font-bold text-[14px]">Secure Account</div>
               </div>
-              <div className="bg-blue-600/50 border border-blue-400/30 p-5 rounded-xl w-full backdrop-blur-sm">
-                <span className="material-symbols-outlined text-2xl mb-2">local_shipping</span>
-                <div className="font-bold text-sm">Global Delivery</div>
+              <div className="border border-pure-white/20 p-6 rounded-[4px] w-full bg-pure-white/5">
+                <span className="material-symbols-outlined text-[24px] mb-3 text-butter-highlight">local_shipping</span>
+                <div className="font-graphik font-bold text-[14px]">Priority Fulfillment</div>
               </div>
             </div>
           </div>
           
-          <div className="text-blue-200 text-sm relative z-10">
-            © 2024 Velocity Premium Retail.
+          <div className="font-graphik text-[12px] uppercase tracking-widest text-pure-white/50 relative z-10 mt-20">
+            © {new Date().getFullYear()} E-Commerce Retail.
           </div>
         </div>
 
         {/* Right Side - Form */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col bg-cream-paper">
           {/* Desktop Header Links */}
-          <div className="hidden lg:flex justify-end items-center gap-8 p-8 text-sm font-medium text-slate-600">
-            <Link to="/products" className="hover:text-slate-900">Catalog</Link>
-            <Link to="/products" className="hover:text-slate-900">Deals</Link>
-            <a href="#" className="hover:text-slate-900">About</a>
-            <span className="material-symbols-outlined text-[20px] cursor-pointer hover:text-slate-900 transition-colors">language</span>
-            <span className="material-symbols-outlined text-[20px] cursor-pointer hover:text-slate-900 transition-colors">help_outline</span>
+          <div className="hidden lg:flex justify-end items-center gap-8 p-8 font-graphik text-[12px] font-bold uppercase tracking-widest text-smoke">
+            <Link to="/products" className="hover:text-ink-black transition-colors">Catalog</Link>
+            <Link to="/products" className="hover:text-ink-black transition-colors">Collections</Link>
+            <span className="material-symbols-outlined text-[20px] cursor-pointer hover:text-ink-black transition-colors">language</span>
+            <span className="material-symbols-outlined text-[20px] cursor-pointer hover:text-ink-black transition-colors">help_outline</span>
           </div>
 
           <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
             <div className="w-full max-w-[460px]">
-              <div className="mb-8">
-                <h2 className="text-3xl font-bold text-slate-900">Create Account</h2>
-                <p className="text-slate-500 mt-2 text-sm">Fill in your details to get started with Velocity.Shop.</p>
+              <div className="mb-10">
+                <h2 className="text-[32px] font-nantes text-ink-black">Create Account</h2>
+                <p className="font-graphik text-[14px] text-smoke mt-2">Set up your profile to continue.</p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Full Name</label>
-                  <div className="relative">
-                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[20px]">person</span>
-                    <input
-                      type="text"
-                      placeholder="John Doe"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 focus:border-[#0D47A1] focus:ring-1 focus:ring-[#0D47A1] outline-none transition-all text-sm bg-slate-50/50"
+                  <label className="block font-graphik text-[12px] font-bold text-ink-black uppercase tracking-widest mb-2">Full Name</label>
+                  <Input
+                    type="text"
+                    placeholder="John Doe"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    icon={<span className="material-symbols-outlined text-[20px] text-smoke">person</span>}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-graphik text-[12px] font-bold text-ink-black uppercase tracking-widest mb-2">Email Address</label>
+                  <Input
+                    type="email"
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    icon={<span className="material-symbols-outlined text-[20px] text-smoke">mail</span>}
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block font-graphik text-[12px] font-bold text-ink-black uppercase tracking-widest mb-2">Password</label>
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      icon={<span className="material-symbols-outlined text-[20px] text-smoke">lock</span>}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-graphik text-[12px] font-bold text-ink-black uppercase tracking-widest mb-2">Confirm Password</label>
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      icon={<span className="material-symbols-outlined text-[20px] text-smoke">lock_reset</span>}
                       required
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Email Address</label>
-                  <div className="relative">
-                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[20px]">mail</span>
-                    <input
-                      type="email"
-                      placeholder="john@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 focus:border-[#0D47A1] focus:ring-1 focus:ring-[#0D47A1] outline-none transition-all text-sm bg-slate-50/50"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
-                    <div className="relative">
-                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[20px]">lock</span>
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 focus:border-[#0D47A1] focus:ring-1 focus:ring-[#0D47A1] outline-none transition-all text-sm tracking-widest bg-slate-50/50"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Confirm Password</label>
-                    <div className="relative">
-                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[20px]">lock_reset</span>
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 focus:border-[#0D47A1] focus:ring-1 focus:ring-[#0D47A1] outline-none transition-all text-sm tracking-widest bg-slate-50/50"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-end mb-2">
+                <div className="flex items-center justify-end">
                    <button 
                      type="button" 
                      onClick={() => setShowPassword(!showPassword)}
-                     className="text-sm text-slate-500 hover:text-slate-700 flex items-center gap-1 transition-colors"
+                     className="font-graphik text-[12px] text-smoke hover:text-ink-black flex items-center gap-1 transition-colors"
                    >
                      <span className="material-symbols-outlined text-[16px]">{showPassword ? 'visibility_off' : 'visibility'}</span>
                      {showPassword ? 'Hide Passwords' : 'Show Passwords'}
@@ -174,36 +165,36 @@ export default function RegisterPage() {
                     id="terms"
                     checked={agreed}
                     onChange={(e) => setAgreed(e.target.checked)}
-                    className="w-4 h-4 mt-0.5 rounded border-slate-300 text-[#0D47A1] focus:ring-[#0D47A1]" 
+                    className="w-4 h-4 mt-0.5 rounded-[4px] border-ash text-ink-black focus:ring-ink-black bg-pure-white" 
                   />
-                  <label htmlFor="terms" className="text-sm text-slate-600 cursor-pointer leading-relaxed">
-                    I agree to the <a href="#" className="text-[#0D47A1] font-bold hover:underline">Terms of Service</a> and <a href="#" className="text-[#0D47A1] font-bold hover:underline">Privacy Policy</a>.
+                  <label htmlFor="terms" className="font-graphik text-[14px] text-smoke cursor-pointer leading-relaxed">
+                    I agree to the <a href="#" className="text-ink-black font-bold hover:underline underline-offset-4">Terms of Service</a> and <a href="#" className="text-ink-black font-bold hover:underline underline-offset-4">Privacy Policy</a>.
                   </label>
                 </div>
 
-                <button
+                <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-[#0D47A1] hover:bg-[#1565C0] text-white py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-70 mt-6 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-95"
+                  className="w-full justify-center mt-8 py-4"
+                  size="lg"
                 >
-                  {loading ? "Signing Up..." : "Sign Up"}
-                  {!loading && <span className="material-symbols-outlined text-[18px]">arrow_forward</span>}
-                </button>
+                  {loading ? "Registering..." : "Create Account"}
+                </Button>
               </form>
 
-              <div className="mt-8 text-center text-sm text-slate-600">
-                Already have an account? <Link to="/login" className="text-[#0D47A1] font-bold hover:underline">Login here</Link>
+              <div className="mt-10 text-center font-graphik text-[14px] text-smoke border-t border-ash pt-8">
+                Already have an account? <Link to="/login" className="text-ink-black font-bold hover:underline underline-offset-4">Sign In</Link>
               </div>
             </div>
           </div>
         </div>
       </main>
 
-      {/* Footer - Only visible on mobile/tablet (Desktop uses left side) */}
-      <footer className="lg:hidden px-8 py-6 border-t border-slate-200 bg-white flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="text-sm text-slate-500 text-center md:text-left">
-          <span className="font-bold text-slate-900 mr-2">Velocity.Shop</span>
-          © 2024 Velocity Premium Retail.
+      {/* Footer - Only visible on mobile/tablet */}
+      <footer className="lg:hidden px-8 py-6 border-t border-ash bg-pure-white flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="font-graphik text-[12px] text-smoke text-center md:text-left uppercase tracking-widest">
+          <span className="font-bold text-ink-black mr-2">E-Commerce</span>
+          © {new Date().getFullYear()} Retail.
         </div>
       </footer>
     </div>

@@ -5,32 +5,20 @@ import {
   BsTags,
   BsReceipt,
   BsPeople,
-  BsGear,
-  BsMoonStars,
-  BsSun,
   BsShop,
   BsTruck,
   BsArrowReturnLeft,
   BsChatDots,
+  BsMegaphone,
 } from "react-icons/bs";
-import { useEffect, useState } from "react";
 
-export default function AdminSidebar() {
+interface AdminSidebarProps {
+  isOpen?: boolean;
+  setIsOpen?: (val: boolean) => void;
+}
+
+export default function AdminSidebar({ isOpen = true, setIsOpen }: AdminSidebarProps) {
   const location = useLocation();
-
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark",
-  );
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [darkMode]);
 
   const mainLinks = [
     { path: "/admin", label: "Analytics", icon: BsGrid },
@@ -41,7 +29,11 @@ export default function AdminSidebar() {
     { path: "/admin/sellers", label: "Sellers", icon: BsShop },
     { path: "/admin/delivery", label: "Deliveries", icon: BsTruck },
     { path: "/admin/support", label: "Support", icon: BsChatDots },
-
+    {
+      path: "/admin/marketing",
+      label: "Marketing",
+      icon: BsMegaphone,
+    },
     {
       path: "/admin/returns",
       label: "Returns",
@@ -50,18 +42,32 @@ export default function AdminSidebar() {
   ];
 
   return (
-    <aside className="w-64 border-r border-border bg-background flex flex-col h-screen sticky top-0">
-      <div className="p-6 pb-8">
-        <h1 className="text-2xl font-bold text-foreground tracking-tight">
-          Velocity.Shop
-        </h1>
+    <aside
+      className={`fixed md:sticky top-0 left-0 h-screen w-64 border-r border-ash bg-pure-white flex flex-col z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0`}
+    >
+      <div className="p-8 pb-8 flex items-center justify-between border-b border-ash">
+        <div>
+          <h1 className="text-[24px] font-nantes text-ink-black tracking-tight">
+            Velocity.Shop
+          </h1>
+          <p className="text-[12px] text-smoke font-graphik uppercase tracking-widest mt-1">
+            Admin Portal
+          </p>
+        </div>
 
-        <p className="text-xs text-foreground/50 font-bold uppercase tracking-widest mt-1">
-          Admin Portal
-        </p>
+        {/* Mobile Close Button */}
+        {setIsOpen && (
+          <button
+            className="md:hidden p-2 hover:bg-ash/30 rounded-[4px]"
+            onClick={() => setIsOpen(false)}
+          >
+            <span className="material-symbols-outlined text-ink-black">close</span>
+          </button>
+        )}
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-4 flex flex-col gap-1">
+      <nav className="flex-1 overflow-y-auto px-4 py-6 flex flex-col gap-2">
         {mainLinks.map((link) => {
           const isActive = location.pathname === link.path;
 
@@ -69,64 +75,45 @@ export default function AdminSidebar() {
             <Link
               key={link.path}
               to={link.path}
-              className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold transition-all ${
-                isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-foreground/70 hover:text-foreground hover:bg-surface"
-              }`}
+              onClick={() => setIsOpen && setIsOpen(false)}
+              className={`flex items-center gap-3 px-4 py-3 text-[14px] font-graphik font-bold transition-all border-r-[3px] ${isActive
+                  ? "bg-ash/30 text-ink-black border-ink-black"
+                  : "text-smoke border-transparent hover:text-ink-black hover:bg-ash/10 hover:border-smoke"
+                }`}
             >
               <link.icon
                 size={18}
-                className={isActive ? "text-primary" : "text-foreground/50"}
+                className={isActive ? "text-ink-black" : "text-smoke"}
               />
-
               {link.label}
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-4 space-y-4">
+      <div className="p-6 space-y-4 border-t border-ash">
         <button
           onClick={() => {
             if (location.pathname !== "/admin/products") {
               window.location.href = "/admin/products";
             } else {
               const btn = document.getElementById("trigger-create-product");
-
               if (btn) btn.click();
             }
           }}
-          className="w-full flex items-center justify-center rounded-lg bg-primary hover:opacity-90 text-white py-3 text-sm font-bold transition-all"
+          className="w-full flex items-center justify-center rounded-[4px] bg-ink-black hover:bg-charcoal text-pure-white py-3 text-[14px] font-graphik font-bold transition-all"
         >
-          Create New Listing
+          Create Listing
         </button>
 
         <div className="space-y-1">
           <Link
             to="/"
-            className="w-full flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold text-foreground/70 hover:text-foreground hover:bg-surface transition-all"
+            className="w-full flex items-center gap-3 px-4 py-3 text-[14px] font-graphik font-bold text-smoke hover:text-ink-black hover:bg-ash/10 transition-all border-r-[3px] border-transparent"
           >
-            <BsShop size={18} className="text-foreground/50" />
+            <BsShop size={18} className="text-smoke" />
             Back to Store
           </Link>
-
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="w-full flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold text-foreground/70 hover:text-foreground hover:bg-surface transition-all"
-          >
-            {darkMode ? (
-              <BsSun size={18} className="text-foreground/50" />
-            ) : (
-              <BsMoonStars size={18} className="text-foreground/50" />
-            )}
-            Toggle Theme
-          </button>
-
-          <button className="w-full flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold text-foreground/70 hover:text-foreground hover:bg-surface transition-all">
-            <BsGear size={18} className="text-foreground/50" />
-            Settings
-          </button>
         </div>
       </div>
     </aside>

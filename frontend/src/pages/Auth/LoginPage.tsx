@@ -4,20 +4,17 @@ import toast from "react-hot-toast";
 import { login, googleLogin } from "../../services/authService";
 import { GoogleLogin } from "@react-oauth/google";
 import { Turnstile } from "react-turnstile";
+import { Button } from "../../components/buttons/Button";
+import { Input } from "../../components/inputs/Input";
 
 export default function LoginPage() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
-
   const [loading, setLoading] = useState(false);
-
   const [rememberMe, setRememberMe] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
-
   const [captchaToken, setCaptchaToken] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
@@ -38,15 +35,11 @@ export default function LoginPage() {
       });
 
       localStorage.setItem("token", response.data.token);
-
       localStorage.setItem("role", response.data.role);
-
       localStorage.setItem("email", response.data.email);
-
       localStorage.setItem("name", response.data.name);
 
       toast.success("Login successful");
-
       navigate("/");
     } catch (err: unknown) {
       const message =
@@ -59,87 +52,69 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
-      <header className="px-8 py-6 flex items-center justify-between bg-white border-b border-slate-200">
+    <div className="min-h-screen flex flex-col bg-cream-paper">
+      <header className="px-8 py-6 flex items-center justify-between bg-pure-white border-b border-ash">
         <Link
           to="/"
-          className="text-xl font-black text-[#0D47A1] tracking-tight"
+          className="text-[20px] font-nantes text-ink-black tracking-tight"
         >
           Velocity.Shop
         </Link>
-
-        <div className="flex items-center gap-4 text-slate-500">
-          <span className="material-symbols-outlined">language</span>
-
-          <span className="material-symbols-outlined">help_outline</span>
+        <div className="flex items-center gap-4 text-smoke">
+          <span className="material-symbols-outlined text-[20px] cursor-pointer hover:text-ink-black transition-colors">language</span>
+          <span className="material-symbols-outlined text-[20px] cursor-pointer hover:text-ink-black transition-colors">help_outline</span>
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center p-6 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-100/50 rounded-full blur-3xl -z-10"></div>
-
-        <div className="w-full max-w-[440px] bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-10 relative z-10">
+      <main className="flex-1 flex items-center justify-center p-6 relative">
+        <div className="w-full max-w-[440px] bg-pure-white rounded-[4px] border border-ash p-8 md:p-10 relative z-10 shadow-sm">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-slate-900">Welcome back</h1>
-
-            <p className="text-slate-500 mt-2 text-sm">
-              Enter your credentials to access your account
+            <h1 className="text-[32px] font-nantes text-ink-black">Welcome Back</h1>
+            <p className="font-graphik text-[14px] text-smoke mt-2">
+              Access your personalized catalog
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block font-graphik text-[12px] font-bold text-ink-black uppercase tracking-widest mb-2">
                 Email Address
               </label>
-
-              <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[20px]">
-                  mail
-                </span>
-
-                <input
-                  type="email"
-                  placeholder="name@company.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 focus:border-[#0D47A1] focus:ring-1 focus:ring-[#0D47A1] outline-none transition-all text-sm bg-slate-50/50"
-                  required
-                />
-              </div>
+              <Input
+                type="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                icon={<span className="material-symbols-outlined text-smoke text-[20px]">mail</span>}
+                required
+              />
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-sm font-medium text-slate-700">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block font-graphik text-[12px] font-bold text-ink-black uppercase tracking-widest">
                   Password
                 </label>
-
                 <Link
                   to="/forgot-password"
-                  className="text-sm text-[#0D47A1] font-medium hover:underline"
+                  className="font-graphik text-[12px] text-smoke hover:text-ink-black hover:underline underline-offset-4 transition-colors"
                 >
                   Forgot Password?
                 </Link>
               </div>
-
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[20px]">
-                  lock
-                </span>
-
-                <input
+                <Input
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-11 py-3 rounded-lg border border-slate-200 focus:border-[#0D47A1] focus:ring-1 focus:ring-[#0D47A1] outline-none transition-all text-sm tracking-widest bg-slate-50/50"
+                  icon={<span className="material-symbols-outlined text-smoke text-[20px]">lock</span>}
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-smoke hover:text-ink-black transition-colors"
                 >
                   <span className="material-symbols-outlined text-[20px]">
                     {showPassword ? "visibility_off" : "visibility"}
@@ -148,41 +123,39 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <input
                 type="checkbox"
                 id="remember"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4"
+                className="w-4 h-4 rounded-[4px] border border-ash text-ink-black focus:ring-ink-black bg-pure-white"
               />
-
-              <label htmlFor="remember" className="text-sm text-slate-600">
+              <label htmlFor="remember" className="font-graphik text-[14px] text-smoke">
                 Remember this device
               </label>
             </div>
 
-            <div className="flex justify-center">
+            <div className="flex justify-center pt-2">
               <Turnstile
                 sitekey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
                 onVerify={(token) => setCaptchaToken(token)}
               />
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={loading || !captchaToken}
-              className="w-full bg-[#0D47A1] text-white py-3.5 rounded-lg font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full justify-center py-4"
+              size="lg"
             >
-              {loading ? "Logging In..." : "Log In"}
-            </button>
+              {loading ? "Authenticating..." : "Sign In"}
+            </Button>
 
-            <div className="my-6 flex items-center">
-              <div className="flex-1 border-t border-slate-200"></div>
-
-              <span className="px-4 text-sm text-slate-500">OR</span>
-
-              <div className="flex-1 border-t border-slate-200"></div>
+            <div className="my-8 flex items-center">
+              <div className="flex-1 border-t border-ash"></div>
+              <span className="px-4 font-graphik text-[12px] uppercase tracking-widest text-smoke">OR</span>
+              <div className="flex-1 border-t border-ash"></div>
             </div>
 
             <div className="flex justify-center">
@@ -194,15 +167,11 @@ export default function LoginPage() {
                     );
 
                     localStorage.setItem("token", response.data.token);
-
                     localStorage.setItem("role", response.data.role);
-
                     localStorage.setItem("email", response.data.email);
-
                     localStorage.setItem("name", response.data.name);
 
                     toast.success("Google login successful");
-
                     navigate("/");
                   } catch {
                     toast.error("Google login failed");
@@ -213,11 +182,11 @@ export default function LoginPage() {
             </div>
           </form>
 
-          <div className="mt-8 text-center text-sm text-slate-600">
+          <div className="mt-8 text-center font-graphik text-[14px] text-smoke">
             Don't have an account?{" "}
             <Link
               to="/register"
-              className="text-[#0D47A1] font-bold hover:underline"
+              className="text-ink-black font-bold hover:underline underline-offset-4"
             >
               Create an account
             </Link>
