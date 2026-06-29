@@ -12,7 +12,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className = '', label, error, helperText, fullWidth = true, containerClassName = '', icon, ...props }, ref) => {
     const baseInputStyles = 'bg-pure-white text-ink-black border border-ash rounded-md px-4 py-2 transition-colors focus:outline-none focus:border-ink-black disabled:opacity-50 disabled:bg-ash/10 font-graphikfix placeholder:text-smoke';
-    const inputClasses = `${baseInputStyles} ${fullWidth ? 'w-full' : ''} ${error ? 'border-[#d32f2f] focus:border-[#d32f2f]' : ''} ${className}`;
+    const inputClasses = `${baseInputStyles} ${fullWidth ? 'w-full' : ''} ${error ? 'border-danger focus:border-danger' : ''} ${className}`;
 
     return (
       <div className={`flex flex-col gap-1 ${fullWidth ? 'w-full' : ''} ${containerClassName}`}>
@@ -33,7 +33,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props} 
           />
         </div>
-        {error && <span className="text-caption text-[#d32f2f]">{error}</span>}
+        {error && <span className="text-caption text-danger">{error}</span>}
         {!error && helperText && <span className="text-caption text-smoke">{helperText}</span>}
       </div>
     );

@@ -110,11 +110,11 @@ export default function HomePage() {
       {/* Full Bleed Hero Section */}
       <section className="relative w-full h-[600px] bg-cream-paper flex items-center overflow-hidden">
         {/* Placeholder image that looks like a lifestyle catalog photo */}
-        <div className="absolute inset-0 bg-[#e6e2dd]">
+        <div className="absolute inset-0 bg-ash/30">
            <img 
              src="https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?q=80&w=2070&auto=format&fit=crop" 
              alt="Lifestyle workspace" 
-             className="w-full h-full object-cover opacity-80 mix-blend-multiply"
+             className="w-full h-full object-cover opacity-80 mix-blend-multiply dark:mix-blend-overlay dark:opacity-40"
            />
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-cream-paper via-cream-paper/80 to-transparent"></div>
@@ -155,7 +155,7 @@ export default function HomePage() {
       </section>
 
       {/* Inverted Dark Value-Prop Section */}
-      <section className="w-full bg-[#2c322b] py-24 my-12">
+      <section className="w-full bg-success text-pure-white py-24 my-12">
         <div className="max-w-[1280px] mx-auto px-12 text-center">
           <h2 className="font-nantes text-heading-lg text-pure-white mb-6 leading-[1.27]">
             Get your products in front of millions of buyers

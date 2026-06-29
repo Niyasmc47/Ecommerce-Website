@@ -65,7 +65,7 @@ export default function ProductCard({ product }: Props) {
             onClick={handleToggleWishlist}
             className="absolute top-2 right-2 z-10 p-1.5 rounded-full bg-pure-white/90 border border-ash hover:border-ink-black transition-all group/btn"
           >
-            <span className={`material-symbols-outlined text-[18px] ${isWishlisted ? 'text-[#d32f2f] [font-variation-settings:"FILL"1]' : 'text-smoke group-hover/btn:text-[#d32f2f]'}`}>
+            <span className={`material-symbols-outlined text-[18px] ${isWishlisted ? 'text-danger [font-variation-settings:"FILL"1]' : 'text-smoke group-hover/btn:text-danger'}`}>
               favorite
             </span>
           </button>
@@ -100,7 +100,7 @@ export default function ProductCard({ product }: Props) {
               In Stock ({product.stock})
             </span>
           ) : (
-            <span className="text-caption text-[#d32f2f] font-graphik">
+            <span className="text-caption text-danger font-graphik">
               Sold Out
             </span>
           )}

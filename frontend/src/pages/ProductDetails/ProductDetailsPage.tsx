@@ -243,9 +243,9 @@ export default function ProductDetailsPage() {
                   </span>
                   <span className="text-ash">|</span>
                   {product.stock > 0 ? (
-                    <span className="text-[#2c322b] font-bold">In Stock</span>
+                    <span className="text-success font-bold">In Stock</span>
                   ) : (
-                    <span className="text-red-800 font-bold">Out of Stock</span>
+                    <span className="text-danger font-bold">Out of Stock</span>
                   )}
                 </div>
               </div>

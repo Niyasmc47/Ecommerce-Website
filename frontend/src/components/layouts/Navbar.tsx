@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getCart } from "../../services/cartService";
 import { getCategories } from "../../services/categoryService";
 import { useWishlist } from "../../contexts/WishlistContext";
+import { useTheme } from "../../contexts/ThemeContext";
 import { Button } from "../buttons/Button";
 import type { Category } from "../../types/category";
 
@@ -19,6 +20,7 @@ export default function Navbar() {
 
   const [cartCount, setCartCount] = useState(0);
   const { wishlistCount } = useWishlist();
+  const { setTheme, resolvedTheme } = useTheme();
 
   useEffect(() => {
     async function loadCart() {
@@ -85,7 +87,7 @@ export default function Navbar() {
 
           {/* Logo Wordmark */}
           <Link to="/" className="font-graphik text-[22px] tracking-[0.24em] text-ink-black uppercase shrink-0">
-            Velocity
+            Velocity.Shop
           </Link>
 
           {/* Hero Search Bar */}
@@ -125,7 +127,7 @@ export default function Navbar() {
             <Link to="/wishlist" className="relative text-ink-black hover:text-charcoal transition-colors p-1">
               <span className="material-symbols-outlined text-[24px]">favorite</span>
               {wishlistCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#d32f2f] text-pure-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                <span className="absolute -top-1 -right-1 bg-danger text-pure-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
                   {wishlistCount}
                 </span>
               )}
@@ -140,6 +142,19 @@ export default function Navbar() {
               )}
             </Link>
 
+            {/* Theme Toggle */}
+            <button
+              onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+              className="relative p-1 text-ink-black hover:text-charcoal transition-colors flex items-center justify-center mr-2 md:mr-0"
+              aria-label="Toggle Theme"
+            >
+              {resolvedTheme === "dark" ? (
+                <span className="material-symbols-outlined text-[24px]">light_mode</span>
+              ) : (
+                <span className="material-symbols-outlined text-[24px]">dark_mode</span>
+              )}
+            </button>
+
             {/* Auth section */}
             {token ? (
               <div className="relative group hidden md:block">
@@ -151,7 +166,7 @@ export default function Navbar() {
                   <div className="bg-pure-white border border-ash rounded-[4px] py-2 shadow-sm flex flex-col">
                     <Link to="/profile" className="px-4 py-2 text-[14px] font-graphik text-ink-black hover:bg-cream-paper transition-colors">Profile</Link>
                     <Link to="/orders" className="px-4 py-2 text-[14px] font-graphik text-ink-black hover:bg-cream-paper transition-colors">Orders</Link>
-                    <button onClick={handleLogout} className="px-4 py-2 text-[14px] font-graphik text-left text-[#d32f2f] hover:bg-cream-paper transition-colors">Sign Out</button>
+                    <button onClick={handleLogout} className="px-4 py-2 text-[14px] font-graphik text-left text-danger hover:bg-cream-paper transition-colors whitespace-nowrap">Sign Out</button>
                   </div>
                 </div>
               </div>
@@ -236,7 +251,7 @@ export default function Navbar() {
               <span className="text-[14px] font-graphik text-smoke">Logged in as {name}</span>
               <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="text-[16px] font-graphik text-ink-black hover:underline">Profile</Link>
               <Link to="/orders" onClick={() => setMobileMenuOpen(false)} className="text-[16px] font-graphik text-ink-black hover:underline">Orders</Link>
-              <button onClick={() => { setMobileMenuOpen(false); handleLogout(); }} className="text-left text-[16px] font-graphik text-[#d32f2f] hover:underline">Sign Out</button>
+              <button onClick={() => { setMobileMenuOpen(false); handleLogout(); }} className="text-left text-[16px] font-graphik text-danger hover:underline">Sign Out</button>
             </div>
           ) : (
             <div className="flex flex-col gap-3">
